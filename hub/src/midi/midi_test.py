@@ -34,9 +34,3 @@ while not effect.isComplete(time.time()):
     print(effect.getEffect(time.time()))
     time.sleep(0.01)
 
-
-
-
-#while True:
-#    time.sleep(1)
-

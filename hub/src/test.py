@@ -11,6 +11,7 @@ from light.effect.effect_combiner import EffectCombiner
 from light.effect.compiled_effect import CompiledEffect
 from light.effect.effect_compiler import EffectCompiler
 from execute.effect_activator import EffectActivator
+from execute.effect_runner import EffectRunner
 from midi.hit_type import HitType
 
 from data.testconfig.test import basicConfig
@@ -44,20 +45,11 @@ compiled = EffectCompiler(config).compile()
 
 eventActivator = EffectActivator(compiled)
 eventActivator.handleNote(HitType.SNARE_HEAD)
+eventActivator.handleNote(HitType.KICK)
 #eventActivator.handleNote(HitType.KICK)
 #eventActivator.handleNote(HitType.KICK)
-#eventActivator.handleNote(HitType.KICK)
-activeEffects = eventActivator.getActiveEffects()
 
-while (eventActivator.peekNext()):
-    t = time.time()
-    next = eventActivator.peekNext()
-    if (t >= next.t):
-        eventActivator.popNext()
-        print(next.toString())
-    else:
-        time.sleep(0.005)
-
-print(len(activeEffects))
+runner = EffectRunner(eventActivator)
+runner.run()
 
 
