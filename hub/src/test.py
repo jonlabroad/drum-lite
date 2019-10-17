@@ -45,7 +45,7 @@ compiled = EffectCompiler(config).compile()
 
 eventActivator = EffectActivator(compiled)
 eventActivator.handleNote(HitType.SNARE_HEAD)
-eventActivator.handleNote(HitType.KICK)
+#eventActivator.handleNote(HitType.KICK)
 #eventActivator.handleNote(HitType.KICK)
 #eventActivator.handleNote(HitType.KICK)
 

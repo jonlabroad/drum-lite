@@ -11,7 +11,10 @@ apt-get install -y libjack-dev
 curl -sL https://deb.nodesource.com/setup_12.x | bash -
 apt-get install -y nodejs
 
+# Neopixel
+pip3 install adafruit-circuitpython-lis3dh
+pip3 install adafruit-circuitpython-neopixel
+
 # MIDI
 pip3 install python-rtmidi
-pip3 install RPI.GPIO
-pip3 install adafruit-blinka
+
