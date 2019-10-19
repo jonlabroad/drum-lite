@@ -3,7 +3,7 @@ from light.effect.compiled_effect import CompiledEffect
 
 class EffectCompiler:
     def __init__(self, config):
-        self.timestep = 0.05
+        self.timestep = 0.01
         self.config = config
 
     def effectsAreComplete(self, effects, dt):

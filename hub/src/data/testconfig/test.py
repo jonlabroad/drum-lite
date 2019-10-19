@@ -18,7 +18,7 @@ def basicConfig():
 
     effects.append(
         EffectConfig([HitType.SNARE_HEAD], [
-            LinearFadeOutEffect(1.0),
+            LinearFadeOutEffect(0.6),
             SingleColorEffect(RGBW(254, 100, 50, 10)),
             ConstantTargetsEffect([
                 EffectTargetType.SNARE
@@ -28,8 +28,8 @@ def basicConfig():
 
     effects.append(
         EffectConfig([HitType.KICK], [
-            LinearFadeOutEffect(1.0),
-            SingleColorEffect(RGBW(0, 0, 50, 30)),
+            LinearFadeOutEffect(0.3),
+            SingleColorEffect(RGBW(0, 0, 100, 30)),
             ConstantTargetsEffect(allTargets)
         ])
     )
