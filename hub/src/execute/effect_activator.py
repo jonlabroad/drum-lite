@@ -9,6 +9,8 @@ class EffectActivator():
     def handleNote(self, hitType):
         noteTime = time.time()
         effects = self.findNewEffects(hitType)
+        print(hitType)
+        print(effects)
         for effect in effects:
             for effectElement in effect:
                 effectElement = copy.deepcopy(effectElement)
