@@ -8,9 +8,8 @@ class EffectActivator():
 
     def handleNote(self, hitType):
         noteTime = time.time()
+        self.removeActiveEffectsForTarget(hitType)
         effects = self.findNewEffects(hitType)
-        print(hitType)
-        print(effects)
         for effect in effects:
             for effectElement in effect:
                 effectElement = copy.deepcopy(effectElement)
@@ -31,3 +30,6 @@ class EffectActivator():
     def findNewEffects(self, hitType):
         effects = list(filter(lambda e: hitType in e[0].hitTypes, self.compiledEffects))
         return effects
+
+    def removeActiveEffectsForTarget(self, hitType):
+        self.activeEffects = list(filter(lambda e: not hitType in e.hitTypes, self.activeEffects))

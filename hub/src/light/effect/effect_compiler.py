@@ -3,7 +3,7 @@ from light.effect.compiled_effect import CompiledEffect
 
 class EffectCompiler:
     def __init__(self, config):
-        self.timestep = 0.01
+        self.timestep = 0.05
         self.config = config
 
     def effectsAreComplete(self, effects, dt):
@@ -17,12 +17,10 @@ class EffectCompiler:
         for configEffect in self.config:
             dt = 0
             compiledEffectElements = []
-            print(configEffect.triggerEvents)
             while (not self.effectsAreComplete(configEffect.effect, dt)):
                 combinedEffectElement = EffectCombiner(configEffect.effect).combine(dt)
                 compiledEffectElement = CompiledEffect(configEffect.triggerEvents , combinedEffectElement, dt, self.timestep)
                 compiledEffectElements.append(compiledEffectElement)
-                print(compiledEffectElement.toString())
                 dt = dt + self.timestep
 
             compiled.append(compiledEffectElements)

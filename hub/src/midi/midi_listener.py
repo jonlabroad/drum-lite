@@ -1,18 +1,25 @@
 import rtmidi
+import time
 
 from midi.midi_drum_note import MidiDrumNote
+from midi.midi_filter import MidiFilter
 
 class MidiListener:
     def __init__(self, activator):
         self.effectActivator = activator
+        self.filter = MidiFilter()
 
     def run(self):
         self.open()
 
     def noteHandler(self, midiNote, junk):
-        note = MidiDrumNote.fromRawNote(midiNote)
-        print(note.toString())
-        self.effectActivator.handleNote(note.note)
+        t = time.time()
+        note = MidiDrumNote.fromRawNote(midiNote, t)
+        note = self.filter.filterNote(note)
+        if note:
+            self.effectActivator.handleNote(note.note)
+        else:
+            print("*** Filtered ***")
 
     def open(self):
         self.midi_in = rtmidi.MidiIn()
