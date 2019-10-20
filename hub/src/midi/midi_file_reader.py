@@ -16,7 +16,7 @@ class MidiFileReader():
             note = int(tok[1])
             velocity = int(tok[2])
             dt = float(tok[3])
-            note = MidiDrumNote(note, velocity, dt)
+            note = MidiDrumNote(status, note, velocity, dt)
             notes.append(note)
 
         MidiPlayback().play(notes)

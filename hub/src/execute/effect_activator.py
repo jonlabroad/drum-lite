@@ -8,12 +8,13 @@ class EffectActivator():
 
     def handleNote(self, hitType):
         noteTime = time.time()
-        self.removeActiveEffectsForTarget(hitType)
+        #self.removeActiveEffectsForTarget(hitType)
         effects = self.findNewEffects(hitType)
         for effect in effects:
             for effectElement in effect:
                 effectElement = copy.deepcopy(effectElement)
                 effectElement.t = noteTime + effectElement.dt
+                effectElement.noteTime = noteTime
                 self.activeEffects.append(effectElement)
 
         self.activeEffects.sort(key=lambda ev: ev.t)

@@ -1,6 +1,7 @@
 from light.effect.partial_effect import PartialEffect
 from light.led_selector import LEDSelector
 from light.effect.resolved_effect import ResolvedEffect
+from light.effect.effect_priority import EffectPriority
 
 class ConstantTargetsEffect(PartialEffect):
     def __init__(self, targets, dt=0):

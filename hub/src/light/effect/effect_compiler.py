@@ -19,7 +19,7 @@ class EffectCompiler:
             compiledEffectElements = []
             while (not self.effectsAreComplete(configEffect.effect, dt)):
                 combinedEffectElement = EffectCombiner(configEffect.effect).combine(dt)
-                compiledEffectElement = CompiledEffect(configEffect.triggerEvents , combinedEffectElement, dt, self.timestep)
+                compiledEffectElement = CompiledEffect(configEffect.triggerEvents , combinedEffectElement, dt, self.timestep, configEffect.priority)
                 compiledEffectElements.append(compiledEffectElement)
                 dt = dt + self.timestep
 

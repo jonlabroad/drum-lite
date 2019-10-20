@@ -10,6 +10,7 @@ class MidiFilter:
     def filterNote(self, note):
         self.cleanHistory()
         print(len(self.recentNotes))
+        note = self.filterOutNoteOff(note)
         note = self.filterOutDoubleHits(note)
         if note:
             self.recentNotes.append(note)
@@ -27,6 +28,14 @@ class MidiFilter:
         t = time.time()
         duplicates = list(filter(lambda n: note.note == n.note and t - n.time < MidiFilter.doubleHitThreshold, self.recentNotes))
         if len(duplicates) > 0:
+            return None
+        return note
+
+    def filterOutNoteOff(self, note):
+        if not note:
+            return None
+
+        if not note.isNoteOn():
             return None
         return note
 

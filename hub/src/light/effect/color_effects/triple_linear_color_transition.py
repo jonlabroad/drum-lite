@@ -1,6 +1,7 @@
 from light.effect.partial_effect import PartialEffect
 from light.effect.resolved_effect import ResolvedEffect
 from util.color_transition import ColorTransition
+from light.effect.effect_priority import EffectPriority
 
 class TripleLinearColorTransition(PartialEffect):
     def __init__(self, srcRgb, dstRgb1, dstRgb2, duration):

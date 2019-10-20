@@ -10,6 +10,7 @@ from light.effect.color_effects.triple_cubic_color_transition import TripleCubic
 from light.effect.translation_effects.constant_targets_effect import ConstantTargetsEffect
 from light.effect.translation_effects.cubic_single_spiral import CubicSingleSpiral
 from light.effect.effect_target_type import EffectTargetType
+from light.effect.effect_priority import EffectPriority
 
 allTargets = [
     EffectTargetType.SNARE,
@@ -26,11 +27,12 @@ def basicConfig():
             CubicFadeOutEffect(2.0),
             #LinearColorTransition(RGBW(255, 255, 0, 0), RGBW(200, 0, 0, 0), 1.0),
             #TripleLinearColorTransition(RGBW(255, 255, 255, 0), RGBW(255, 255, 0, 0), RGBW(255, 0, 0, 0), 1.0),
-            TripleCubicColorTransition(RGBW(255, 255, 210, 0), RGBW(255, 255, 0, 0), RGBW(255, 40, 0, 0), 2.0),
+            TripleCubicColorTransition(RGBW(255, 255, 180, 0), RGBW(255, 200, 0, 0), RGBW(255, 80, 0, 0), 2.0),
             CubicSingleSpiral([
                 EffectTargetType.SNARE
-            ], 2.0, 6)
-        ])
+            ], 2.0, 6),
+            #ConstantTargetsEffect([EffectTargetType.SNARE])
+        ], EffectPriority.HIGH)
     )
 
     effects.append(
@@ -38,7 +40,8 @@ def basicConfig():
             LinearFadeOutEffect(0.3),
             SingleColorEffect(RGBW(0, 0, 100, 30)),
             ConstantTargetsEffect(allTargets)
-        ])
+        ], EffectPriority.LOW
+        )
     )
 
     return effects
