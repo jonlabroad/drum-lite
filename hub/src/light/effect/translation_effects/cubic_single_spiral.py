@@ -5,19 +5,18 @@ from light.led_selector import LEDSelector
 from light.effect.resolved_effect import ResolvedEffect
 from midi.hit_type import HitType
 from light.effect.effect_priority import EffectPriority
+from util.scale_functions import ScaleFunctions
 
 class CubicSingleSpiral(PartialEffect):
-    def __init__(self, targets, duration, numChildren):
+    def __init__(self, targets, duration, numChildren, amplitude=1.0):
         super().__init__(0)
         self.duration = duration
         self.numChildren = numChildren
         self.targets = targets
+        self.amplitude = amplitude
 
     def getEffect(self, t):
-        dt = t - self.startTime
-        tNorm = (1 - dt / self.duration)
-        tNorm = 1 - tNorm * tNorm * tNorm
-        print(tNorm)
+        tNorm = ScaleFunctions.cubicEaseOut(t, self.startTime, self.duration)
         ledPositions = []
 
         for target in self.targets:
@@ -31,7 +30,7 @@ class CubicSingleSpiral(PartialEffect):
                 for p in tailPos:
                     ledPositions.append(LEDSelector().unalias(target, p))
 
-        return ResolvedEffect.createTranslation(list(set(ledPositions)))
+        return ResolvedEffect(None, None, list(set(ledPositions)))
 
     def isTemporal(self):
         return True

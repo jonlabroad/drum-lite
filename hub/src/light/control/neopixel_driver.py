@@ -14,8 +14,9 @@ class NeopixelDriver:
                 r = max(0, effect.rgbw.r)
                 g = max(0, effect.rgbw.g)
                 b = max(0, effect.rgbw.b)
-                #print(effect.rgbw.toString())
                 amplitude = max(0, effect.amplitude)
+                #print(amplitude)
+                #print([ledId, effect.rgbw.toString()])
                 self.pixels[ledId] = (int(r*amplitude), int(g*amplitude), int(b*amplitude))
 
         self.pixels.show()

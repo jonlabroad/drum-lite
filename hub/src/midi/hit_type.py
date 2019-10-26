@@ -9,7 +9,7 @@ class HitType(Enum):
     TOM1_RIM = 50
     TOM2 = 45
     TOM2_RIM = 47
-    TOM3_HEAD = 43
+    TOM3 = 43
     TOM3_RIM = 58
     HH_OPEN_BOW  = 46
     HH_OPEN_EDGE = 26

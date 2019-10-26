@@ -6,6 +6,14 @@ class EffectActivator():
         self.compiledEffects = compiledEffects
         self.activeEffects = []
 
+        self.ambientEffects = list(filter(lambda e: e[0].isAmbient, compiledEffects))
+        for ae in self.ambientEffects:
+            for el in ae:
+                effectElement = copy.deepcopy(el)
+                effectElement.t = effectElement.dt
+                effectElement.noteTime = 0
+                self.activeEffects.append(effectElement)
+
     def handleNote(self, hitType):
         noteTime = time.time()
         #self.removeActiveEffectsForTarget(hitType)
@@ -17,12 +25,14 @@ class EffectActivator():
                 effectElement.noteTime = noteTime
                 self.activeEffects.append(effectElement)
 
-        self.activeEffects.sort(key=lambda ev: ev.t)
+        #self.activeEffects.sort(key=lambda ev: ev.t)
 
     def getCurrentActiveEffects(self):
         t = time.time()
-        currentActive = list(filter(lambda e: t >= e.t, self.activeEffects))
-        self.activeEffects = list(filter(lambda e: e.t + e.duration >= t, self.activeEffects))
+        testAmbient = list(filter(lambda e: e.isAmbient and t % 4.0 >= e.t and t % 4.0 < (e.t + e.duration), self.activeEffects))
+        #print([len(testAmbient), len(self.activeEffects)])
+        currentActive = list(filter(lambda e: (not e.isAmbient and t >= e.t) or (e.isAmbient and t % 4.0 >= e.t and t % 4.0 < (e.t + e.duration)), self.activeEffects))
+        self.activeEffects = list(filter(lambda e: e.isAmbient or e.t + e.duration >= t, self.activeEffects))
         return currentActive
 
     def getActiveEffects(self):

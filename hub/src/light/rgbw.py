@@ -1,5 +1,5 @@
 class RGBW:
-    def __init__(self, r, g, b, w):
+    def __init__(self, r, g, b, w=0):
         self.r = r
         self.g = g
         self.b = b
