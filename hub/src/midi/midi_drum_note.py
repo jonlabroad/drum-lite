@@ -10,7 +10,6 @@ class MidiDrumNote:
 
     @staticmethod
     def fromRawNote(rawNote, time):
-        print(rawNote)
         val = rawNote[0]
         status = val[0]
         midiNoteNum = val[1]

@@ -16,8 +16,12 @@ from midi.hit_type import HitType
 from midi.midi_listener import MidiListener
 
 from data.testconfig.test import basicConfig
+from data.testconfig.forge import forgeConfig
+from data.testconfig.tron import tronConfig
 
-config = basicConfig()
+#config = basicConfig()
+config = tronConfig()
+#config = forgeConfig()
 compiled = EffectCompiler(config).compile()
 
 eventActivator = EffectActivator(compiled)

@@ -25,7 +25,7 @@ class ConstantSpin(PartialEffect):
             startPos = positions[0]
             ledsPerChild = len(positions) / self.num
             for child in range(0, self.num):
-                childPt = startPos + round(child * ledsPerChild + tNorm * len(positions) + self.offset)
+                childPt = startPos + round(child * ledsPerChild + tNorm * len(positions)) + self.offset
                 ledPositions.append(LEDSelector().unalias(target, childPt))
 
         return ResolvedEffect(None, None, list(set(ledPositions)))

@@ -9,9 +9,10 @@ class EffectActivator():
         self.ambientEffects = list(filter(lambda e: e[0].isAmbient, compiledEffects))
         for ae in self.ambientEffects:
             for el in ae:
-                effectElement = copy.deepcopy(el)
+                effectElement = el.clone()
                 effectElement.t = effectElement.dt
                 effectElement.noteTime = 0
+
                 self.activeEffects.append(effectElement)
 
     def handleNote(self, hitType):
@@ -20,7 +21,7 @@ class EffectActivator():
         effects = self.findNewEffects(hitType)
         for effect in effects:
             for effectElement in effect:
-                effectElement = copy.deepcopy(effectElement)
+                effectElement = effectElement.clone()
                 effectElement.t = noteTime + effectElement.dt
                 effectElement.noteTime = noteTime
                 self.activeEffects.append(effectElement)
@@ -29,10 +30,10 @@ class EffectActivator():
 
     def getCurrentActiveEffects(self):
         t = time.time()
-        testAmbient = list(filter(lambda e: e.isAmbient and t % 4.0 >= e.t and t % 4.0 < (e.t + e.duration), self.activeEffects))
-        #print([len(testAmbient), len(self.activeEffects)])
-        currentActive = list(filter(lambda e: (not e.isAmbient and t >= e.t) or (e.isAmbient and t % 4.0 >= e.t and t % 4.0 < (e.t + e.duration)), self.activeEffects))
+
+        currentActive = list(filter(lambda e: (not e.isAmbient and e.t < t and e.t + e.duration > t) or (e.isAmbient and t % e.ambientDuration >= e.t and t % e.ambientDuration < (e.t + e.duration)), self.activeEffects))
         self.activeEffects = list(filter(lambda e: e.isAmbient or e.t + e.duration >= t, self.activeEffects))
+        #print("getCurrentActiveEffects: " + str(time.time() - t))
         return currentActive
 
     def getActiveEffects(self):

@@ -19,9 +19,23 @@ class EffectCompiler:
             compiledEffectElements = []
             while (not self.effectsAreComplete(configEffect.effect, dt)):
                 combinedEffectElement = EffectCombiner(configEffect.effect).combine(dt)
-                compiledEffectElement = CompiledEffect(configEffect.triggerEvents , combinedEffectElement, dt, self.timestep, configEffect.priority, configEffect.isAmbient)
+                compiledEffectElement = CompiledEffect(
+                    configEffect.triggerEvents,
+                    combinedEffectElement,
+                    dt,
+                    self.timestep,
+                    configEffect.priority,
+                    configEffect.isAmbient,
+                    configEffect.isModifier)
+
                 compiledEffectElements.append(compiledEffectElement)
                 dt = dt + self.timestep
+
+            if configEffect.isAmbient:
+                ambientDuration = dt - self.timestep
+                print("ambient duration: " + str(ambientDuration))
+                for el in compiledEffectElements:
+                    el.ambientDuration = ambientDuration
 
             compiled.append(compiledEffectElements)
         return compiled

@@ -24,120 +24,51 @@ allTargets = [
 def basicConfig():
     effects = []
 
-    effects.append(
-        EffectConfig([], [
-            ConstantAmplitude(0.02),
-            SingleColorEffect(RGBW(128, 5, 0)),
-            #CubicSingleSpiral(allTargets, 2.0, 6),
-            ConstantSpin(allTargets, 4.0, 1.0, 4, 0, 1.0),
-            #ConstantTargetsEffect(allTargets)
-        ], EffectPriority.LOWEST, isAmbient=True
-        )
-    )
-
-    effects.append(
-        EffectConfig([], [
-            ConstantAmplitude(0.05),
-            SingleColorEffect(RGBW(255, 20, 0)),
-            #CubicSingleSpiral(allTargets, 2.0, 6),
-            ConstantSpin(allTargets, 4.0, 1.0, 4, 1, 0.8),
-            #ConstantTargetsEffect(allTargets)
-        ], EffectPriority.LOWEST, isAmbient=True
-        )
-    )
-
-    effects.append(
-        EffectConfig([], [
-            ConstantAmplitude(0.08),
-            SingleColorEffect(RGBW(255, 51, 0)),
-            #CubicSingleSpiral(allTargets, 2.0, 6),
-            ConstantSpin(allTargets, 4.0, 1.0, 4, 2, 0.8),
-            #ConstantTargetsEffect(allTargets)
-        ], EffectPriority.LOWEST, isAmbient=True
-        )
-    )
-
-    effects.append(
-        EffectConfig([], [
-            ConstantAmplitude(0.1),
-            SingleColorEffect(RGBW(230, 115, 0)),
-            #CubicSingleSpiral(allTargets, 2.0, 6),
-            ConstantSpin(allTargets, 4.0, 1.0, 4, 3, 0.8),
-            #ConstantTargetsEffect(allTargets)
-        ], EffectPriority.LOWEST, isAmbient=True
-        )
-    )
-
-    effects.append(
-        EffectConfig([], [
-            ConstantAmplitude(0.15),
-            SingleColorEffect(RGBW(255, 204, 0)),
-            #CubicSingleSpiral(allTargets, 2.0, 6),
-            ConstantSpin(allTargets, 4.0, 1.0, 4, 4, 0.8),
-            #ConstantTargetsEffect(allTargets)
-        ], EffectPriority.LOWEST, isAmbient=True
-        )
-    )
 
     effects.append(
         EffectConfig([HitType.SNARE_HEAD], [
-            CubicFadeOutEffect(2.0),
+            CubicFadeOutEffect(4.0),
             #LinearColorTransition(RGBW(255, 255, 0, 0), RGBW(200, 0, 0, 0), 1.0),
             #TripleLinearColorTransition(RGBW(255, 255, 255, 0), RGBW(255, 255, 0, 0), RGBW(255, 0, 0, 0), 1.0),
-            TripleCubicColorTransition(RGBW(255, 255, 120, 0), RGBW(255, 200, 0, 0), RGBW(255, 80, 0, 0), 2.0),
-            CubicSingleSpiral([
-                EffectTargetType.SNARE
-            ], 2.0, 6),
-            #ConstantTargetsEffect([EffectTargetType.SNARE])
-        ], EffectPriority.HIGH)
-    )
-
-    effects.append(
-        EffectConfig([HitType.TOM1], [
-            CubicFadeOutEffect(2.0),
-            #LinearColorTransition(RGBW(255, 255, 0, 0), RGBW(200, 0, 0, 0), 1.0),
-            #TripleLinearColorTransition(RGBW(255, 255, 255, 0), RGBW(255, 255, 0, 0), RGBW(255, 0, 0, 0), 1.0),
-            TripleCubicColorTransition(RGBW(255, 255, 120, 0), RGBW(255, 200, 0, 0), RGBW(255, 80, 0, 0), 2.0),
-            CubicSingleSpiral([
-                EffectTargetType.TOM1
-            ], 2.0, 6),
-            #ConstantTargetsEffect([EffectTargetType.SNARE])
-        ], EffectPriority.HIGH)
-    )
-
-    effects.append(
-        EffectConfig([HitType.TOM2], [
-            CubicFadeOutEffect(2.0),
-            #LinearColorTransition(RGBW(255, 255, 0, 0), RGBW(200, 0, 0, 0), 1.0),
-            #TripleLinearColorTransition(RGBW(255, 255, 255, 0), RGBW(255, 255, 0, 0), RGBW(255, 0, 0, 0), 1.0),
-            TripleCubicColorTransition(RGBW(255, 255, 120, 0), RGBW(255, 200, 0, 0), RGBW(255, 80, 0, 0), 2.0),
-            CubicSingleSpiral([
-                EffectTargetType.TOM2
-            ], 2.0, 6),
-            #ConstantTargetsEffect([EffectTargetType.SNARE])
-        ], EffectPriority.HIGH)
-    )
-
-    effects.append(
-        EffectConfig([HitType.TOM3], [
-            CubicFadeOutEffect(2.0),
-            #LinearColorTransition(RGBW(255, 255, 0, 0), RGBW(200, 0, 0, 0), 1.0),
-            #TripleLinearColorTransition(RGBW(255, 255, 255, 0), RGBW(255, 255, 0, 0), RGBW(255, 0, 0, 0), 1.0),
-            TripleCubicColorTransition(RGBW(255, 255, 120, 0), RGBW(255, 200, 0, 0), RGBW(255, 80, 0, 0), 2.0),
+            TripleCubicColorTransition(RGBW(255, 255, 120, 0), RGBW(255, 200, 0, 0), RGBW(255, 80, 0, 0), 4.0),
             CubicSingleSpiral([
                 EffectTargetType.TOM3
-            ], 2.0, 6),
+            ], 4.0, 2),
             #ConstantTargetsEffect([EffectTargetType.SNARE])
         ], EffectPriority.HIGH)
     )
 
-#    effects.append(
-#        EffectConfig([HitType.KICK], [
-#            LinearFadeOutEffect(0.3),
-#            SingleColorEffect(RGBW(0, 0, 100, 30)),
-#            ConstantTargetsEffect(allTargets)
-#        ], EffectPriority.LOW
-#        )
-#    )
+    color = RGBW(128, 60, 60)
+    effects.append(
+        EffectConfig([HitType.TOM2], [
+                ConstantAmplitude(1.0),
+                SingleColorEffect(color),
+                #CubicSingleSpiral(allTargets, 2.0, 6),
+                ConstantSpin([EffectTargetType.TOM2], 4.0, 1.0, 1, 0, 1.0),
+            ], EffectPriority.LOWEST, isAmbient=False
+        )
+    )
+
+    color = RGBW(128, 128, 128)
+    effects.append(
+        EffectConfig([], [
+                ConstantAmplitude(1.0),
+                SingleColorEffect(color),
+                #CubicSingleSpiral(allTargets, 2.0, 6),
+                ConstantSpin([EffectTargetType.TOM2], 4.0, 1.0, 1, 0, 1.0),
+            ], EffectPriority.LOWEST, isAmbient=True
+        )
+    )
+
+    color = RGBW(128, 128, 128)
+    effects.append(
+        EffectConfig([], [
+                ConstantAmplitude(1.0),
+                SingleColorEffect(color),
+                #CubicSingleSpiral(allTargets, 2.0, 6),
+                ConstantSpin([EffectTargetType.TOM3]   , 4.0, 1.0, 1, 0, 1.0),
+            ], EffectPriority.LOWEST, isAmbient=True
+        )
+    )
 
     return effects

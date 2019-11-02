@@ -11,5 +11,8 @@ class RGBW:
         self.b = self.b + other.b
         self.w = self.w + other.w
 
+    def equals(self, other):
+        return self.r == other.r and self.g == other.g and self.b == other.b and self.w == other.w
+
     def toString(self):
         return [self.r, self.g, self.b, self.w]

@@ -32,7 +32,6 @@ class EffectCombiner:
         positions = []
         for unresolvedEffect in self.unresolvedEffects:
             resolvedEffect = unresolvedEffect.getEffect(dt)
-            print(resolvedEffect.ledPositions)
             if (resolvedEffect.ledPositions):
                 positions.extend(resolvedEffect.ledPositions)
         return list(set(positions))

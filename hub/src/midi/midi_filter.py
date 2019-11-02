@@ -9,7 +9,6 @@ class MidiFilter:
 
     def filterNote(self, note):
         self.cleanHistory()
-        print(len(self.recentNotes))
         note = self.filterOutNoteOff(note)
         note = self.filterOutDoubleHits(note)
         if note:

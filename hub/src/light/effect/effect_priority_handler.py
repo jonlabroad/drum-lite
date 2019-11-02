@@ -1,3 +1,5 @@
+import copy
+
 from light.effect.effect_priority import EffectPriority
 
 class EffectPriorityHandler:
@@ -14,17 +16,17 @@ class EffectPriorityHandler:
             useEffect = True
             for currEffect in currentEffectsAtLed:
                 # Quit now if there are any with priority higher
-                if effect.priority != EffectPriority.ANY and currEffect.priority > effect.priority:
+                if effect.priority != EffectPriority.ANY and currEffect.priority > effect.priority and currEffect.isModifier == effect.isModifier:
                     useEffect = False
                     break
 
                 # Quit now if there is already a higher priority effect
-                if effect.priority != EffectPriority.ANY and currEffect.priority > effect.priority:
+                if effect.priority != EffectPriority.ANY and currEffect.priority > effect.priority and currEffect.isModifier == effect.isModifier:
                     useEffect = False
                     break
 
                 # Quit now if there are any same-priority effects at a later time
-                if currEffect.priority == effect.priority and currEffect.noteTime >= effect.noteTime:
+                if currEffect.priority == effect.priority and currEffect.noteTime >= effect.noteTime and currEffect.isModifier == effect.isModifier:
                     useEffect = False
                     break
 
@@ -33,18 +35,19 @@ class EffectPriorityHandler:
 
             # Remove any existing effects if necessary
             newEffectsAtLed = []
-            for currentEffect in currentEffectsAtLed:
-                # Remove any of same or lower priority
-                if currentEffect.priority < effect.priority:
+            for currEffect in currentEffectsAtLed:
+                # Remove any of lower priority if this isn't a modifier
+                if currEffect.priority <= effect.priority and currEffect.isModifier == effect.isModifier:
                     continue
 
-                # Remove any at an equal priority but in the past
-                if currentEffect.priority == effect.priority and currentEffect.noteTime < effect.noteTime:
+                # Remove any at an equal priority and equal type but in the past
+                if currEffect.priority == effect.priority and currEffect.t < effect.t and currEffect.isModifier == effect.isModifier:
                     continue
 
-                newEffectsAtLed.append(currentEffect)
-            
-            newEffectsAtLed.append(effect)
+                newEffectsAtLed.append(currEffect.clone())
+
+            #print("Adding: " + str([effect.t, effect.duration, effect.priority, effect.noteTime, effect.rgbw.r, effect.rgbw.g, effect.rgbw.b]))
+            newEffectsAtLed.append(effect.clone())
             newEffectsAtLed.sort(key = lambda e: e.noteTime)
             self.leds[ledPos] = newEffectsAtLed
 
