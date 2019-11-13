@@ -1,8 +1,18 @@
 import time
 import rtmidi
 import json
+import socketio
+import time
+import asyncio
+import signal
+import sys
+from aiohttp import web
+import signal
+import sys
+import platform
 
 from midi.midi_file_reader import MidiFileReader
+from midi.midi_drum_note import MidiDrumNote
 from light.effect.amplitude_effects.linear_fade_out_effect import LinearFadeOutEffect
 from light.effect.translation_effects.constant_targets_effect import ConstantTargetsEffect
 from light.effect.color_effects.single_color_effect import SingleColorEffect
@@ -25,15 +35,51 @@ config = tronConfig()
 compiled = EffectCompiler(config).compile()
 
 eventActivator = EffectActivator(compiled)
-midiListener = MidiListener(eventActivator)
-midiListener.run()
+if platform.system() != 'Windows':
+    midiListener = MidiListener(eventActivator)
+    midiListener.run()
 
 #eventActivator.handleNote(HitType.SNARE_HEAD)
-#eventActivator.handleNote(HitType.KICK)
-#eventActivator.handleNote(HitType.KICK)
-#eventActivator.handleNote(HitType.KICK)
 
-runner = EffectRunner(eventActivator)
-runner.run()
+sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
 
+def signal_handler(signal, frame):
+        # close the socket here
+        print("EXITING")
+        sys.exit(0)
 
+@sio.event
+async def connect(sid, environ):
+    print("CONNECT ", sid)
+
+@sio.event
+async def disconnect(sid):
+    print("DISCONNECT ", sid)
+
+@sio.on('trigger_note')
+async def noteHandler(junk, data):
+    print(data)
+    t = time.time()
+    jsonData = json.loads(data)
+    print(jsonData)
+    note = MidiDrumNote(16, jsonData['note'], jsonData['velocity'], 0, t)
+    eventActivator.handleNote(note.note)
+
+def testHandler(sid, msg):
+    print("TEST EVENT")
+    print(msg)
+
+async def runEffects():
+    runner = EffectRunner(eventActivator, sio)
+    await runner.run()
+
+def testAsyncServer():
+    app = web.Application()
+    sio.on("test", testHandler)
+    sio.attach(app)
+    sio.start_background_task(runEffects)
+    web.run_app(app, port=3000, host="localhost")
+    sio.wait()
+
+signal.signal(signal.SIGINT, signal_handler)
+testAsyncServer()

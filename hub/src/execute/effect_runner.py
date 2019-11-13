@@ -1,17 +1,26 @@
 import time
 import copy
+import platform
 
 from light.effect.effect_priority_handler import EffectPriorityHandler
-from light.control.neopixel_driver import NeopixelDriver
+if platform.system() != 'Windows':
+    from light.control.neopixel_driver import NeopixelDriver
+from light.control.socketio_driver import SocketIoDriver
+
 from light.effect.runtime_combiners.basic_combiner import BasicCombiner
 
 class EffectRunner:
-    def __init__(self, activator):
+    def __init__(self, activator, sio):
         self.activator = activator
         self.priorityHandler = EffectPriorityHandler()
+        self.sio = sio
 
-    def run(self):
-        driver = NeopixelDriver()
+    async def run(self):
+        if platform.system() != 'Windows':
+            driver = NeopixelDriver()
+        else:
+            driver = SocketIoDriver(self.sio)
+
         combiner = BasicCombiner()
         while (True):
             startTime = time.time()
@@ -31,9 +40,9 @@ class EffectRunner:
             #print("Combiner: " + str(time.time() - combinerStart))
 
             #print(mappedEffectsToRun.get(3))
-            driver.runEffects(mappedEffectsToRun)
+            await driver.runEffects(mappedEffectsToRun)
             
             #print("Runner total: " + str(time.time() - startTime))
             #print("")
 
-            time.sleep(0.01)
+            await self.sio.sleep(0.01)

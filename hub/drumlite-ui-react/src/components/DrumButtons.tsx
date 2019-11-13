@@ -4,7 +4,9 @@ import { Button, Page } from "react-onsenui"
 import { Grid } from "@material-ui/core"
 
 export interface DrumButtonsProps {
-    
+    disabled: boolean
+
+    onClick: any
 }
 
 export const DrumButtons: FunctionComponent<DrumButtonsProps> = (props: DrumButtonsProps) => {
@@ -12,17 +14,17 @@ export const DrumButtons: FunctionComponent<DrumButtonsProps> = (props: DrumButt
         <Page>
             <Grid container spacing={2}>
                 <Grid item xs={1}>
-                    <Button modifier="cta">Tom 1</Button>
+                    <Button modifier="cta" disabled={props.disabled} onClick={() => props.onClick(48)}>Tom 1</Button>
                 </Grid>
                 <Grid item xs={1}>
-                    <Button modifier="cta">Tom 2</Button>
+                    <Button modifier="cta" disabled={props.disabled} onClick={() => props.onClick(45)}>Tom 2</Button>
                 </Grid>
                 <Grid item xs={10}></Grid>
                 <Grid item xs={1}>
-                    <Button modifier="cta">Snare</Button>
+                    <Button modifier="cta" disabled={props.disabled} onClick={() => props.onClick(38)}>Snare</Button>
                 </Grid>
                 <Grid item xs={1}>
-                    <Button modifier="cta">Tom 3</Button>
+                    <Button modifier="cta" disabled={props.disabled} onClick={() => props.onClick(43)}>Tom 3</Button>
                 </Grid>
                 <Grid item xs={10}></Grid>
             </Grid>

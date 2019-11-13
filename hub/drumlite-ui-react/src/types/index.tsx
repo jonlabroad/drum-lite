@@ -4,6 +4,7 @@ export interface MainState {
 }
 
 export interface DataState {
+    connected: boolean
 }
 
 export interface NavigationState {
