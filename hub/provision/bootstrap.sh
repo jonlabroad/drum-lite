@@ -15,6 +15,8 @@ apt-get install -y nodejs
 pip3 install adafruit-circuitpython-lis3dh
 pip3 install adafruit-circuitpython-neopixel
 pip3 install python-socketio
+pip3 install socketio
+pip3 install aiohttp
 
 # MIDI
 pip3 install python-rtmidi
