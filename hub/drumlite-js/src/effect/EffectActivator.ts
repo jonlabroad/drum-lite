@@ -17,7 +17,6 @@ export default class EffectActivator {
                 effectElement.t = effectElement.dt;
                 effectElement.noteTime = 0;
 
-                console.log(effectElement);
                 this.activeEffects.push(effectElement);
             }
         }

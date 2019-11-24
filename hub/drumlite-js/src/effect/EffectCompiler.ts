@@ -36,9 +36,8 @@ export default class EffectCompiler {
                     configEffect.priority,
                     configEffect.isAmbient,
                     configEffect.isModifier);
-
+                console.log(compiledEffectElement.ledPositions);
                 compiledEffectElements.push(compiledEffectElement);
-                console.log(compiledEffectElement);
                 dt = dt + this.timestepMillis;
             }
 
@@ -51,6 +50,7 @@ export default class EffectCompiler {
             }
             compiled.push(compiledEffectElements);
         }
+
         return compiled
     }
 }

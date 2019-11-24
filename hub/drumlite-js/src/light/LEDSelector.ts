@@ -20,7 +20,7 @@ export default class LEDSelector {
         return []
     }
 
-    public unalias(target: EffectTarget, pos: number) {
+    public unalias(target: EffectTarget, pos: number): number {
         const targetPos = this.getAllTargetPositions(target);
         const startPos = targetPos[0];
         return targetPos.length > 0 ? (pos % targetPos.length + startPos) : -1;

@@ -7,10 +7,19 @@ import ConstantTargetsEffect from "../light/effect/positional/ConstantTargetsEff
 import { EffectTarget } from "../light/effect/EffectTarget";
 import RGB from "../light/RGB";
 import { EffectPriority } from "../effect/EffectPriority";
+import ConstantSpin from "../light/effect/positional/ConstantSpin";
+import Sparkle from "../light/effect/positional/Sparkle";
 
 export default class TestConfig extends BaseEffectConfig {
     constructor() {
         super();
+        const allTargets = [
+            EffectTarget.SNARE,
+            EffectTarget.TOM1,
+            EffectTarget.TOM2,
+            EffectTarget.TOM3
+        ];
+
         this.effects.push(new PartialEffectConfig(
             [HitType.SNARE_HEAD],
             [
@@ -58,12 +67,19 @@ export default class TestConfig extends BaseEffectConfig {
         this.effects.push(new PartialEffectConfig(
             [],
             [
-                new ConstantAmplitude(1, 1000),
-                new SingleColorEffect(new RGB(128, 128, 128)),
-                new ConstantTargetsEffect([
-                    EffectTarget.TOM1
-                ])
+                new ConstantSpin(allTargets, 2000, 1, 2, 0, 1),
+                new SingleColorEffect(new RGB(0, 128, 128)),
             ], EffectPriority.LOWEST, true)
         );
+
+        const sparkleDuration = 1750;
+        this.effects.push(new PartialEffectConfig(
+            [HitType.CRASH1_EDGE], [
+                new ConstantAmplitude(1.0),
+                new SingleColorEffect(new RGB(200,200,200)),
+                new Sparkle([EffectTarget.TOM2], 15, 1, sparkleDuration)
+            ],
+            EffectPriority.VERY_HIGH
+        ));
     }
 }
