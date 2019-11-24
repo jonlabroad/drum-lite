@@ -26,7 +26,6 @@ export default class WebsocketsDriver {
 
     send(topic: string, message: any): boolean {
         if (this.connected) {
-            console.log("sending");
             this.ws.send(JSON.stringify(message));
             return true;
         }

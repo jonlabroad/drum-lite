@@ -23,7 +23,6 @@ export default class EffectActivator {
     }
 
     public handleNote(hitType: HitType) {
-        console.log(hitType);
         const noteTime = new Date();
         const effects = this.findNewEffects(hitType);
         for (let effect of effects) {

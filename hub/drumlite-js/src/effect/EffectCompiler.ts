@@ -36,14 +36,12 @@ export default class EffectCompiler {
                     configEffect.priority,
                     configEffect.isAmbient,
                     configEffect.isModifier);
-                console.log(compiledEffectElement.ledPositions);
                 compiledEffectElements.push(compiledEffectElement);
                 dt = dt + this.timestepMillis;
             }
 
             if (configEffect.isAmbient) {
                 const ambientDuration = dt - this.timestepMillis;
-                console.log(`ambient duration: ${ambientDuration}`);
                 for (let el of compiledEffectElements) {
                     el.ambientDuration = ambientDuration;
                 }

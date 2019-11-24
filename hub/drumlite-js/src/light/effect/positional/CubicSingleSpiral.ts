@@ -28,7 +28,7 @@ export default class CubicSingleSpiral extends PartialEffect {
             const fullChildLength = Math.ceil(positions.length / this.numChildren);
             const childLength = Math.ceil((1 - tNorm) * fullChildLength);
 
-            for (let child of Util.range(0, this.numChildren - 1)) {
+            for (let child of Util.range(0, this.numChildren)) {
                 const childRoot = Math.round(child * fullChildLength + tNorm * fullChildLength);
                 const tailPos = Util.range(childRoot - childLength, childRoot);
                 for (let p of tailPos) {

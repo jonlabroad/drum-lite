@@ -25,7 +25,7 @@ export default class SymmetricalLeds extends PartialEffect {
             const tempPos: number[] = [];
             const tPos = ledSelector.getAllTargetPositions(target);
             const numLeds = tPos.length;
-            for (let sectionNum of Util.range(0, this.numSym - 1)) {
+            for (let sectionNum of Util.range(0, this.numSym)) {
                 const centerPos = Math.round(sectionNum * numLeds / this.numSym) + this.offset;
                 tempPos.push(centerPos);
                 tempPos.push(...Util.range(centerPos, centerPos + Math.round(this.sectionLength / 2), 1));

@@ -46,7 +46,7 @@ export default class LEDDriver {
             }
         }
 
-        const allLeds = new Set<number>(Util.range(0, LEDDriver.ledsOnStrip - 1));
+        const allLeds = new Set<number>(Util.range(0, LEDDriver.ledsOnStrip));
         const drivenLeds = new Set<number>(effectsToApply.keys());
         const ledsNotDriven = new Set<number>([...allLeds].filter(led => !drivenLeds.has(led)));
         for (let ledId of ledsNotDriven) {
@@ -74,7 +74,6 @@ export default class LEDDriver {
                     this.previousLedEffects.set(ledId, e);
                 }
             }
-            console.log("Sending pixels");
             const sendSuccess = this.driverImpl.send('command_leds', this.pixels);
             if (!sendSuccess) {
                 this.previousLedEffects.clear();

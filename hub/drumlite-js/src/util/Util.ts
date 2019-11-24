@@ -3,7 +3,7 @@ import { EffectTarget } from "../light/effect/EffectTarget";
 export default class Util {
     public static range(start: number, stop: number, inc: number = 1): number[] {
         const result = [];
-        for (let n = start; n <= stop; n++) {
+        for (let n = start; n < stop; n++) {
             result.push(n);
         }
         return result;
@@ -22,5 +22,9 @@ export default class Util {
         return new Promise(resolve => {
             setTimeout(resolve, ms);
         });
+    }
+
+    public static modulo(n: number, m: number) {
+        return ((n % m) + m) % m;
     }
 }

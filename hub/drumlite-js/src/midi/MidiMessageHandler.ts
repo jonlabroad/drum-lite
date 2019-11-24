@@ -16,7 +16,6 @@ export default class MidiMessageHandler {
         let note: MidiDrumNote | undefined = MidiDrumNote.fromRawNote(message, date);
         note = this.filter.filterNote(note);
         if (note) {
-            console.log(note.note);
             this.activator.handleNote(note.note);
         }
     }
