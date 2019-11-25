@@ -9,7 +9,7 @@ export default class LinearColorTransition extends PartialEffect {
     duration: number;
     
     constructor(srcRgb: RGB, dstRgb: RGB, duration: number) {
-        super(0);
+        super("Linear Color Transition", "Color", 0);
         this.src = srcRgb
         this.dst = dstRgb
         this.duration = duration

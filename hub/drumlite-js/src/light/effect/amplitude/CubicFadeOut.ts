@@ -5,7 +5,7 @@ export default class CubicFadeOut extends PartialEffect {
     fadeOutDuration: number;
 
     constructor(fadeOutDuration: number, dt = 0) {
-        super(dt);
+        super("Cubic Fade Out", "Amplitude", dt);
         this.fadeOutDuration = fadeOutDuration;
     }
 

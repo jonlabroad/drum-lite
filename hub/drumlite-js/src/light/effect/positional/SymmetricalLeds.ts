@@ -11,7 +11,7 @@ export default class SymmetricalLeds extends PartialEffect {
     offset: number;
 
     constructor(targets: EffectTarget[], numSym: number, sectionLength: number, offset = 0, dt = 0) {
-        super(dt);
+        super("Symmetrical", "Positional", dt);
         this.targets = targets
         this.numSym = numSym
         this.sectionLength = sectionLength

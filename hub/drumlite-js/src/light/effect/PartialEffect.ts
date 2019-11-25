@@ -3,8 +3,12 @@ import ResolvedEffect from "../../effect/ResolvedEffect";
 export default class PartialEffect {
     public startTime: number = 0;
     public isModifier: boolean = false;
+    public typeName: string;
+    public className: string;
 
-    constructor(startTime: number = 0) {
+    constructor(type: string, className: string, startTime: number = 0) {
+        this.typeName = type;
+        this.className = className;
         this.startTime = startTime
         this.isModifier = false
     }

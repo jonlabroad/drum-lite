@@ -6,7 +6,7 @@ export default class SingleColorEffect extends PartialEffect {
     rgb: RGB;
     
     constructor(rgb: RGB, dt: number = 0) {
-        super(dt);
+        super("Single Color Effect", "Color", dt);
         this.rgb = rgb;
     }
     

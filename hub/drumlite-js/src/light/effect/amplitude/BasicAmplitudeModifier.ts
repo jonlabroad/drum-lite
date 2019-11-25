@@ -5,7 +5,7 @@ export default class BasicAmplitudeModifier extends EffectModifier {
     amplitude: number;
     
     constructor(amplitude: number) {
-        super();
+        super("Basic Amplitude Modifier", "Modifier");
         this.amplitude = amplitude;
     }
 

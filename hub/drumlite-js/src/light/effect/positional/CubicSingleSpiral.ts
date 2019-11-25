@@ -12,7 +12,7 @@ export default class CubicSingleSpiral extends PartialEffect {
     amplitude: number;
 
     constructor(targets: EffectTarget[], duration: number, numChildren: number, amplitude=1.0) {
-        super(0);
+        super("Cubic Single Spiral", "Positional", 0);
         this.duration = duration
         this.numChildren = numChildren
         this.targets = targets

@@ -6,7 +6,7 @@ export default class LinearFadeOutEffect extends PartialEffect {
     startAmplitude: number;
 
     constructor(fadeOutDuration: number, startAmplitude: number, dt=0) {
-        super(dt);
+        super("Linear Fade Out", "Amplitude", dt);
         this.fadeOutDuration = fadeOutDuration;
         this.startAmplitude = startAmplitude;
     }

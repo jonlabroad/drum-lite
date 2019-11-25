@@ -14,7 +14,7 @@ export default class ConstantSpin extends PartialEffect {
 
 
     constructor(targets: EffectTarget[], period: number, speed: number, num: number, offset: number, amplitude = 1.0) {
-        super(0);
+        super("Constant Spin", "Positional", 0);
         this.targets = targets
         this.period = period
         this.num = num

@@ -3,8 +3,8 @@ import PartialEffect from "./PartialEffect";
 export default class EffectModifier extends PartialEffect {
     public isModifier: boolean;
     
-    constructor() {
-        super(0);
+    constructor(type: string, className: string) {
+        super(type, className, 0);
         this.isModifier = true;
     }
 }

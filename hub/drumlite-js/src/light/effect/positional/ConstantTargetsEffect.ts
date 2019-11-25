@@ -7,7 +7,7 @@ export default class ConstantTargetsEffect extends PartialEffect {
     targets: EffectTarget[];
     
     constructor(targets: EffectTarget[], dt: number = 0) {
-        super(dt);
+        super("Constant Targets", "Positional", dt);
         this.targets = targets
     }
 

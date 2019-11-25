@@ -6,7 +6,7 @@ export default class ConstantAmplitude extends PartialEffect {
     durationMillis?: number;
     
     constructor(amplitude: number, durationMillis: number | undefined = undefined, dt: number = 0){
-        super(dt);
+        super("Constant Amplitude", "Amplitude", dt);
         this.amplitude = amplitude;
         this.durationMillis = durationMillis;
     }

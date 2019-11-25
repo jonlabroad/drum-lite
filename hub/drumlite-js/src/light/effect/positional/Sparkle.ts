@@ -12,7 +12,7 @@ export default class Sparkle extends PartialEffect {
     duration: number;
     
     constructor(targets: EffectTarget[], startingDensity: number, sparkleSize: number, duration: number) {
-        super();
+        super("Sparkle", "Positional");
         this.targets = targets;
         this.startingDensity = startingDensity;
         this.sparkleSize = sparkleSize;

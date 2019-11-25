@@ -10,7 +10,7 @@ export default class TripleLinearColorTransition extends PartialEffect {
     duration: number;
     
     constructor(srcRgb: RGB, dstRgb1: RGB, dstRgb2: RGB, duration: number) {
-        super(0);
+        super("Triple Linear Transition", "Color", 0);
         this.src = srcRgb;
         this.dst1 = dstRgb1;
         this.dst2 = dstRgb2;
