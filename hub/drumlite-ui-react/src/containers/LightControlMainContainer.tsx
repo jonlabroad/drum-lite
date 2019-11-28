@@ -6,6 +6,7 @@ import { connect } from "react-redux"
 import { MainState } from "../types"
 import { LightControlMain } from "../components/LightControlMain"
 import { handleDrumTrigger } from "../actions"
+import { HitType } from "drumlite-js/dist/midi/HitType"
 
 export interface LightControlMainContainerProps {
     connected: boolean
@@ -29,7 +30,7 @@ const mapStateToProps = (state: MainState) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    handleDrumTrigger: (gameweek: number) => dispatch(handleDrumTrigger(gameweek)),
+    handleDrumTrigger: (hitType: HitType) => dispatch(handleDrumTrigger(hitType)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LightControlMainContainer);

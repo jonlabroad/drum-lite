@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import BaseEffectConfig from "./BaseEffectConfig";
 import PartialEffectConfig from "./PartialEffectConfig";
 import { HitType } from "../midi/HitType";
@@ -9,11 +11,11 @@ import RGB from "../light/RGB";
 import { EffectPriority } from "../effect/EffectPriority";
 import ConstantSpin from "../light/effect/positional/ConstantSpin";
 import Sparkle from "../light/effect/positional/Sparkle";
-import PartialEffect from "../light/effect/PartialEffect";
 import Util from "../util/Util";
 import LinearFadeOutEffect from "../light/effect/amplitude/LinearFadeOutEffect";
 import LinearColorTransition from "../light/effect/color/LinearColorTransition";
 import SymmetricalLeds from "../light/effect/positional/SymmetricalLeds";
+import JsonEffectConfig from '../light/effect/JsonEffectConfig';
 
 function arrayToRgb(arr: number[]) {
     return new RGB(arr[0], arr[1], arr[2]);
@@ -98,6 +100,8 @@ export default class TronConfig extends BaseEffectConfig {
 
         this.createSparkle([HitType.CRASH2_EDGE], EffectTarget.TOM2, [EffectTarget.TOM1, EffectTarget.TOM3], [EffectTarget.SNARE], [15, 5, 3]);
         this.createSparkle([HitType.CRASH1_EDGE], EffectTarget.TOM1, [EffectTarget.TOM2, EffectTarget.SNARE], [EffectTarget.TOM3], [15, 5, 3]);
+
+        //fs.writeFileSync("tron.config", JSON.stringify(this.effects, null, 2));
     }
 
     createRacer(targets: EffectTarget[], offset: number, color: RGB) {
@@ -113,9 +117,20 @@ export default class TronConfig extends BaseEffectConfig {
 
     createTrail(targets: EffectTarget[], offset: number, length: number, color: RGB) {
         for (let n of Util.range(0, length)) {
+            // TEST JSON config
+            const constantAmplitudeConfig: JsonEffectConfig = {
+                className: "ConstantAmplitude",
+                typeName: "Constant Amplitude",
+                parameters: {
+                    amplitude: ambientAmplitude
+                }
+            };
+            const constAmplitudeEffect = new ConstantAmplitude();
+            constAmplitudeEffect.fromJson(JSON.stringify(constantAmplitudeConfig));
+
             this.effects.push(
                 new PartialEffectConfig([], [
-                    new ConstantAmplitude(ambientAmplitude / 2),
+                    constAmplitudeEffect,
                     new SingleColorEffect(color),
                     new ConstantSpin(targets, ambientSpinPeriod, 1000, 1, offset - n, 1.0),
                 ], EffectPriority.LOWEST, true

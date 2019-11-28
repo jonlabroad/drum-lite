@@ -1,6 +1,8 @@
+import IRemoteDriver from "./IRemoteDriver";
+
 const io = require('socket.io-client');
 
-export default class SocketIODriver {
+export default class SocketIODriver implements IRemoteDriver {
     server: any;
     public sio: any;
 
@@ -9,7 +11,7 @@ export default class SocketIODriver {
         this.sio = io('http://localhost:3000');
     }
 
-    public send(type: string, message: any) {
+    public send(type: string, message: string) {
         console.log({type, message});
         this.sio.emit(type, message);
     }

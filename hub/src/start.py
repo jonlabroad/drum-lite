@@ -6,8 +6,9 @@ driver = NeopixelDriver()
 
 async def echo(websocket, path):
     async for message in websocket:
+        print(message)
         driver.drive(message)
 
 asyncio.get_event_loop().run_until_complete(
-    websockets.serve(echo, '10.0.0.27', 3000))
+    websockets.serve(echo, '0.0.0.0', 3000))
 asyncio.get_event_loop().run_forever()

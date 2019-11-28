@@ -5,6 +5,7 @@ import TestConfig from "./effects/TestConfig";
 import EffectCompiler from "./effect/EffectCompiler";
 import EffectRunner from "./effect/EffectRunner";
 import TronConfig from "./effects/TronConfig";
+import WebsocketsDriver from "./light/drivers/WebsocketsDriver";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -12,7 +13,7 @@ async function sleep(ms: number) {
     });
 }
 
-async function main() {
+export default async function main() {
     //const config = new TestConfig();
     const config = new TronConfig();
     const compiled = new EffectCompiler(config).compile();
@@ -21,7 +22,9 @@ async function main() {
     const midi = new Midi(msgHandler.handleMessage.bind(msgHandler));
     midi.openPort();
 
-    const runner = new EffectRunner(effectActivator);
+    const ledDriver = new WebsocketsDriver();
+    ledDriver.connect();
+    const runner = new EffectRunner(effectActivator, ledDriver);
     await runner.run();
 }
 

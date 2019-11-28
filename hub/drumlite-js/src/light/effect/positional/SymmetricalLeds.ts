@@ -5,31 +5,26 @@ import Util from "../../../util/Util";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export default class SymmetricalLeds extends PartialEffect {
-    targets: EffectTarget[];
-    numSym: number;
-    sectionLength: number;
-    offset: number;
-
     constructor(targets: EffectTarget[], numSym: number, sectionLength: number, offset = 0, dt = 0) {
         super("Symmetrical", "Positional", dt);
-        this.targets = targets
-        this.numSym = numSym
-        this.sectionLength = sectionLength
-        this.offset = offset
+        this.params.targets = targets
+        this.params.numSym = numSym
+        this.params.sectionLength = sectionLength
+        this.params.offset = offset
     }
 
     public getEffect(t: number) {
         const ledSelector = new LEDSelector();
         const pos: number[] = [];
-        for (let target of this.targets) {
+        for (let target of (this.params.targets as EffectTarget[])) {
             const tempPos: number[] = [];
             const tPos = ledSelector.getAllTargetPositions(target);
             const numLeds = tPos.length;
-            for (let sectionNum of Util.range(0, this.numSym)) {
-                const centerPos = Math.round(sectionNum * numLeds / this.numSym) + this.offset;
+            for (let sectionNum of Util.range(0, this.params.numSym as number)) {
+                const centerPos = Math.round(sectionNum * numLeds / (this.params.numSym as number)) + (this.params.offset as number);
                 tempPos.push(centerPos);
-                tempPos.push(...Util.range(centerPos, centerPos + Math.round(this.sectionLength / 2), 1));
-                tempPos.push(...Util.range(centerPos, centerPos - Math.round(this.sectionLength / 2), -1));
+                tempPos.push(...Util.range(centerPos, centerPos + Math.round((this.params.sectionLength as number) / 2), 1));
+                tempPos.push(...Util.range(centerPos, centerPos - Math.round((this.params.sectionLength as number) / 2), -1));
             }
 
             for (let p of tempPos) {

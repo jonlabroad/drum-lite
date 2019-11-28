@@ -2,26 +2,23 @@ import PartialEffect from "../PartialEffect";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export default class ConstantAmplitude extends PartialEffect {
-    amplitude: number;
-    durationMillis?: number;
-    
-    constructor(amplitude: number, durationMillis: number | undefined = undefined, dt: number = 0){
+    constructor(amplitude?: number, durationMillis: number | undefined = undefined, dt: number = 0){
         super("Constant Amplitude", "Amplitude", dt);
-        this.amplitude = amplitude;
-        this.durationMillis = durationMillis;
+        this.params.amplitude = amplitude;
+        this.params.durationMillis = durationMillis;
     }
 
     public getEffect(t: number): ResolvedEffect {
-        return ResolvedEffect.createAmplitude(this.amplitude);
+        return ResolvedEffect.createAmplitude(this.params.amplitude as number);
     }
 
     public isTemporal(): boolean {
-        return !!this.durationMillis;
+        return !!this.params.durationMillis;
     }
 
     public isComplete(t:  number) {
-        if (this.durationMillis) {
-            return t > this.durationMillis;
+        if (this.params.durationMillis) {
+            return t > this.params.durationMillis;
         }
         return true;
     }

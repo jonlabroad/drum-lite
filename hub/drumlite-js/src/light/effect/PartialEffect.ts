@@ -1,16 +1,28 @@
 import ResolvedEffect from "../../effect/ResolvedEffect";
+import JsonEffectConfig from "./JsonEffectConfig";
+import RGB from "../RGB";
+
+export interface Parameters {
+    startTime: number
+    isModifier: boolean
+    typeName: string
+    className: string
+    [key: string]: string | number | boolean | RGB | undefined | null | string[] | number[] | boolean[] | RGB[]
+}
 
 export default class PartialEffect {
-    public startTime: number = 0;
-    public isModifier: boolean = false;
-    public typeName: string;
-    public className: string;
+    protected params: Parameters = {
+        startTime: 0,
+        isModifier: false,
+        typeName: "",
+        className: ""
+    };
 
     constructor(type: string, className: string, startTime: number = 0) {
-        this.typeName = type;
-        this.className = className;
-        this.startTime = startTime
-        this.isModifier = false
+        this.params.typeName = type;
+        this.params.className = className;
+        this.params.startTime = startTime
+        this.params.isModifier = false
     }
 
     public getEffect(t: number): ResolvedEffect {
@@ -27,5 +39,10 @@ export default class PartialEffect {
 
     public getAmbientDuration(): number {
         return 0;
+    }
+
+    public fromJson(json: string) {
+        const config = JSON.parse(json) as JsonEffectConfig;
+        this.params = {...this.params, ...config.parameters};
     }
 }

@@ -1,15 +1,15 @@
 import CompiledEffect from "../../effect/CompiledEffect";
 import Util from "../../util/Util";
-import WebsocketsDriver from "./WebsocketsDriver";
+import IRemoteDriver from "./IRemoteDriver";
 
 export default class LEDDriver {
     static readonly ledsOnStrip = 160;
 
     private pixels: Record<number, number[]>;
     private previousLedEffects: Map<number, number[]>;
-    private driverImpl: WebsocketsDriver;
+    private driverImpl: IRemoteDriver;
 
-    constructor(driverImpl: WebsocketsDriver) {
+    constructor(driverImpl: IRemoteDriver) {
         this.pixels = {};//new Map<number, number[]>();
         for (let i = 0; i < LEDDriver.ledsOnStrip; i++) {
             //this.pixels.set(i, [0,0,0]);

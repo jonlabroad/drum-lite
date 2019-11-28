@@ -1,19 +1,20 @@
-import IRemoteDriver from "./IRemoteDriver";
-
-const Websockets = require('ws');
+import IRemoteDriver from "drumlite-js/dist/light/drivers/IRemoteDriver";
 
 export default class WebsocketsDriver implements IRemoteDriver {
     ws: any;
     connected: boolean = false;
 
-    connect() {
-        //this.ws = new Websockets('ws://localhost:3000', {
-            this.ws = new Websockets('ws://10.0.0.27:3000', {
-            perMessageDeflate: false
-        });
+    connect(onOpen: any, onClose: any) {
+        this.ws = new WebSocket('ws://10.0.0.27:3000');
+        this.ws.onopen = () => {
+            this.connected = true;
+            onOpen();
+        }
 
-        this.ws.on('open', this.onConnection.bind(this));
-        this.ws.on('close', this.onDisconnection.bind(this));
+        this.ws.onclose = () => {
+            this.connected = false;
+            onClose();
+        }
     }
 
     onConnection() {

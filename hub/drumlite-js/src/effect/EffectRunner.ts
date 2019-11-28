@@ -4,23 +4,22 @@ import BasicCombiner from "./combiners/BasicCombiner";
 import SocketIODriver from "../light/drivers/SocketIODriver";
 import LEDDriver from "../light/drivers/LedDriver";
 import Util from "../util/Util";
-import WebsocketsDriver from "../light/drivers/WebsocketsDriver";
+import IRemoteDriver from "../light/drivers/IRemoteDriver";
 
 export default class EffectRunner {
     activator: EffectActivator;
     priorityHandler: EffectPriorityHandler;
     combiner: BasicCombiner;
-    websockets: WebsocketsDriver;
+    ledDriver: IRemoteDriver;
     driver: LEDDriver;
     isRunning: boolean;
 
-    constructor(activator: EffectActivator) {
+    constructor(activator: EffectActivator, driver: IRemoteDriver) {
         this.activator = activator;
         this.priorityHandler = new EffectPriorityHandler();
         this.combiner = new BasicCombiner();
-        this.websockets = new WebsocketsDriver();
-        this.websockets.connect();
-        this.driver = new LEDDriver(this.websockets);
+        this.ledDriver = driver;
+        this.driver = new LEDDriver(this.ledDriver);
         this.isRunning = false;
     }
 

@@ -6,38 +6,39 @@ import Util from "../../../util/Util";
 import LEDSelector from "../../LEDSelector";
 
 export default class ConstantSpin extends PartialEffect {
-    targets: EffectTarget[];
-    period: number;
-    num: number;
-    offset: number;
-    amplitude: number;
-
-
-    constructor(targets: EffectTarget[], period: number, speed: number, num: number, offset: number, amplitude = 1.0) {
+    constructor(targets: EffectTarget[] = [], period?: number, speed?: number, num?: number, offset?: number, amplitude = 1.0) {
         super("Constant Spin", "Positional", 0);
-        this.targets = targets
-        this.period = period
-        this.num = num
-        this.offset = offset
-        this.amplitude = amplitude
+        this.params.targets = targets
+        this.params.period = period
+        this.params.num = num
+        this.params.offset = offset
+        this.params.amplitude = amplitude
     }
 
     public getEffect(t: number) {
-        const tNorm = ScaleFunctions.linear(t, this.startTime, this.period);
+        const {
+            targets,
+            period,
+            num,
+            offset,
+            amplitude
+        } = this.params;
+
+        const tNorm = ScaleFunctions.linear(t, this.params.startTime, period as number);
         const ledPositions: number[] = [];
         const ledSelector = new LEDSelector();
 
-        for (let target of this.targets) {
+        for (let target of (targets as EffectTarget[])) {
             const positions = ledSelector.getAllTargetPositions(target);
             const startPos = positions[0];
-            const ledsPerChild = positions.length / this.num;
-            for (let child of Util.range(0, this.num)) {
-                const childPt = startPos + Math.round(child * ledsPerChild + tNorm * positions.length) + this.offset;
+            const ledsPerChild = positions.length / (num as number);
+            for (let child of Util.range(0, num as number)) {
+                const childPt = startPos + Math.round(child * ledsPerChild + tNorm * positions.length) + (offset as number);
                 ledPositions.push(ledSelector.unalias(target, childPt));
             }
         }
 
-        return new ResolvedEffect(undefined, undefined, [...(new Set<number>(ledPositions))]);
+        return new ResolvedEffect(undefined, undefined, [...new Set<number>(ledPositions)]);
     }
 
     public isTemporal() {
@@ -45,6 +46,6 @@ export default class ConstantSpin extends PartialEffect {
     }
 
     public isComplete(t: number) {
-        return t > this.startTime + this.period;
+        return t > this.params.startTime + (this.params.period as number);
     }
 }

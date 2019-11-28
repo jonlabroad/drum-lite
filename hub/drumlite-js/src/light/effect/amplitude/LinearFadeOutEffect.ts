@@ -2,18 +2,17 @@ import PartialEffect from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export default class LinearFadeOutEffect extends PartialEffect {
-    fadeOutDuration: number;
-    startAmplitude: number;
-
-    constructor(fadeOutDuration: number, startAmplitude: number, dt=0) {
+    constructor(fadeOutDuration?: number, startAmplitude?: number, dt=0) {
         super("Linear Fade Out", "Amplitude", dt);
-        this.fadeOutDuration = fadeOutDuration;
-        this.startAmplitude = startAmplitude;
+        this.params.fadeOutDuration = fadeOutDuration;
+        this.params.startAmplitude = startAmplitude;
     }
 
     public getEffect(t: number) {
-        const dt = t - this.startTime;
-        const scale = this.startAmplitude - dt / this.fadeOutDuration * this.startAmplitude;
+        const dt = t - this.params.startTime;
+        const startAmp = this.params.amplitude as number;
+        const fadeOutDuration = this.params.fadeOutDuration as number;
+        const scale = startAmp - dt / fadeOutDuration * startAmp;
         return ResolvedEffect.createAmplitude(scale);
     }
 
@@ -22,6 +21,8 @@ export default class LinearFadeOutEffect extends PartialEffect {
     }
 
     public isComplete(t: number) {
-        return t - this.startTime >= this.fadeOutDuration;
+        const startTime = this.params.startTime as number;
+        const fadeOutDuration = this.params.fadeOutDuration as number;
+        return t - startTime >= fadeOutDuration;
     }
 }

@@ -4,21 +4,17 @@ import ResolvedEffect from "../../../effect/ResolvedEffect";
 import ColorTransition from "../../../util/ColorTransition";
 
 export default class LinearColorTransition extends PartialEffect {
-    src: RGB;
-    dst: RGB;
-    duration: number;
-    
-    constructor(srcRgb: RGB, dstRgb: RGB, duration: number) {
+    constructor(srcRgb?: RGB, dstRgb?: RGB, duration?: number) {
         super("Linear Color Transition", "Color", 0);
-        this.src = srcRgb
-        this.dst = dstRgb
-        this.duration = duration
+        this.params.src = srcRgb
+        this.params.dst = dstRgb
+        this.params.duration = duration
     }
     
     public getEffect(t: number) {
-        const dt = t - this.startTime;
-        const tNorm = dt / this.duration;
-        return ResolvedEffect.createRgb(ColorTransition.linear(tNorm, this.src, this.dst));
+        const dt = t - this.params.startTime;
+        const tNorm = dt / (this.params.duration as number);
+        return ResolvedEffect.createRgb(ColorTransition.linear(tNorm, this.params.src as RGB, this.params.dst as RGB));
     }
 
     public isTemporal() {

@@ -2,6 +2,7 @@ import * as constants from '../constants';
 import GlobalConfig from '../config/GlobalConfig';
 import { MainState } from '../types';
 import { ThunkDispatch } from 'redux-thunk';
+import { HitType } from 'drumlite-js/dist/midi/HitType';
 
 export interface Test {
     type: constants.TEST;
@@ -25,14 +26,13 @@ export function socketConnect(connected: boolean): SocketConnect {
     }
 };
 
-export function handleDrumTrigger(note: number): any {
+export function handleDrumTrigger(hitType: HitType): any {
     return (dispatch: ThunkDispatch<{}, {}, any>, getState: any) => {
         const state = getState() as MainState;
 
-        GlobalConfig.socket.emit("trigger_note", JSON.stringify({
-            note: note,
-            velocity: 100
-          }));
+        if (GlobalConfig.effectActivator) {
+            GlobalConfig.effectActivator.handleNote(hitType);
+        }
     }
 }
 

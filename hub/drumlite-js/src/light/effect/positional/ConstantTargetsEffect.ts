@@ -4,16 +4,14 @@ import ResolvedEffect from "../../../effect/ResolvedEffect";
 import LEDSelector from "../../LEDSelector";
 
 export default class ConstantTargetsEffect extends PartialEffect {
-    targets: EffectTarget[];
-    
     constructor(targets: EffectTarget[], dt: number = 0) {
         super("Constant Targets", "Positional", dt);
-        this.targets = targets
+        this.params.targets = targets
     }
 
     public getEffect(t: number) {
         const pos = [];
-        for (let target of this.targets) {
+        for (let target of (this.params.targets as EffectTarget[])) {
             pos.push(...new LEDSelector().getAllTargetPositions(target));
         }
 

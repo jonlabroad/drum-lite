@@ -7,8 +7,10 @@ import { MainState } from "../types"
 import { LightControlMain } from "../components/LightControlMain"
 import { handleDrumTrigger, socketConnect } from "../actions"
 import GlobalConfig from "../config/GlobalConfig"
+import WebsocketsDriver from "../driver/WebsocketsDriver"
 
-export interface SocketIoContainerProps {
+export interface WebsocketContainerProps {
+    driver: WebsocketsDriver
     children: ReactNode
     
     connected: boolean
@@ -16,15 +18,11 @@ export interface SocketIoContainerProps {
     socketConnect: any
 }
 
-export const SocketIoContainer: FunctionComponent<SocketIoContainerProps> = (props: SocketIoContainerProps) => {
+export const WebsocketContainer: FunctionComponent<WebsocketContainerProps> = (props: WebsocketContainerProps) => {
     useEffect(() => {
-        const sio = GlobalConfig.socket;
-        sio.on('connect', function() {
-            props.socketConnect(true);
-        });
-        sio.on('disconnect', function() {
-            props.socketConnect(false);
-        })
+        props.driver.connect(
+            () => props.socketConnect(true),
+            () => props.socketConnect(false));
     }, []);
 
     return (
@@ -44,4 +42,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     socketConnect: (connected: boolean) => dispatch(socketConnect(connected)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SocketIoContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(WebsocketContainer);

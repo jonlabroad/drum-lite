@@ -2,15 +2,13 @@ import EffectModifier from "../EffectModifier"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export default class BasicAmplitudeModifier extends EffectModifier {
-    amplitude: number;
-    
-    constructor(amplitude: number) {
+    constructor(amplitude?: number) {
         super("Basic Amplitude Modifier", "Modifier");
-        this.amplitude = amplitude;
+        this.params.amplitude = amplitude;
     }
 
     public getEffect(t: number) {
-        return ResolvedEffect.createAmplitude(this.amplitude);
+        return ResolvedEffect.createAmplitude(this.params.amplitude as number);
     }
 
     public isTemporal() {

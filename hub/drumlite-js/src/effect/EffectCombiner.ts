@@ -46,6 +46,6 @@ export default class EffectCombiner {
                 positions.push(...resolvedEffect.ledPositions);
             }
         }
-        return [...(new Set<number>(positions).keys())];
+        return [...new Set<number>(positions).keys()];
     }
 }
