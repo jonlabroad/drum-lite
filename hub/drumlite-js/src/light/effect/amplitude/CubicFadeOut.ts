@@ -1,15 +1,18 @@
-import PartialEffect from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
-export default class CubicFadeOut extends PartialEffect {
-    constructor(fadeOutDuration?: number, dt = 0) {
-        super("Cubic Fade Out", "Amplitude", dt);
-        this.params.fadeOutDuration = fadeOutDuration;
+export class CubicFadeOutParameters extends EffectParameters {
+    fadeOutDuration = new EffectParameter<number>("Fade Out Duration", 0);
+}
+
+export default class CubicFadeOut extends PartialEffect<CubicFadeOutParameters> {
+    constructor(params: CubicFadeOutParameters, dt = 0) {
+        super("Cubic Fade Out", "Amplitude", params, dt);
     }
 
     public getEffect(t: number) {
-        const dt = t - this.params.startTime;
-        const tNorm = dt / (this.params.fadeOutDuration as number) - 1;
+        const dt = t - this.params.startTime.val;
+        const tNorm = dt / (this.params.fadeOutDuration.val) - 1;
         const scale = 1 - (tNorm * tNorm * tNorm + 1);
         return ResolvedEffect.createAmplitude(scale);
     }
@@ -19,6 +22,6 @@ export default class CubicFadeOut extends PartialEffect {
     }
 
     public isComplete(t: number) {
-        return t - this.params.startTime >= (this.params.fadeOutDuration as number);
+        return t - this.params.startTime.val >= (this.params.fadeOutDuration.val);
     }
 }

@@ -1,17 +1,26 @@
-import PartialEffect from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
-export default class LinearFadeOutEffect extends PartialEffect {
-    constructor(fadeOutDuration?: number, startAmplitude?: number, dt=0) {
-        super("Linear Fade Out", "Amplitude", dt);
-        this.params.fadeOutDuration = fadeOutDuration;
-        this.params.startAmplitude = startAmplitude;
+export class LinearFadeOutEffectParams extends EffectParameters {
+    amplitude = new EffectParameter<number>("Amplitude", 1.0);
+    fadeOutDuration = new EffectParameter<number>("Fade Out Duration", 0);
+
+    constructor(amplitude: number = 1, fadeOutDuration: number = 1) {
+        super(0);
+        this.amplitude.val = amplitude;
+        this.fadeOutDuration.val = fadeOutDuration;
+    }
+}
+
+export default class LinearFadeOutEffect extends PartialEffect<LinearFadeOutEffectParams> {
+    constructor(params: LinearFadeOutEffectParams, dt=0) {
+        super("Linear Fade Out", "Amplitude", params, dt);
     }
 
     public getEffect(t: number) {
-        const dt = t - this.params.startTime;
-        const startAmp = this.params.amplitude as number;
-        const fadeOutDuration = this.params.fadeOutDuration as number;
+        const dt = t - this.params.startTime.val;
+        const startAmp = this.params.amplitude.val;
+        const fadeOutDuration = this.params.fadeOutDuration.val as number;
         const scale = startAmp - dt / fadeOutDuration * startAmp;
         return ResolvedEffect.createAmplitude(scale);
     }
@@ -21,8 +30,8 @@ export default class LinearFadeOutEffect extends PartialEffect {
     }
 
     public isComplete(t: number) {
-        const startTime = this.params.startTime as number;
-        const fadeOutDuration = this.params.fadeOutDuration as number;
+        const startTime = this.params.startTime.val;
+        const fadeOutDuration = this.params.fadeOutDuration.val;
         return t - startTime >= fadeOutDuration;
     }
 }

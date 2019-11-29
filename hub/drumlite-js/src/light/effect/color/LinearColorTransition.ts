@@ -1,20 +1,30 @@
 import RGB from "../../RGB"
-import PartialEffect from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import ColorTransition from "../../../util/ColorTransition";
 
-export default class LinearColorTransition extends PartialEffect {
-    constructor(srcRgb?: RGB, dstRgb?: RGB, duration?: number) {
-        super("Linear Color Transition", "Color", 0);
-        this.params.src = srcRgb
-        this.params.dst = dstRgb
-        this.params.duration = duration
+export class LinearColorTransitionParams extends EffectParameters {
+    src = new EffectParameter<RGB>("Start Color", new RGB())
+    dst = new EffectParameter<RGB>("End Color", new RGB())
+    duration = new EffectParameter<number>("Duration", 0)
+
+    constructor(src: RGB, dst: RGB, duration: number) {
+        super(0);
+        this.src.val = src;
+        this.dst.val = dst;
+        this.duration.val = duration;
+    }
+}
+
+export default class LinearColorTransition extends PartialEffect<LinearColorTransitionParams> {
+    constructor(params: LinearColorTransitionParams) {
+        super("Linear Color Transition", "Color", params, 0);
     }
     
     public getEffect(t: number) {
-        const dt = t - this.params.startTime;
-        const tNorm = dt / (this.params.duration as number);
-        return ResolvedEffect.createRgb(ColorTransition.linear(tNorm, this.params.src as RGB, this.params.dst as RGB));
+        const dt = t - this.params.startTime.val;
+        const tNorm = dt / (this.params.duration.val);
+        return ResolvedEffect.createRgb(ColorTransition.linear(tNorm, this.params.src.val, this.params.dst.val));
     }
 
     public isTemporal() {

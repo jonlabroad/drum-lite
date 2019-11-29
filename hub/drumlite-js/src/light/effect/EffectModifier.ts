@@ -1,10 +1,10 @@
-import PartialEffect from "./PartialEffect";
+import PartialEffect, { EffectParameters } from "./PartialEffect";
 
-export default class EffectModifier extends PartialEffect {
+export default class EffectModifier<T extends EffectParameters> extends PartialEffect<T> {
     public isModifier: boolean;
     
-    constructor(type: string, className: string) {
-        super(type, className, 0);
+    constructor(type: string, className: string, params: T) {
+        super(type, className, params, 0);
         this.isModifier = true;
     }
 }

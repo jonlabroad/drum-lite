@@ -1,18 +1,32 @@
 import { EffectTarget } from "../EffectTarget";
-import PartialEffect from "../PartialEffect";
+import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import ScaleFunctions from "../../../util/ScaleFunctions";
 import Util from "../../../util/Util";
 import LEDSelector from "../../LEDSelector";
 
-export default class ConstantSpin extends PartialEffect {
-    constructor(targets: EffectTarget[] = [], period?: number, speed?: number, num?: number, offset?: number, amplitude = 1.0) {
-        super("Constant Spin", "Positional", 0);
-        this.params.targets = targets
-        this.params.period = period
-        this.params.num = num
-        this.params.offset = offset
-        this.params.amplitude = amplitude
+export class ConstantSpinParams extends EffectParameters {
+    targets = new EffectParameter<EffectTarget[]>("Targets", [], "target", true);
+    period = new EffectParameter<number>("Period", 0);
+    num = new EffectParameter<number>("Number", 1);
+    speed = new EffectParameter<number>("Speed", 1);
+    offset = new EffectParameter<number>("Offset", 0);
+    amplitude = new EffectParameter<number>("Amplitude", 1);
+
+    constructor(targets: EffectTarget[], period: number, num: number, speed: number, offset: number, amplitude: number) {
+        super(0);
+        this.targets.val = targets;
+        this.period.val = period;
+        this.num.val = num;
+        this.speed.val = speed;
+        this.offset.val = offset;
+        this.amplitude.val = amplitude;
+    }
+}
+
+export default class ConstantSpin extends PartialEffect<ConstantSpinParams> {
+    constructor(params: ConstantSpinParams, dt = 0) {
+        super("Constant Spin", "Positional", params, dt);
     }
 
     public getEffect(t: number) {
@@ -24,16 +38,16 @@ export default class ConstantSpin extends PartialEffect {
             amplitude
         } = this.params;
 
-        const tNorm = ScaleFunctions.linear(t, this.params.startTime, period as number);
+        const tNorm = ScaleFunctions.linear(t, this.params.startTime.val, period.val);
         const ledPositions: number[] = [];
         const ledSelector = new LEDSelector();
 
-        for (let target of (targets as EffectTarget[])) {
+        for (let target of targets.val) {
             const positions = ledSelector.getAllTargetPositions(target);
             const startPos = positions[0];
-            const ledsPerChild = positions.length / (num as number);
-            for (let child of Util.range(0, num as number)) {
-                const childPt = startPos + Math.round(child * ledsPerChild + tNorm * positions.length) + (offset as number);
+            const ledsPerChild = positions.length / (num.val);
+            for (let child of Util.range(0, num.val)) {
+                const childPt = startPos + Math.round(child * ledsPerChild + tNorm * positions.length) + (offset.val);
                 ledPositions.push(ledSelector.unalias(target, childPt));
             }
         }
@@ -46,6 +60,6 @@ export default class ConstantSpin extends PartialEffect {
     }
 
     public isComplete(t: number) {
-        return t > this.params.startTime + (this.params.period as number);
+        return t > this.params.startTime.val + (this.params.period.val);
     }
 }

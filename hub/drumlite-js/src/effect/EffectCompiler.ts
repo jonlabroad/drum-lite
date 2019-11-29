@@ -12,7 +12,7 @@ export default class EffectCompiler {
         this.config = config
     }
 
-    public effectsAreComplete(effects: PartialEffect[], dt: number) {
+    public effectsAreComplete(effects: PartialEffect<any>[], dt: number) {
         for (let effect of effects) {
             if (effect.isTemporal() && !effect.isComplete(dt)) {
                 return false;

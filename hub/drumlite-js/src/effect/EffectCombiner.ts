@@ -3,9 +3,9 @@ import ResolvedEffect from "./ResolvedEffect";
 import RGB from "../light/RGB";
 
 export default class EffectCombiner {
-    unresolvedEffects: PartialEffect[];
+    unresolvedEffects: PartialEffect<any>[];
     
-    constructor(effects: PartialEffect[]) {
+    constructor(effects: PartialEffect<any>[]) {
         this.unresolvedEffects = effects;
     }
 

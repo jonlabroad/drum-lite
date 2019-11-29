@@ -1,30 +1,41 @@
-import PartialEffect from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
 import { EffectTarget } from "../EffectTarget"
 import LEDSelector from "../../LEDSelector";
 import Util from "../../../util/Util";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
-export default class SymmetricalLeds extends PartialEffect {
-    constructor(targets: EffectTarget[], numSym: number, sectionLength: number, offset = 0, dt = 0) {
-        super("Symmetrical", "Positional", dt);
-        this.params.targets = targets
-        this.params.numSym = numSym
-        this.params.sectionLength = sectionLength
-        this.params.offset = offset
+export class SymmetricalLedsParams extends EffectParameters {
+    targets = new EffectParameter<EffectTarget[]>("Targets", [], "target", true)
+    numSym = new EffectParameter<number>("Number", 1)
+    sectionLength = new EffectParameter<number>("Length", 1)
+    offset = new EffectParameter<number>("Offset", 0)
+
+    constructor(targets: EffectTarget[], numSym: number, sectionsLength: number, offset: number) {
+        super(0);
+        this.targets.val = targets;
+        this.numSym.val = numSym;
+        this.sectionLength.val = sectionsLength;
+        this.offset.val = offset;
+    }
+}
+
+export default class SymmetricalLeds extends PartialEffect<SymmetricalLedsParams> {
+    constructor(params: SymmetricalLedsParams, dt = 0) {
+        super("Symmetrical", "Positional", params, dt);
     }
 
     public getEffect(t: number) {
         const ledSelector = new LEDSelector();
         const pos: number[] = [];
-        for (let target of (this.params.targets as EffectTarget[])) {
+        for (let target of this.params.targets.val) {
             const tempPos: number[] = [];
             const tPos = ledSelector.getAllTargetPositions(target);
             const numLeds = tPos.length;
-            for (let sectionNum of Util.range(0, this.params.numSym as number)) {
-                const centerPos = Math.round(sectionNum * numLeds / (this.params.numSym as number)) + (this.params.offset as number);
+            for (let sectionNum of Util.range(0, this.params.numSym.val)) {
+                const centerPos = Math.round(sectionNum * numLeds / this.params.numSym.val) + (this.params.offset.val);
                 tempPos.push(centerPos);
-                tempPos.push(...Util.range(centerPos, centerPos + Math.round((this.params.sectionLength as number) / 2), 1));
-                tempPos.push(...Util.range(centerPos, centerPos - Math.round((this.params.sectionLength as number) / 2), -1));
+                tempPos.push(...Util.range(centerPos, centerPos + Math.round((this.params.sectionLength.val) / 2), 1));
+                tempPos.push(...Util.range(centerPos, centerPos - Math.round((this.params.sectionLength.val) / 2), -1));
             }
 
             for (let p of tempPos) {

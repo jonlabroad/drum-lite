@@ -4,12 +4,12 @@ import { EffectPriority } from "../effect/EffectPriority";
 
 export default class PartialEffectConfig {
     triggerEvents: HitType[];
-    effect: PartialEffect[];
+    effect: PartialEffect<any>[];
     priority: number;
     isAmbient: boolean;
     isModifier: boolean;
 
-    constructor(triggerEvents: HitType[], effect: PartialEffect[], priority: EffectPriority = EffectPriority.MEDIUM, isAmbient: boolean = false, isModifier: boolean = false) {
+    constructor(triggerEvents: HitType[], effect: PartialEffect<any>[], priority: EffectPriority = EffectPriority.MEDIUM, isAmbient: boolean = false, isModifier: boolean = false) {
         this.triggerEvents = triggerEvents;
         this.effect = effect;
         this.priority = priority;

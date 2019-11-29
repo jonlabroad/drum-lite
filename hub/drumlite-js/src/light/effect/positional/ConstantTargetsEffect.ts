@@ -1,17 +1,25 @@
-import PartialEffect from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
 import { EffectTarget } from "../EffectTarget"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import LEDSelector from "../../LEDSelector";
 
-export default class ConstantTargetsEffect extends PartialEffect {
-    constructor(targets: EffectTarget[], dt: number = 0) {
-        super("Constant Targets", "Positional", dt);
-        this.params.targets = targets
+export class ConstantTargetsEffectParams extends EffectParameters {
+    targets = new EffectParameter<EffectTarget[]>("Targets", [], "target", true)
+
+    constructor(targets: EffectTarget[]) {
+        super(0);
+        this.targets.val = targets;
+    }
+}
+
+export default class ConstantTargetsEffect extends PartialEffect<ConstantTargetsEffectParams> {
+    constructor(params: ConstantTargetsEffectParams, dt: number = 0) {
+        super("Constant Targets", "Positional", params, dt);
     }
 
     public getEffect(t: number) {
         const pos = [];
-        for (let target of (this.params.targets as EffectTarget[])) {
+        for (let target of (this.params.targets.val)) {
             pos.push(...new LEDSelector().getAllTargetPositions(target));
         }
 

@@ -1,29 +1,40 @@
 import { EffectTarget } from "../EffectTarget"
-import PartialEffect from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
 import ScaleFunctions from "../../../util/ScaleFunctions";
 import LEDSelector from "../../LEDSelector";
 import Util from "../../../util/Util";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
-export default class Sparkle extends PartialEffect {
-    constructor(targets: EffectTarget[], startingDensity: number, sparkleSize: number, duration: number) {
-        super("Sparkle", "Positional");
-        this.params.targets = targets;
-        this.params.startingDensity = startingDensity;
-        this.params.sparkleSize = sparkleSize;
-        this.params.duration = duration;
+export class SparkleParams extends EffectParameters {
+    targets = new EffectParameter<EffectTarget[]>("Targets", [], "target", true)
+    density = new EffectParameter<number>("Density", 1)
+    sparkleSize = new EffectParameter<number>("Sparkle Size", 1)
+    duration = new EffectParameter<number>("Duration", 0)
+
+    constructor(targets: EffectTarget[], density: number, sparkleSize: number, duration: number) {
+        super(0);
+        this.targets.val = targets;
+        this.density.val = density;
+        this.sparkleSize.val = sparkleSize;
+        this.duration.val = duration;
+    }
+}
+
+export default class Sparkle extends PartialEffect<SparkleParams> {
+    constructor(params: SparkleParams, dt = 0) {
+        super("Sparkle", "Positional", params, dt);
     }
 
     public getEffect(t: number) {
         const ledSelector = new LEDSelector();
         const pos: number[] = [];
-        for (let target of (this.params.targets as EffectTarget[])) {
+        for (let target of this.params.targets.val) {
             const tempPos: number[] = [];
-            const tNorm = 1 - ScaleFunctions.linear(t, this.params.startTime, this.params.duration as number);
+            const tNorm = 1 - ScaleFunctions.linear(t, this.params.startTime.val, this.params.duration.val);
             const targetPos = ledSelector.getAllTargetPositions(target);
             const numLeds = targetPos.length;
             
-            const scaledDensity = Math.floor((this.params.startingDensity as number) * tNorm);
+            const scaledDensity = Math.floor(this.params.density.val * tNorm);
             for (let sparkle of Util.range(0, scaledDensity)) {
                 const randomLed = ledSelector.unalias(target, Math.round(Math.random() * (numLeds - 1)));
                 tempPos.push(randomLed);
@@ -41,6 +52,6 @@ export default class Sparkle extends PartialEffect {
     }
 
     public isComplete(t: number) {
-        return t > (this.params.duration as number);
+        return t > this.params.duration.val;
     }
 }
