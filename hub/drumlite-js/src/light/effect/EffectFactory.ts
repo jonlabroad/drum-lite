@@ -11,7 +11,7 @@ export default class EffectFactory {
         switch (config.className) {
             case "Constant Amplitude":
                 return this.create(new ConstantAmplitude(new ConstantAmplitudeParams()), jsonConfig);
-            case " Cubic Fade Out":
+            case "Cubic Fade Out":
                 return this.create(new CubicFadeOut(new CubicFadeOutParameters()), jsonConfig);
             case "Linear Fade Out":
                 return this.create(new LinearFadeOutEffect(new LinearFadeOutEffectParams()), jsonConfig);

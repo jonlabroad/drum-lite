@@ -3,7 +3,7 @@ import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export class ConstantAmplitudeParams extends EffectParameters {
     amplitude = new EffectParameter<number>("Amplitude", 0)
-    durationMilliseconds = new EffectParameter<number>("Amplitude", 0)
+    durationMilliseconds = new EffectParameter<number>("Duration (Milliseconds)", 0)
 
     constructor(amplitude: number = 1.0, durationMilliseconds: number = 0) {
         super(0);

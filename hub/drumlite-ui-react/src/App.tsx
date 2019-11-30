@@ -14,6 +14,7 @@ import WebsocketsDriver from './driver/WebsocketsDriver';
 import WebsocketContainer from './containers/WebsocketContainer';
 import { HitType } from 'drumlite-js/dist/midi/HitType';
 import GlobalConfig from './config/GlobalConfig';
+import { TestEffectSelector } from './components/TestEffectSelector';
 
 const App: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);

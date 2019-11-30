@@ -3,6 +3,7 @@ import React from "react"
 import { Button, Page, Col, Row } from "react-onsenui"
 import { Grid } from "@material-ui/core"
 import { DrumButtons } from "./DrumButtons"
+import { TestEffectSelector } from "./TestEffectSelector";
 
 export interface LightControlMainProps {
     disabled: boolean
@@ -14,10 +15,10 @@ export const LightControlMain: FunctionComponent<LightControlMainProps> = (props
     return (
         <Page>
             <Grid container spacing={2}>
-                <DrumButtons
-                    onClick={props.onDrumButtonClick}
-                    disabled={props.disabled}
-                />
+                    <DrumButtons
+                        onClick={props.onDrumButtonClick}
+                        disabled={props.disabled}
+                    />
             </Grid>
         </Page>
     )
