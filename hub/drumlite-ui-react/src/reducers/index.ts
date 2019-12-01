@@ -1,13 +1,14 @@
 import { Reducer } from "react";
 import { MainState } from "../types";
 import { RootAction } from "../actions";
-import { SOCKET_CONNECT } from "../constants";
+import { SOCKET_CONNECT, ENABLE_LEDS } from "../constants";
 
 export const initialState: MainState = {
     data: {
         connected: false
     },
     nav: {
+        runLeds: false
     }
 };
 
@@ -22,8 +23,17 @@ export const mainReducer: Reducer<MainState, RootAction> = (state = initialState
             return newState;
 */
         case SOCKET_CONNECT:
+        {
             const newState = { ...state, data: { ...state.data, connected: action.connected } };
             return newState;
+        }
+
+        case ENABLE_LEDS:
+        {
+            const newState = { ...state, nav: { ...state.nav, runLeds: action.enable } };
+            return newState;
+        }
+
         default:
             console.log(`Don't know how to process ${action.type}`)
         }

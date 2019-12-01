@@ -8,4 +8,5 @@ export interface DataState {
 }
 
 export interface NavigationState {
+    runLeds: boolean
 }

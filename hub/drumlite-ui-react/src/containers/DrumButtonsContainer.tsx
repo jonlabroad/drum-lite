@@ -7,27 +7,31 @@ import { MainState } from "../types"
 import { LightControlMain } from "../components/LightControlMain"
 import { handleDrumTrigger, enableLeds } from "../actions"
 import { HitType } from "drumlite-js/dist/midi/HitType"
+import { DrumButtons } from "../components/DrumButtons"
 
-export interface LightControlMainContainerProps {
+export interface DrumButtonsContainerProps {
     connected: boolean
+    runLeds: boolean
 
     handleDrumTrigger: any
     enableLeds: any
+    
 }
 
-export const LightControlMainContainer: FunctionComponent<LightControlMainContainerProps> = (props: LightControlMainContainerProps) => {
+export const DrumButtonsContainer: FunctionComponent<DrumButtonsContainerProps> = (props: DrumButtonsContainerProps) => {
     return (
-        <LightControlMain
+        <DrumButtons
+            onClick={props.handleDrumTrigger}
+            onRunLedsClick={props.enableLeds}
             disabled={!props.connected}
-            onDrumButtonClick={props.handleDrumTrigger}
-            onEnableClick={props.enableLeds}
         />
     )
 }
 
 const mapStateToProps = (state: MainState) => {
     return {
-        connected: state.data.connected
+        connected: state.data.connected,
+        runLeds: state.nav.runLeds
     }
 };
 
@@ -36,4 +40,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     enableLeds: (enable: boolean) => dispatch(enableLeds(enable))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LightControlMainContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DrumButtonsContainer);

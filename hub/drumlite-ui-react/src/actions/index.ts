@@ -26,6 +26,18 @@ export function socketConnect(connected: boolean): SocketConnect {
     }
 };
 
+export interface EnableLeds {
+    type: constants.ENABLE_LEDS;
+    enable: boolean;
+}
+export type EnableLedsAction = EnableLeds;
+export function enableLeds(enable: boolean): EnableLeds {
+    return {
+        type: constants.ENABLE_LEDS,
+        enable: enable
+    }
+};
+
 export function handleDrumTrigger(hitType: HitType): any {
     return (dispatch: ThunkDispatch<{}, {}, any>, getState: any) => {
         const state = getState() as MainState;
@@ -38,5 +50,6 @@ export function handleDrumTrigger(hitType: HitType): any {
 
 export type RootAction =
 TestAction |
-SocketConnectAction
+SocketConnectAction |
+EnableLedsAction
 ;

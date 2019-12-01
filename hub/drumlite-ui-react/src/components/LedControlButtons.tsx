@@ -8,16 +8,11 @@ export interface DrumButtonsProps {
     disabled: boolean
 
     onClick: any
-    onRunLedsClick: any
 }
 
 export const DrumButtons: FunctionComponent<DrumButtonsProps> = (props: DrumButtonsProps) => {
     return (
-        <Page>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Button modifier="cta" disabled={props.disabled} onClick={() => props.onRunLedsClick(true)}>Run</Button>
-                </Grid>
                 <Grid item xs={1}>
                     <Button modifier="cta" disabled={props.disabled} onClick={() => props.onClick(48)}>Tom 1</Button>
                 </Grid>
@@ -35,6 +30,5 @@ export const DrumButtons: FunctionComponent<DrumButtonsProps> = (props: DrumButt
                     <TestEffectSelector />
                 </Grid>
             </Grid>
-        </Page>
     )
 }

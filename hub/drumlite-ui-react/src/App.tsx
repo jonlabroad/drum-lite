@@ -15,6 +15,7 @@ import WebsocketContainer from './containers/WebsocketContainer';
 import { HitType } from 'drumlite-js/dist/midi/HitType';
 import GlobalConfig from './config/GlobalConfig';
 import { TestEffectSelector } from './components/TestEffectSelector';
+import { Page } from 'react-onsenui';
 
 const App: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -37,11 +38,13 @@ const App: React.FC = () => {
 
   return (
     <React.Fragment>
-      <div className="App">
-        <WebsocketContainer driver={driver.current}>
-          <LightControlMainContainer/>
-        </WebsocketContainer>
-      </div>
+      <Page>
+        <div className="App">
+          <WebsocketContainer driver={driver.current}>
+            <LightControlMainContainer/>
+          </WebsocketContainer>
+        </div>
+      </Page>
     </React.Fragment>
   );
 }

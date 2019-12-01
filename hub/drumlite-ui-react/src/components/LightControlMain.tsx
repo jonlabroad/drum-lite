@@ -1,24 +1,21 @@
 import { FunctionComponent } from "react"
 import React from "react"
-import { Button, Page, Col, Row } from "react-onsenui"
+import { Page } from "react-onsenui"
 import { Grid } from "@material-ui/core"
-import { DrumButtons } from "./DrumButtons"
-import { TestEffectSelector } from "./TestEffectSelector";
+import DrumButtonsContainer from "../containers/DrumButtonsContainer"
 
 export interface LightControlMainProps {
     disabled: boolean
 
     onDrumButtonClick: any
+    onEnableClick: any
 }
 
 export const LightControlMain: FunctionComponent<LightControlMainProps> = (props: LightControlMainProps) => {
     return (
         <Page>
             <Grid container spacing={2}>
-                    <DrumButtons
-                        onClick={props.onDrumButtonClick}
-                        disabled={props.disabled}
-                    />
+                    <DrumButtonsContainer />
             </Grid>
         </Page>
     )
