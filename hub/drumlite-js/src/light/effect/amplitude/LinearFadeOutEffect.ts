@@ -2,25 +2,25 @@ import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffe
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export class LinearFadeOutEffectParams extends EffectParameters {
-    amplitude = new EffectParameter<number>("Amplitude", 1.0);
-    fadeOutDuration = new EffectParameter<number>("Fade Out Duration", 0);
+    effectName = "Linear Fade Out";
+    typeName = "Amplitude";
 
     constructor(amplitude: number = 1, fadeOutDuration: number = 1) {
         super(0);
-        this.amplitude.val = amplitude;
-        this.fadeOutDuration.val = fadeOutDuration;
+        this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
+        this.params.fadeOutDuration = new EffectParameter<number>("Fade Out Duration", fadeOutDuration);
     }
 }
 
 export default class LinearFadeOutEffect extends PartialEffect<LinearFadeOutEffectParams> {
     constructor(params: LinearFadeOutEffectParams, dt=0) {
-        super("Linear Fade Out", "Amplitude", params, dt);
+        super(params, dt);
     }
 
     public getEffect(t: number) {
-        const dt = t - this.params.startTime.val;
-        const startAmp = this.params.amplitude.val;
-        const fadeOutDuration = this.params.fadeOutDuration.val as number;
+        const dt = t - this.params.params.startTime.val;
+        const startAmp = this.params.params.amplitude.val;
+        const fadeOutDuration = this.params.params.fadeOutDuration.val as number;
         const scale = startAmp - dt / fadeOutDuration * startAmp;
         return ResolvedEffect.createAmplitude(scale);
     }
@@ -30,8 +30,8 @@ export default class LinearFadeOutEffect extends PartialEffect<LinearFadeOutEffe
     }
 
     public isComplete(t: number) {
-        const startTime = this.params.startTime.val;
-        const fadeOutDuration = this.params.fadeOutDuration.val;
+        const startTime = this.params.params.startTime.val;
+        const fadeOutDuration = this.params.params.fadeOutDuration.val;
         return t - startTime >= fadeOutDuration;
     }
 }

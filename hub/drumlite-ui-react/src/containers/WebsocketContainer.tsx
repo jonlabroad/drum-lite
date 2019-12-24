@@ -39,7 +39,7 @@ const mapStateToProps = (state: MainState) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    socketConnect: (connected: boolean) => dispatch(socketConnect(connected)),
+    socketConnect: (connected: boolean) => dispatch(socketConnect({connected})),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WebsocketContainer);

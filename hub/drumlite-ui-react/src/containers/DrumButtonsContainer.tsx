@@ -37,7 +37,7 @@ const mapStateToProps = (state: MainState) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
     handleDrumTrigger: (hitType: HitType) => dispatch(handleDrumTrigger(hitType)),
-    enableLeds: (enable: boolean) => dispatch(enableLeds(enable))
+    enableLeds: (enable: boolean) => dispatch(enableLeds({enable}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrumButtonsContainer);

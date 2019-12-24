@@ -18,26 +18,23 @@ export class EffectParameter<T> {
 }
 
 export class EffectParameters {
-    public startTime: EffectParameter<number>
+    public effectName: string = "Unknown"
+    public typeName: string = "Unknown"
+    public params: {[key: string]: EffectParameter<any>} = {}
 
     constructor(startTime: number = 0) {
-        this.startTime = new EffectParameter<number>("Start Time", 0);
+        this.params.startTime = new EffectParameter<number>("Start Time", 0);
     }
 }
 
 export default class PartialEffect<T extends EffectParameters> {
     isModifier = false
-    typeName: string = "unknown"
-    className: string = "PartialEffect"
-
     public params: T;
 
-    constructor(typeName: string, className: string, params: T, startTime: number, isModifier = false) {
-        this.typeName = typeName;
-        this.className = className;
+    constructor(params: T, startTime: number, isModifier = false) {
         this.isModifier = isModifier;
         this.params = params;
-        this.params.startTime.val = startTime;
+        this.params.params.startTime.val = startTime;
     }
 
     public getEffect(t: number): ResolvedEffect {

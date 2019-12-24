@@ -66,7 +66,7 @@ export default class TronConfig extends BaseEffectConfig {
 
         this.createRacer([EffectTarget.SNARE], 0, colors['tronBlueMain']);
         this.createTrail([EffectTarget.SNARE], -1, 20, colors['tronBlueTrail']);
-    
+
         this.createRacer([EffectTarget.SNARE], 27, colors['tronOrangeMain']);
         this.createTrail([EffectTarget.SNARE], 26, 20, colors['tronOrangeTrail']);
     
@@ -106,7 +106,7 @@ export default class TronConfig extends BaseEffectConfig {
             new PartialEffectConfig([], [
                     new ConstantAmplitude(new ConstantAmplitudeParams(ambientAmplitude)),
                     new SingleColorEffect(new SingleColorEffectParams(color)),
-                    new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1000, 1, offset, 1.0)),
+                    new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1, 1, offset, 1.0)),
                 ], EffectPriority.LOWEST, true
             )
         );
@@ -118,7 +118,7 @@ export default class TronConfig extends BaseEffectConfig {
                 new PartialEffectConfig([], [
                     new ConstantAmplitude(new ConstantAmplitudeParams(ambientAmplitude)),
                     new SingleColorEffect(new SingleColorEffectParams(color)),
-                    new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1000, 1, offset - n, 1.0)),
+                    new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1, 1, offset - n, 1.0)),
                 ], EffectPriority.LOWEST, true
                 )
             );
@@ -128,7 +128,7 @@ export default class TronConfig extends BaseEffectConfig {
     createPulseEffect(hitTypes: HitType[], targets: EffectTarget[], duration: number, amplitude: number) {
         this.effects.push(
             new PartialEffectConfig(hitTypes, [
-                new LinearFadeOutEffect(new LinearFadeOutEffectParams(duration, amplitude)),
+                new LinearFadeOutEffect(new LinearFadeOutEffectParams(amplitude, duration)),
                 new ConstantTargetsEffect(new ConstantTargetsEffectParams(targets)),
             ],
             EffectPriority.VERY_HIGH,
@@ -137,7 +137,7 @@ export default class TronConfig extends BaseEffectConfig {
 
         this.effects.push(
             new PartialEffectConfig(hitTypes, [
-                new LinearFadeOutEffect(new LinearFadeOutEffectParams(duration, amplitude / 20)),
+                new LinearFadeOutEffect(new LinearFadeOutEffectParams(amplitude / 20, duration)),
                 new LinearColorTransition(new LinearColorTransitionParams(colors["pinkPulse1"], colors["pinkPulse2"], duration)),
                 new SymmetricalLeds(new SymmetricalLedsParams(targets, 3, 3, 5)),
             ],
@@ -150,7 +150,7 @@ export default class TronConfig extends BaseEffectConfig {
         const hitDuration = 750;
         this.effects.push(
                     new PartialEffectConfig(hitTypes, [
-                    new LinearFadeOutEffect(new LinearFadeOutEffectParams(hitDuration, 1)),
+                    new LinearFadeOutEffect(new LinearFadeOutEffectParams(1, hitDuration)),
                     new LinearColorTransition(new LinearColorTransitionParams(color1, color2, hitDuration)),
                     new ConstantTargetsEffect(new ConstantTargetsEffectParams(targets))
                 ],

@@ -6,27 +6,23 @@ import Util from "../../../util/Util";
 import LEDSelector from "../../LEDSelector";
 
 export class ConstantSpinParams extends EffectParameters {
-    targets = new EffectParameter<EffectTarget[]>("Targets", [], "target", true);
-    period = new EffectParameter<number>("Period", 0);
-    num = new EffectParameter<number>("Number", 1);
-    speed = new EffectParameter<number>("Speed", 1);
-    offset = new EffectParameter<number>("Offset", 0);
-    amplitude = new EffectParameter<number>("Amplitude", 1);
+    effectName = "Constant Spin";
+    typeName = "Positional";
 
-    constructor(targets: EffectTarget[], period: number, num: number, speed: number, offset: number, amplitude: number) {
+    constructor(targets: EffectTarget[] = [], period: number = 1, num: number = 1, speed: number = 1, offset: number = 0, amplitude: number = 1) {
         super(0);
-        this.targets.val = targets;
-        this.period.val = period;
-        this.num.val = num;
-        this.speed.val = speed;
-        this.offset.val = offset;
-        this.amplitude.val = amplitude;
+        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, "target", true);
+        this.params.period = new EffectParameter<number>("Period", period);
+        this.params.num = new EffectParameter<number>("Number", num);
+        this.params.speed = new EffectParameter<number>("Speed", speed);
+        this.params.offset = new EffectParameter<number>("Offset", offset);
+        this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
     }
 }
 
 export default class ConstantSpin extends PartialEffect<ConstantSpinParams> {
     constructor(params: ConstantSpinParams, dt = 0) {
-        super("Constant Spin", "Positional", params, dt);
+        super(params, dt);
     }
 
     public getEffect(t: number) {
@@ -35,10 +31,11 @@ export default class ConstantSpin extends PartialEffect<ConstantSpinParams> {
             period,
             num,
             offset,
-            amplitude
-        } = this.params;
+            amplitude,
+            startTime
+        } = this.params.params;
 
-        const tNorm = ScaleFunctions.linear(t, this.params.startTime.val, period.val);
+        const tNorm = ScaleFunctions.linear(t, startTime.val, period.val);
         const ledPositions: number[] = [];
         const ledSelector = new LEDSelector();
 
@@ -60,6 +57,6 @@ export default class ConstantSpin extends PartialEffect<ConstantSpinParams> {
     }
 
     public isComplete(t: number) {
-        return t > this.params.startTime.val + (this.params.period.val);
+        return t > this.params.params.startTime.val + (this.params.params.period.val);
     }
 }

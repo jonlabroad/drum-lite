@@ -3,21 +3,22 @@ import ResolvedEffect from "../../../effect/ResolvedEffect";
 import { EffectParameters, EffectParameter } from "../PartialEffect";
 
 export class BasicAmplitudeModifierParams extends EffectParameters {
-    amplitude = new EffectParameter<number>("Amplitude", 1.0)
+    effectName = "Basic Amplitude Modifier";
+    typeName = "Modifier";
 
     constructor(amplitude = 1) {
         super(0);
-        this.amplitude.val = amplitude;
+        this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
     }
 }
 
 export default class BasicAmplitudeModifier extends EffectModifier<BasicAmplitudeModifierParams> {
     constructor(params: BasicAmplitudeModifierParams) {
-        super("Basic Amplitude Modifier", "Modifier", params);
+        super(params);
     }
 
     public getEffect(t: number) {
-        return ResolvedEffect.createAmplitude(this.params.amplitude.val as number);
+        return ResolvedEffect.createAmplitude(this.params.params.amplitude.val as number);
     }
 
     public isTemporal() {

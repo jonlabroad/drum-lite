@@ -3,21 +3,22 @@ import RGB from "../../RGB"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export class SingleColorEffectParams extends EffectParameters {
-    rgb = new EffectParameter<RGB>("Color", new RGB());
+    effectName = "Single Color Transition";
+    typeName = "Color";
 
-    constructor(rgb: RGB) {
+    constructor(rgb: RGB = new RGB()) {
         super(0);
-        this.rgb.val = rgb;
+        this.params.rgb = new EffectParameter<RGB>("Color", rgb);
     }
 }
 
 export default class SingleColorEffect extends PartialEffect<SingleColorEffectParams> {
     constructor(params: SingleColorEffectParams, dt: number = 0) {
-        super("Single Color Effect", "Color", params, dt);
+        super(params, dt);
     }
     
     public getEffect(t: number) {
-        return ResolvedEffect.createRgb(this.params.rgb.val)
+        return ResolvedEffect.createRgb(this.params.params.rgb.val)
     }
 
     public isTemporal() {

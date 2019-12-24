@@ -2,32 +2,32 @@ import PartialEffect, { EffectParameter, EffectParameters } from "../PartialEffe
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export class ConstantAmplitudeParams extends EffectParameters {
-    amplitude = new EffectParameter<number>("Amplitude", 0)
-    durationMilliseconds = new EffectParameter<number>("Duration (Milliseconds)", 0)
+    effectName = "Constant Amplitude";
+    typeName = "Amplitude";
 
     constructor(amplitude: number = 1.0, durationMilliseconds: number = 0) {
         super(0);
-        this.amplitude.val = amplitude;
-        this.durationMilliseconds.val = durationMilliseconds
+        this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
+        this.params.durationMilliseconds = new EffectParameter<number>("Duration (Milliseconds)", durationMilliseconds);
     }
 }
 
 export default class ConstantAmplitude extends PartialEffect<ConstantAmplitudeParams> {
     constructor(params: ConstantAmplitudeParams, dt: number = 0){
-        super("Constant Amplitude", "Amplitude", params, dt);
+        super(params, dt);
     }
 
     public getEffect(t: number): ResolvedEffect {
-        return ResolvedEffect.createAmplitude(this.params.amplitude.val);
+        return ResolvedEffect.createAmplitude(this.params.params.amplitude.val);
     }
 
     public isTemporal(): boolean {
-        return !!this.params.durationMilliseconds.val;
+        return !!this.params.params.durationMilliseconds.val;
     }
 
     public isComplete(t:  number) {
-        if (this.params.durationMilliseconds.val) {
-            return t > this.params.durationMilliseconds.val;
+        if (this.params.params.durationMilliseconds.val) {
+            return t > this.params.params.durationMilliseconds.val;
         }
         return true;
     }

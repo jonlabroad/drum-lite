@@ -6,27 +6,33 @@ import Util from "../../../util/Util";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export class CubicSingleSpiralParams extends EffectParameters {
-    duration = new EffectParameter<number>("Duration", 0)
-    numChildren = new EffectParameter<number>("Number", 1)
-    targets = new EffectParameter<EffectTarget[]>("Targets", [], "target", true)
-    amplitude = new EffectParameter<number>("Amplitude", 1)
+    effectName = "Cubic Single Spiral";
+    typeName = "Positional";
+
+    constructor(targets: EffectTarget[] = [], numChildren: number = 1, amplitude: number = 1, duration: number = 1) {
+        super(0);
+        this.params.duration = new EffectParameter<number>("Duration", duration)
+        this.params.numChildren = new EffectParameter<number>("Number", numChildren)
+        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, "target", true)
+        this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude)
+    }
 }
 
 export default class CubicSingleSpiral extends PartialEffect<CubicSingleSpiralParams> {
     constructor(params: CubicSingleSpiralParams, dt = 0) {
-        super("Cubic Single Spiral", "Positional", params, dt);
+        super(params, dt);
     }
 
     public getEffect(t: number) {
-        const tNorm = ScaleFunctions.cubicEaseOut(t, this.params.startTime.val, this.params.duration.val);
+        const tNorm = ScaleFunctions.cubicEaseOut(t, this.params.params.startTime.val, this.params.params.duration.val);
         const ledPositions: number[] = [];
         const ledSelector = new LEDSelector();
-        for (let target of (this.params.targets.val)) {
+        for (let target of (this.params.params.targets.val)) {
             const positions = ledSelector.getAllTargetPositions(target);
-            const fullChildLength = Math.ceil(positions.length / (this.params.numChildren.val));
+            const fullChildLength = Math.ceil(positions.length / (this.params.params.numChildren.val));
             const childLength = Math.ceil((1 - tNorm) * fullChildLength);
 
-            for (let child of Util.range(0, this.params.numChildren.val)) {
+            for (let child of Util.range(0, this.params.params.numChildren.val)) {
                 const childRoot = Math.round(child * fullChildLength + tNorm * fullChildLength);
                 const tailPos = Util.range(childRoot - childLength, childRoot);
                 for (let p of tailPos) {
@@ -43,6 +49,6 @@ export default class CubicSingleSpiral extends PartialEffect<CubicSingleSpiralPa
     }
 
     public isComplete(t: number) {
-        return t > this.params.startTime.val + (this.params.duration.val);
+        return t > this.params.params.startTime.val + (this.params.params.duration.val);
     }
 }

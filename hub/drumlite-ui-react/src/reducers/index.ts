@@ -1,7 +1,7 @@
 import { Reducer } from "react";
 import { MainState } from "../types";
-import { RootAction } from "../actions";
-import { SOCKET_CONNECT, ENABLE_LEDS } from "../constants";
+import { socketConnect, SocketConnect, EnableLeds, enableLeds } from "../actions";
+import { createReducer, Actions, Action, PayloadAction } from "@reduxjs/toolkit";
 
 export const initialState: MainState = {
     data: {
@@ -12,30 +12,14 @@ export const initialState: MainState = {
     }
 };
 
-export const mainReducer: Reducer<MainState, RootAction> = (state = initialState, action): MainState => {
-    if (!state) {
-        state = initialState;
+export const mainReducer: Reducer<MainState, any> = createReducer(initialState, {
+    [socketConnect.type]: (state: MainState, action: PayloadAction<SocketConnect>) => {
+        console.log(action);
+        const newState = { ...state, data: { ...state.data, connected: action.payload.connected } };
+        return newState;
+    },
+    [enableLeds.type]: (state: MainState, action: PayloadAction<EnableLeds>) => {
+        const newState = { ...state, nav: { ...state.nav, runLeds: action.payload.enable } };
+        return newState;
     }
-    switch (action.type) {
-/*
-        case API_REQUEST_IN_PROGRESS:
-            const newState = { ...state, data: { ...state.data, actionsInProgress: new Set<string>(state.data.actionsInProgress).add(action.key) }}
-            return newState;
-*/
-        case SOCKET_CONNECT:
-        {
-            const newState = { ...state, data: { ...state.data, connected: action.connected } };
-            return newState;
-        }
-
-        case ENABLE_LEDS:
-        {
-            const newState = { ...state, nav: { ...state.nav, runLeds: action.enable } };
-            return newState;
-        }
-
-        default:
-            console.log(`Don't know how to process ${action.type}`)
-        }
-    return state;
-}
+});

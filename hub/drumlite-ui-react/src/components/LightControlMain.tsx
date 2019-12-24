@@ -13,10 +13,8 @@ export interface LightControlMainProps {
 
 export const LightControlMain: FunctionComponent<LightControlMainProps> = (props: LightControlMainProps) => {
     return (
-        <Page>
-            <Grid container spacing={2}>
-                    <DrumButtonsContainer />
-            </Grid>
-        </Page>
+        <Grid container spacing={2}>
+            <DrumButtonsContainer />
+        </Grid>
     )
 }

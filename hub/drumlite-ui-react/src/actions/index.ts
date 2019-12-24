@@ -3,6 +3,7 @@ import GlobalConfig from '../config/GlobalConfig';
 import { MainState } from '../types';
 import { ThunkDispatch } from 'redux-thunk';
 import { HitType } from 'drumlite-js/dist/midi/HitType';
+import { createAction, Actions } from '@reduxjs/toolkit';
 
 export interface Test {
     type: constants.TEST;
@@ -14,29 +15,17 @@ export function test(): Test {
     }
 };
 
+
 export interface SocketConnect {
-    type: constants.SOCKET_CONNECT;
     connected: boolean;
 }
-export type SocketConnectAction = SocketConnect;
-export function socketConnect(connected: boolean): SocketConnect {
-    return {
-        type: constants.SOCKET_CONNECT,
-        connected: connected
-    }
-};
+export const socketConnect = createAction<SocketConnect>('SOCKET_CONNECT');
+
 
 export interface EnableLeds {
-    type: constants.ENABLE_LEDS;
     enable: boolean;
 }
-export type EnableLedsAction = EnableLeds;
-export function enableLeds(enable: boolean): EnableLeds {
-    return {
-        type: constants.ENABLE_LEDS,
-        enable: enable
-    }
-};
+export const enableLeds = createAction<EnableLeds>("ENABLE_LEDS");
 
 export function handleDrumTrigger(hitType: HitType): any {
     return (dispatch: ThunkDispatch<{}, {}, any>, getState: any) => {
@@ -48,8 +37,6 @@ export function handleDrumTrigger(hitType: HitType): any {
     }
 }
 
-export type RootAction =
-TestAction |
-SocketConnectAction |
-EnableLedsAction
-;
+export type MainActions = 
+    SocketConnect |
+    EnableLeds;
