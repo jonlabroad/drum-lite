@@ -5,6 +5,7 @@ import BaseEffectConfig from "@jonlabroad/drum-lite/dist/effects/BaseEffectConfi
 import { CSSProperties } from "@material-ui/styles"
 import { List, ListHeader, ListItem } from "react-onsenui"
 import PartialEffectConfig from "@jonlabroad/drum-lite/dist/effects/PartialEffectConfig";
+import EffectConfigParameterContainer from "../containers/EffectConfigParameterContainer"
 
 export interface EffectsConfigEditorProps {
     config: BaseEffectConfig
@@ -30,7 +31,9 @@ function renderEffects(config: BaseEffectConfig): JSX.Element {
                         <ListItem>
                         <Box display="flex" flexDirection="column">
                             <div>{e.params.effectName}</div>
-                            <div>{Object.keys(e.params.params).map((key: any) => <div>{`${e.params.params[key].paramName}: ${e.params.params[key].val.toString()}`}</div>)}</div>
+                            <div>{Object.keys(e.params.params).map((key: any) => <EffectConfigParameterContainer 
+                                parameter={e.params.params[key]}
+                            />)}</div>
                         </Box>
                         </ListItem>
 
