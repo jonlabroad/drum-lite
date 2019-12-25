@@ -1,13 +1,10 @@
 import { FunctionComponent } from "react"
 import React from "react"
-import { Button, Page, Col, Row } from "react-onsenui"
-import { Grid } from "@material-ui/core"
 import { connect } from "react-redux"
 import { MainState } from "../types"
-import { LightControlMain } from "../components/LightControlMain"
 import { handleDrumTrigger, enableLeds } from "../actions"
-import { HitType } from "drumlite-js/dist/midi/HitType"
 import { DrumButtons } from "../components/DrumButtons"
+import { HitType } from "@jonlabroad/drum-lite/dist/midi/HitType";
 
 export interface DrumButtonsContainerProps {
     connected: boolean

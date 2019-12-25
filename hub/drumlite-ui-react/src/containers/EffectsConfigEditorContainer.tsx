@@ -2,9 +2,8 @@ import { FunctionComponent } from "react"
 import React from "react"
 import { connect } from "react-redux"
 import { MainState } from "../types"
-import { EffectsLibrary } from "../components/EffectsLibrary"
 import { EffectsConfigEditor } from "../components/EffectConfigEditor"
-import TronConfig from "drumlite-js/dist/effects/TronConfig"
+import TronConfig from "@jonlabroad/drum-lite/dist/effects/TronConfig"
 
 export interface EffectsConfigEditorContainerProps {
 }

@@ -2,3 +2,6 @@
 dist
 node_modules
 build
+/secrets.txt
+/hub/drumlite-ui-react/.npmrc
+/hub/drumlite-js/.npmrc

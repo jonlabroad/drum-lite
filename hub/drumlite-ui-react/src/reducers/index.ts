@@ -1,7 +1,7 @@
 import { Reducer } from "react";
 import { MainState } from "../types";
 import { socketConnect, SocketConnect, EnableLeds, enableLeds } from "../actions";
-import { createReducer, Actions, Action, PayloadAction } from "@reduxjs/toolkit";
+import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 
 export const initialState: MainState = {
     data: {

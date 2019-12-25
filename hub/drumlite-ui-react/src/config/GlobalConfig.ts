@@ -1,4 +1,4 @@
-import EffectActivator from "drumlite-js/dist/effect/EffectActivator";
+import EffectActivator from "@jonlabroad/drum-lite/dist/effect/EffectActivator";
 
 export default class GlobalConfig {
     public static effectActivator?: EffectActivator = undefined;

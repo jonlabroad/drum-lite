@@ -1,4 +1,4 @@
-import IRemoteDriver from "drumlite-js/dist/light/drivers/IRemoteDriver";
+import IRemoteDriver from "@jonlabroad/drum-lite/dist/light/drivers/IRemoteDriver";
 
 export default class WebsocketsDriver implements IRemoteDriver {
     ws: any;

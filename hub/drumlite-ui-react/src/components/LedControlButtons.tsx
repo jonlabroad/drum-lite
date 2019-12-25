@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react"
 import React from "react"
-import { Button, Page } from "react-onsenui"
+import { Button } from "react-onsenui"
 import { Grid } from "@material-ui/core"
 
 export interface DrumButtonsProps {

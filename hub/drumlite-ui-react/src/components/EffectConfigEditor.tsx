@@ -1,11 +1,10 @@
 import { FunctionComponent } from "react"
 import React from "react"
-import { Grid, Box } from "@material-ui/core"
-import BaseEffectConfig from "drumlite-js/dist/effects/BaseEffectConfig"
+import { Box } from "@material-ui/core"
+import BaseEffectConfig from "@jonlabroad/drum-lite/dist/effects/BaseEffectConfig"
 import { CSSProperties } from "@material-ui/styles"
 import { List, ListHeader, ListItem } from "react-onsenui"
-import { EffectParameters } from "drumlite-js/dist/light/effect/PartialEffect"
-import PartialEffectConfig from "drumlite-js/dist/effects/PartialEffectConfig"
+import PartialEffectConfig from "@jonlabroad/drum-lite/dist/effects/PartialEffectConfig";
 
 export interface EffectsConfigEditorProps {
     config: BaseEffectConfig

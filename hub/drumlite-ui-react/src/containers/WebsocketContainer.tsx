@@ -1,12 +1,8 @@
 import { FunctionComponent, ReactNode, useEffect } from "react"
 import React from "react"
-import { Button, Page, Col, Row } from "react-onsenui"
-import { Grid } from "@material-ui/core"
 import { connect } from "react-redux"
 import { MainState } from "../types"
-import { LightControlMain } from "../components/LightControlMain"
-import { handleDrumTrigger, socketConnect } from "../actions"
-import GlobalConfig from "../config/GlobalConfig"
+import { socketConnect } from "../actions"
 import WebsocketsDriver from "../driver/WebsocketsDriver"
 
 export interface WebsocketContainerProps {

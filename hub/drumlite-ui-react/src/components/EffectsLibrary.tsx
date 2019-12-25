@@ -1,12 +1,11 @@
 import { FunctionComponent } from "react"
 import React from "react"
-import { Grid, Box } from "@material-ui/core"
+import { Box } from "@material-ui/core"
 import { CSSProperties } from "@material-ui/styles";
-import { EffectParameter, EffectParameters } from "drumlite-js/dist/light/effect/PartialEffect";
 import { Add } from "@material-ui/icons";
 import EffectUtil from "../util/EffectUtil";
 import { List, ListHeader, ListItem } from "react-onsenui";
-import Helmet from "react-helmet";
+import { EffectParameters } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect";
 
 export interface EffectsLibraryProps {
 }

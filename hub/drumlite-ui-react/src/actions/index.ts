@@ -2,8 +2,8 @@ import * as constants from '../constants';
 import GlobalConfig from '../config/GlobalConfig';
 import { MainState } from '../types';
 import { ThunkDispatch } from 'redux-thunk';
-import { HitType } from 'drumlite-js/dist/midi/HitType';
-import { createAction, Actions } from '@reduxjs/toolkit';
+import { createAction } from '@reduxjs/toolkit';
+import { HitType } from '@jonlabroad/drum-lite/dist/midi/HitType';
 
 export interface Test {
     type: constants.TEST;
