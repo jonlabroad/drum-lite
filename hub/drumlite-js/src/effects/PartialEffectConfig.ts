@@ -3,6 +3,7 @@ import PartialEffect from "../light/effect/PartialEffect";
 import { EffectPriority } from "../effect/EffectPriority";
 
 export default class PartialEffectConfig {
+    name: string = "Untitled";
     triggerEvents: HitType[];
     effect: PartialEffect<any>[];
     priority: number;

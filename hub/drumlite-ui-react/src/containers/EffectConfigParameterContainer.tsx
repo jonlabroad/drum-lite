@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react"
+import { FunctionComponent, CSSProperties } from "react"
 import React from "react"
 import { connect } from "react-redux"
 import { MainState } from "../types"
@@ -10,13 +10,18 @@ export interface EffectConfigParameterContainerProps {
     parameter: EffectParameter<any>
 }
 
+const style: CSSProperties = {
+    marginTop: "20px",
+    marginBottom: "25px"
+}
+
 function onChange(val: any) {
     // TODO? Change config value. Done here or up a level?
 }
 
 export const EffectConfigParameterContainer: FunctionComponent<EffectConfigParameterContainerProps> = (props: EffectConfigParameterContainerProps) => {
     return (
-        <div>
+        <div style={style}>
             <EffectConfigParameter
                 parameter={props.parameter}
 

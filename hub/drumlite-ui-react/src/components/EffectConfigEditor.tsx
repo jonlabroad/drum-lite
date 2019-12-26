@@ -20,12 +20,12 @@ function renderEffects(config: BaseEffectConfig): JSX.Element {
     return (
     <List
         dataSource={config.effects}
-        renderHeader={() => <ListHeader>{"EFFECT NAME"}</ListHeader>}
+        renderHeader={() => <ListHeader>{"Config Name"}</ListHeader>}
         renderRow={(effect: PartialEffectConfig) => <ListItem>
         <Box display="flex" flexDirection="row">
             <List
                 dataSource={effect.effect}
-                renderHeader={() => <ListHeader>{effect.triggerEvents.map(t => t.toString())}</ListHeader>}
+                renderHeader={() => <ListHeader>{effect.name}</ListHeader>}
                 renderRow={(e) => {
                     return (
                         <ListItem>
@@ -36,34 +36,12 @@ function renderEffects(config: BaseEffectConfig): JSX.Element {
                             />)}</div>
                         </Box>
                         </ListItem>
-
                     );
                 }}
             />
         </Box>
     </ListItem>}
     />
-    );
-
-    return (
-        <div>
-        {config.effects.map(effect => {
-        return <Box style={effectBoxStyle} display="flex" flexDirection="column">
-            <div>{effect.isAmbient ? <div>Ambient</div> : effect.triggerEvents.map(trigger => <div>{trigger.toString()}</div>)}</div>
-            {effect.effect.map(effectElement => {
-                console.log(effectElement.params);
-                return <div>
-                        {effectElement.params.effectName}
-                        {Object.keys(effectElement.params.params).map(key => {
-                            return <div>
-                                    {effectElement.params.params[key].paramName}
-                                </div>
-                        })}
-                    </div>
-            })}
-        </Box>
-    })}
-    </div>
     );
 }
 
