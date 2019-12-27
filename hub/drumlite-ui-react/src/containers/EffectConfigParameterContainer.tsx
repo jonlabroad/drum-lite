@@ -5,9 +5,13 @@ import { MainState } from "../types"
 import { EffectsLibrary } from "../components/EffectsLibrary"
 import { EffectConfigParameter } from "../components/EffectConfigParameter"
 import { EffectParameter } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect"
+import ParameterHelpers from "../util/ParameterHelpers"
+import { configurationChanged } from "../actions"
 
 export interface EffectConfigParameterContainerProps {
     parameter: EffectParameter<any>
+
+    configChanged: any
 }
 
 const style: CSSProperties = {
@@ -15,8 +19,9 @@ const style: CSSProperties = {
     marginBottom: "25px"
 }
 
-function onChange(val: any) {
-    // TODO? Change config value. Done here or up a level?
+function onChange(parameter: EffectParameter<any>, val: any) {
+    ParameterHelpers.setValue(parameter, val);
+    
 }
 
 export const EffectConfigParameterContainer: FunctionComponent<EffectConfigParameterContainerProps> = (props: EffectConfigParameterContainerProps) => {
@@ -25,7 +30,10 @@ export const EffectConfigParameterContainer: FunctionComponent<EffectConfigParam
             <EffectConfigParameter
                 parameter={props.parameter}
 
-                onChange={onChange}
+                onChange={(parameter: EffectParameter<any>, val: any) => {
+                    onChange(parameter, val);
+                    props.configChanged();
+                }}
             />
         </div>
     )
@@ -37,6 +45,7 @@ const mapStateToProps = (state: MainState) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
+    configChanged: () => dispatch(configurationChanged({}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EffectConfigParameterContainer);

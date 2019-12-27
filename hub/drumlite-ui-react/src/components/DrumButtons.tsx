@@ -6,6 +6,7 @@ import { CSSProperties } from "@material-ui/styles";
 
 export interface DrumButtonsProps {
     disabled: boolean
+    ledsRunning: boolean
 
     onClick: any
     onRunLedsClick: any
@@ -21,7 +22,7 @@ export const DrumButtons: FunctionComponent<DrumButtonsProps> = (props: DrumButt
     return (
         <Box display="flex" flexDirection="column" justifyContent="center">
             <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center">
-                <Button style={drumButtonStyle} modifier="cta" disabled={props.disabled} onClick={() => props.onRunLedsClick(true)}>Run</Button>
+                <Button style={drumButtonStyle} modifier="cta" disabled={props.disabled} onClick={() => props.onRunLedsClick(!props.ledsRunning)}>{props.ledsRunning ? 'Stop' : 'Run'}</Button>
             </Box>
             <Box display="flex" flexDirection="row" justifyContent="center">
                 <Button style={drumButtonStyle} modifier="cta" disabled={props.disabled} onClick={() => props.onClick(48)}>Tom 1</Button>

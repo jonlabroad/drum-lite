@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react"
+import { FunctionComponent, useState } from "react"
 import React from "react"
 import { Input } from "react-onsenui"
 import { EffectParameter, ParameterType } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect"
@@ -24,13 +24,21 @@ function getInputType(paramType: ParameterType): string {
 export const EffectConfigParameter: FunctionComponent<EffectConfigParameterProps> = (props: EffectConfigParameterProps) => {
     const val = props.parameter.type === "number" ||
                 props.parameter.type === "string" ? props.parameter.val : JSON.stringify(props.parameter.val);
+
+    const [currentVal, setCurrentVal] = useState(val);
     
     return (
         <div>
         <Input
-            value={val} float
+            value={currentVal} float
             type={getInputType(props.parameter.type)}
-            onChange={(event) => { props.onChange(event.target.value) } }
+            onChange={(event) => { setCurrentVal(event.target.value) } }
+            onBlur={(event) => { 
+                console.log({currentVal});
+                if (currentVal !== val) {
+                    props.onChange(props.parameter, currentVal);
+                }
+            }}
             modifier='material'
             placeholder={props.parameter.paramName} />
         </div>

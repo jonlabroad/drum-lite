@@ -21,6 +21,7 @@ export default class TestConfig extends BaseEffectConfig {
         ];
 
         this.effects.push(new PartialEffectConfig(
+            undefined,
             [HitType.SNARE_HEAD],
             [
                 new ConstantAmplitude(new ConstantAmplitudeParams(1, 1000)),
@@ -32,6 +33,7 @@ export default class TestConfig extends BaseEffectConfig {
         );
 
         this.effects.push(new PartialEffectConfig(
+            undefined,
             [HitType.TOM1],
             [
                 new ConstantAmplitude(new ConstantAmplitudeParams(1, 1000)),
@@ -43,6 +45,7 @@ export default class TestConfig extends BaseEffectConfig {
         );
 
         this.effects.push(new PartialEffectConfig(
+            undefined,
             [HitType.TOM2],
             [
                 new ConstantAmplitude(new ConstantAmplitudeParams(1, 1000)),
@@ -54,6 +57,7 @@ export default class TestConfig extends BaseEffectConfig {
         );
 
         this.effects.push(new PartialEffectConfig(
+            undefined,
             [HitType.TOM3],
             [
                 new ConstantAmplitude(new ConstantAmplitudeParams(1.0, 1000)),
@@ -65,6 +69,7 @@ export default class TestConfig extends BaseEffectConfig {
         );
 
         this.effects.push(new PartialEffectConfig(
+            undefined,
             [],
             [
                 new ConstantSpin(new ConstantSpinParams(allTargets, 2000, 1, 2, 0, 1)),
@@ -74,6 +79,7 @@ export default class TestConfig extends BaseEffectConfig {
 
         const sparkleDuration = 1750;
         this.effects.push(new PartialEffectConfig(
+            undefined,
             [HitType.CRASH1_EDGE], [
                 new ConstantAmplitude(new ConstantAmplitudeParams(1.0)),
                 new SingleColorEffect(new SingleColorEffectParams(new RGB(200,200,200))),

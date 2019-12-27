@@ -10,7 +10,8 @@ export default class PartialEffectConfig {
     isAmbient: boolean;
     isModifier: boolean;
 
-    constructor(triggerEvents: HitType[], effect: PartialEffect<any>[], priority: EffectPriority = EffectPriority.MEDIUM, isAmbient: boolean = false, isModifier: boolean = false) {
+    constructor(name: string | undefined, triggerEvents: HitType[], effect: PartialEffect<any>[], priority: EffectPriority = EffectPriority.MEDIUM, isAmbient: boolean = false, isModifier: boolean = false) {
+        this.name = name || "Untitled";
         this.triggerEvents = triggerEvents;
         this.effect = effect;
         this.priority = priority;

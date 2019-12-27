@@ -3,15 +3,20 @@ import React from "react"
 import { connect } from "react-redux"
 import { MainState } from "../types"
 import { EffectsConfigEditor } from "../components/EffectConfigEditor"
-import TronConfig from "@jonlabroad/drum-lite/dist/effects/TronConfig"
+import BaseEffectConfig from "@jonlabroad/drum-lite/dist/effects/BaseEffectConfig"
+import { configurationChanged } from "../actions"
 
 export interface EffectsConfigEditorContainerProps {
+    config: BaseEffectConfig // TODO move to state
+
+    configChanged: any
 }
 
 export const EffectsLibraryContainer: FunctionComponent<EffectsConfigEditorContainerProps> = (props: EffectsConfigEditorContainerProps) => {
     return (
         <EffectsConfigEditor
-            config={new TronConfig()}
+            config={props.config}
+            configChanged={props.configChanged}
         />
     )
 }
@@ -22,6 +27,7 @@ const mapStateToProps = (state: MainState) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
+    configChanged: (config: BaseEffectConfig) => dispatch(configurationChanged({config}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EffectsLibraryContainer);

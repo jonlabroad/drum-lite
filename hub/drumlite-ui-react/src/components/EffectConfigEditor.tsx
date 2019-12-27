@@ -9,6 +9,8 @@ import EffectConfigParameterContainer from "../containers/EffectConfigParameterC
 
 export interface EffectsConfigEditorProps {
     config: BaseEffectConfig
+
+    configChanged: any
 }
 
 const effectBoxStyle: CSSProperties = {
@@ -17,6 +19,7 @@ const effectBoxStyle: CSSProperties = {
 }
 
 function renderEffects(config: BaseEffectConfig): JSX.Element {
+    console.log({config});
     return (
     <List
         dataSource={config.effects}
@@ -31,7 +34,9 @@ function renderEffects(config: BaseEffectConfig): JSX.Element {
                         <ListItem>
                         <Box display="flex" flexDirection="column">
                             <div>{e.params.effectName}</div>
-                            <div>{Object.keys(e.params.params).map((key: any) => <EffectConfigParameterContainer 
+                            <div>{Object.keys(e.params.params)
+                                        .filter((key: string) => !e.params.params[key].isHidden)
+                                        .map((key: string) => <EffectConfigParameterContainer 
                                 parameter={e.params.params[key]}
                             />)}</div>
                         </Box>

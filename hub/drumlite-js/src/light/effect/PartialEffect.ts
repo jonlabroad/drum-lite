@@ -8,12 +8,14 @@ export class EffectParameter<T> {
     val: T
     type: ParameterType
     isArray: boolean
+    isHidden: boolean
 
-    constructor(paramName: string, val: T, type: ParameterType = "number", isArray: boolean = false) {
+    constructor(paramName: string, val: T, type: ParameterType = "number", isArray: boolean = false, isHidden: boolean = false) {
         this.paramName = paramName;
         this.val = val;
         this.type = type;
         this.isArray = isArray;
+        this.isHidden = isHidden;
     }
 }
 
@@ -23,7 +25,7 @@ export class EffectParameters {
     public params: {[key: string]: EffectParameter<any>} = {}
 
     constructor(startTime: number = 0) {
-        this.params.startTime = new EffectParameter<number>("Start Time", 0);
+        this.params.startTime = new EffectParameter<number>("Start Time", 0, "number", false, true);
     }
 }
 

@@ -18,6 +18,7 @@ export interface DrumButtonsContainerProps {
 export const DrumButtonsContainer: FunctionComponent<DrumButtonsContainerProps> = (props: DrumButtonsContainerProps) => {
     return (
         <DrumButtons
+            ledsRunning={props.runLeds}
             onClick={props.handleDrumTrigger}
             onRunLedsClick={props.enableLeds}
             disabled={!props.connected}

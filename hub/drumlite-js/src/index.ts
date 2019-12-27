@@ -24,7 +24,9 @@ export default async function main() {
 
     const ledDriver = new WebsocketsDriver();
     ledDriver.connect();
-    const runner = new EffectRunner(effectActivator, ledDriver);
+    const runner = new EffectRunner(effectActivator, ledDriver, {
+        periodMillis: 50
+    });
     await runner.run();
 }
 

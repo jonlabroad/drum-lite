@@ -6,30 +6,32 @@ import LEDDriver from "../light/drivers/LedDriver";
 import Util from "../util/Util";
 import IRemoteDriver from "../light/drivers/IRemoteDriver";
 
+export interface RunnerOptions {
+    periodMillis?: number
+}
+
 export default class EffectRunner {
     activator: EffectActivator;
     priorityHandler: EffectPriorityHandler;
     combiner: BasicCombiner;
     ledDriver: IRemoteDriver;
     driver: LEDDriver;
-    isRunning: boolean;
+    runLeds: boolean;
+    options: RunnerOptions;
 
-    constructor(activator: EffectActivator, driver: IRemoteDriver) {
+    constructor(activator: EffectActivator, driver: IRemoteDriver, options: RunnerOptions) {
         this.activator = activator;
         this.priorityHandler = new EffectPriorityHandler();
         this.combiner = new BasicCombiner();
         this.ledDriver = driver;
         this.driver = new LEDDriver(this.ledDriver);
-        this.isRunning = false;
+        this.runLeds = false;
+        this.options = options;
     }
 
     public async run() {
-        while(true) {
-            if (this.isRunning) {
-                return;
-            }
-            this.isRunning = true;
-            
+        this.runLeds = true;
+        while(this.runLeds) {
             const activeEffects = this.activator.getCurrentActiveEffects();
             this.priorityHandler.clear();
             for (let activeEffect of activeEffects) {
@@ -41,8 +43,15 @@ export default class EffectRunner {
             this.combiner.combine(mappedEffectsToRun);
             this.driver.runEffects(mappedEffectsToRun)
 
-            this.isRunning = false;
-            await Util.sleep(100);
+            await Util.sleep(this.options.periodMillis || 100);
         }
+    }
+
+    public stop() {
+        this.runLeds = false;
+    }
+
+    public setActivator(activator: EffectActivator) {
+        this.activator = activator;
     }
 }

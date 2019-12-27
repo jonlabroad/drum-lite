@@ -1,6 +1,6 @@
 {
   "name": "@jonlabroad/drum-lite",
-  "version": "1.0.16",
+  "version": "1.0.25",
   "description": "",
   "repository": "git://github.com/jonlabroad/drum-lite.git",
   "main": "dist/index.js",

@@ -4,17 +4,8 @@ import { MainState } from '../types';
 import { ThunkDispatch } from 'redux-thunk';
 import { createAction } from '@reduxjs/toolkit';
 import { HitType } from '@jonlabroad/drum-lite/dist/midi/HitType';
-
-export interface Test {
-    type: constants.TEST;
-}
-export type TestAction = Test;
-export function test(): Test {
-    return {
-        type: constants.TEST
-    }
-};
-
+import BaseEffectConfig from '@jonlabroad/drum-lite/dist/effects/BaseEffectConfig';
+import EffectCompiler from '@jonlabroad/drum-lite/dist/effect/EffectCompiler';
 
 export interface SocketConnect {
     connected: boolean;
@@ -26,6 +17,18 @@ export interface EnableLeds {
     enable: boolean;
 }
 export const enableLeds = createAction<EnableLeds>("ENABLE_LEDS");
+
+export interface ConfigurationChanged {
+    config?: BaseEffectConfig;
+}
+export function configurationChanged(params: ConfigurationChanged): any {
+    return (dispatch: ThunkDispatch<{}, {}, any>, getState: any) => {
+        const state = getState() as MainState;
+        if (GlobalConfig.effectActivator && GlobalConfig.config) {
+            GlobalConfig.effectActivator.setEffects(new EffectCompiler(GlobalConfig.config).compile());
+        }
+    }
+}
 
 export function handleDrumTrigger(hitType: HitType): any {
     return (dispatch: ThunkDispatch<{}, {}, any>, getState: any) => {
@@ -39,4 +42,5 @@ export function handleDrumTrigger(hitType: HitType): any {
 
 export type MainActions = 
     SocketConnect |
-    EnableLeds;
+    EnableLeds |
+    ConfigurationChanged;

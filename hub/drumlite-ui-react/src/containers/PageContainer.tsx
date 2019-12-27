@@ -18,10 +18,18 @@ import GlobalConfig from "../config/GlobalConfig"
 import EffectRunner from "@jonlabroad/drum-lite/dist/effect/EffectRunner"
 import EffectsLibraryContainer from "./EffectsLibraryContainer"
 import EffectsConfigEditorContainer from "./EffectsConfigEditorContainer"
+import BaseEffectConfig from "@jonlabroad/drum-lite/dist/effects/BaseEffectConfig"
 
 export interface PageContainerProps {
+    runLeds: boolean
 }
 
+function compileAndRun(config: BaseEffectConfig, effectActivator: EffectActivator, runner: EffectRunner) {
+    console.log(config.effects[0].effect[0].params);
+    const compiled = new EffectCompiler(config).compile();
+    effectActivator.setEffects(compiled);
+    runner.run();
+}
 
 export const PageContainer: FunctionComponent<PageContainerProps> = (props: PageContainerProps) => {
     const driver = useRef(new WebsocketsDriver());
@@ -29,16 +37,27 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
     const compiled = useRef(new EffectCompiler(config.current).compile());
     const effectActivator = useRef(new EffectActivator(compiled.current));
     GlobalConfig.effectActivator = effectActivator.current;
+    GlobalConfig.config = config.current;
   
-    const runner = useRef(new EffectRunner(effectActivator.current, driver.current));
+    const runner = useRef(new EffectRunner(effectActivator.current, driver.current, {
+        periodMillis: 25
+    }));
+    const [isRunning, setIsRunning] = useState(false);
   
     useEffect(() => {
-        async function run() {
-            await runner.current.run();
+        function run() {
+            if (!isRunning && props.runLeds) {
+                setIsRunning(true);
+                compileAndRun(config.current, effectActivator.current, runner.current);
+            }
+            
+            if (isRunning && !props.runLeds) {
+                runner.current.stop();
+                setIsRunning(false);
+            }
         }
-      
         run();
-    }, []);
+    });
 
     return (
         <Page>
@@ -52,7 +71,9 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
                         </Box>
                     </Grid>
                     <Grid item xs={4}>
-                        <EffectsConfigEditorContainer/>
+                        <EffectsConfigEditorContainer
+                            config={config.current}
+                        />
                     </Grid>
                 </Grid>
             </WebsocketContainer>
