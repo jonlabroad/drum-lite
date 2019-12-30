@@ -1,4 +1,4 @@
-import BaseEffectConfig from "./BaseEffectConfig";
+import BaseEffectConfig from "./FullEffectConfig";
 import PartialEffectConfig from "./PartialEffectConfig";
 import { HitType } from "../midi/HitType";
 import ConstantAmplitude, { ConstantAmplitudeParams } from "../light/effect/amplitude/ConstantAmplitude";
@@ -15,6 +15,7 @@ import LinearColorTransition, { LinearColorTransitionParams } from "../light/eff
 import SymmetricalLeds, { SymmetricalLedsParams } from "../light/effect/positional/SymmetricalLeds";
 import RacerEffect, { RacerParameters } from "../light/effect/composed/RacerEffect";
 import ComposedEffectConfig from "./ComposedEffectConfig";
+import FullEffectConfig from "./FullEffectConfig";
 
 function arrayToRgb(arr: number[]) {
     return new RGB(arr[0], arr[1], arr[2]);
@@ -62,15 +63,15 @@ const ambientAmplitude = 0.1;
 const kickAmplitudeMod = 5.0;
 const ambientSpinPeriod = 1500;
 
-export default class TronConfig extends BaseEffectConfig {
+export default class TronConfig extends FullEffectConfig {
     constructor() {
         super();
 
         const racer1Snare = new RacerEffect("Racer1 Snare",
             new RacerParameters(ambientAmplitude, colors['tronBlueMain'], ambientAmplitude, colors['tronBlueTrail'], 20, ambientSpinPeriod, 0, [EffectTarget.SNARE])
         );
+        this.effects.push(racer1Snare);
         //this.effects.push(racer1Snare.children.map(childEffect => new PartialEffectConfig("Racer1", [], childEffect, EffectPriority.LOWEST, true, false)));
-        this.effects.push([new ComposedEffectConfig("Racer1", racer1Snare, EffectPriority.LOWEST, true, false)]);
 
 /*
         const racer2Snare = new RacerEffect("Racer2 Snare",
@@ -115,30 +116,7 @@ export default class TronConfig extends BaseEffectConfig {
         //fs.writeFileSync("tron.config", JSON.stringify(this.effects, null, 2));
     }
 
-    createRacer(name: string, targets: EffectTarget[], offset: number, color: RGB) {
-        this.effects.push(
-            [new PartialEffectConfig(name, [], [
-                    new ConstantAmplitude(new ConstantAmplitudeParams(ambientAmplitude)),
-                    new SingleColorEffect(new SingleColorEffectParams(color)),
-                    new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1, 1, offset, 1.0)),
-                ], EffectPriority.LOWEST, true
-            )]
-        );
-    }
-
-    createTrail(name: string, targets: EffectTarget[], offset: number, length: number, color: RGB) {
-        for (let n of Util.range(0, length)) {
-            this.effects.push(
-                [new PartialEffectConfig(name, [], [
-                    new ConstantAmplitude(new ConstantAmplitudeParams(ambientAmplitude)),
-                    new SingleColorEffect(new SingleColorEffectParams(color)),
-                    new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1, 1, offset - n, 1.0)),
-                ], EffectPriority.LOWEST, true
-                )]
-            );
-        }
-    }
-
+/*
     createPulseEffect(name: string, hitTypes: HitType[], targets: EffectTarget[], duration: number, amplitude: number) {
         this.effects.push(
             [new PartialEffectConfig(name, hitTypes, [
@@ -188,4 +166,5 @@ export default class TronConfig extends BaseEffectConfig {
             });
         });
     }
+*/
 }

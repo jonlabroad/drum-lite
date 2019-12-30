@@ -7,7 +7,7 @@ export class SingleColorEffectParams extends EffectParameters {
     typeName = "Color";
 
     constructor(rgb: RGB = new RGB()) {
-        super(0);
+        super();
         this.params.rgb = new EffectParameter<RGB>("Color", rgb, {type: "rgb"});
     }
 }

@@ -1,42 +1,37 @@
 import { HitType } from "../midi/HitType";
 import CompiledEffect from "./CompiledEffect";
-import BaseEffectConfig from "../effects/BaseEffectConfig";
 
 export default class EffectActivator {
-    compiledEffects: CompiledEffect[][] = [[], []];
+    compiledEffects: CompiledEffect[] = [];
     activeEffects: CompiledEffect[] = [];
-    ambientEffects: CompiledEffect[][] = [[],[]];
+    ambientEffects: CompiledEffect[] = [];
 
-    constructor(compiledEffects: CompiledEffect[][]) {
+    constructor(compiledEffects: CompiledEffect[]) {
         this.setEffects(compiledEffects);
     }
 
     public handleNote(hitType: HitType) {
         const noteTime = new Date();
         const effects = this.findNewEffects(hitType);
-        for (let effect of effects) {
-            for (let effectElement of effect) {
-                effectElement = Object.assign({}, effectElement);
-                effectElement.t = noteTime.getTime() + effectElement.dt;
-                effectElement.noteTime = noteTime.getTime();
-                this.activeEffects.push(effectElement);
-            }
+        for (let effectElement of effects) {
+            effectElement = Object.assign({}, effectElement);
+            effectElement.t = noteTime.getTime() + effectElement.dt;
+            effectElement.noteTime = noteTime.getTime();
+            this.activeEffects.push(effectElement);
         }
     }
 
-    public setEffects(compiledEffects: CompiledEffect[][]) {
+    public setEffects(compiledEffects: CompiledEffect[]) {
         this.compiledEffects = compiledEffects;
         this.activeEffects = []
 
-        this.ambientEffects = this.compiledEffects.filter(e => e.length > 0 && e[0].isAmbient, compiledEffects);
-        for (let ae of this.ambientEffects) {
-            for (let el of ae) {
-                const effectElement = Object.assign({}, el);
-                effectElement.t = effectElement.dt;
-                effectElement.noteTime = 0;
+        this.ambientEffects = this.compiledEffects.filter(e => e && e.isAmbient, compiledEffects);
+        for (let el of this.ambientEffects) {
+            const effectElement = Object.assign({}, el);
+            effectElement.t = effectElement.dt;
+            effectElement.noteTime = 0;
 
-                this.activeEffects.push(effectElement);
-            }
+            this.activeEffects.push(effectElement);
         }
     }
 
@@ -52,7 +47,7 @@ export default class EffectActivator {
     }
 
     public findNewEffects(hitType: HitType) {
-        const effects = this.compiledEffects.filter(e => e.length > 0 && e[0].hitTypes.find(h => h === hitType), this.compiledEffects);
+        const effects = this.compiledEffects.filter(e => e && e.hitTypes.find(h => h === hitType), this.compiledEffects);
         return effects
     }
 

@@ -10,7 +10,7 @@ export class SparkleParams extends EffectParameters {
     typeName = "Positional";
 
     constructor(targets: EffectTarget[] = [], density: number = 1, sparkleSize: number = 1, duration: number = 0) {
-        super(0);
+        super();
         this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})
         this.params.density = new EffectParameter<number>("Density", density)
         this.params.sparkleSize = new EffectParameter<number>("Sparkle Size", sparkleSize)

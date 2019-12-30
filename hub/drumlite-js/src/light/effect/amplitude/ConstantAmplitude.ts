@@ -6,7 +6,7 @@ export class ConstantAmplitudeParams extends EffectParameters {
     typeName = "Amplitude";
 
     constructor(amplitude: number = 1.0, durationMilliseconds: number = 0) {
-        super(0);
+        super();
         this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
         this.params.durationMilliseconds = new EffectParameter<number>("Duration (Milliseconds)", durationMilliseconds, {isHidden: true, range: defaultMillisecondRange});
     }

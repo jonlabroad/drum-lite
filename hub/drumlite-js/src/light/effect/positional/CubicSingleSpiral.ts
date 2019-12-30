@@ -10,7 +10,7 @@ export class CubicSingleSpiralParams extends EffectParameters {
     typeName = "Positional";
 
     constructor(targets: EffectTarget[] = [], numChildren: number = 1, amplitude: number = 1, duration: number = 1) {
-        super(0);
+        super();
         this.params.duration = new EffectParameter<number>("Duration", duration, {range: defaultMillisecondRange});
         this.params.numChildren = new EffectParameter<number>("Number", numChildren)
         this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})

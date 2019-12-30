@@ -49,7 +49,7 @@ export class EffectParameters {
     public params: {[key: string]: EffectParameter<any>} = {}
 
     constructor(startTime: number = 0) {
-        this.params.startTime = new EffectParameter<number>("Start Time", 0, {type: "number", isHidden: true});
+        this.params.startTime = new EffectParameter<number>("Start Time", startTime, {type: "number", isHidden: true});
     }
 }
 

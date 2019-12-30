@@ -6,7 +6,7 @@ export class CubicFadeOutParameters extends EffectParameters {
     typeName = "Amplitude";
 
     constructor(fadeOutDuration: number = 0) {
-        super(0);
+        super();
         this.params.fadeOutDuration = new EffectParameter<number>("Fade Out Duration", fadeOutDuration, {range: defaultMillisecondRange});
     }
 }

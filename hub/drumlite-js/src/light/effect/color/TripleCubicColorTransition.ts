@@ -8,7 +8,7 @@ export class TripleCubicColorTransitionParams extends EffectParameters {
     typeName = "Color";
 
     constructor(src: RGB = new RGB(), dst1: RGB = new RGB(), dst2: RGB = new RGB(), duration: number = 1) {
-        super(0);
+        super();
         this.params.src = new EffectParameter<RGB>("Start Color", src, {type: "rgb"});
         this.params.dst1 = new EffectParameter<RGB>("Intermediate Color", dst1, {type: "rgb"});
         this.params.dst2 = new EffectParameter<RGB>("End Color", dst2, {type: "rgb"});

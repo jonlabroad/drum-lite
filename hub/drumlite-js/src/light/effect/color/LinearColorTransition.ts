@@ -8,7 +8,7 @@ export class LinearColorTransitionParams extends EffectParameters {
     typeName = "Color";
 
     constructor(src: RGB = new RGB(), dst: RGB = new RGB(), duration: number = 0) {
-        super(0);
+        super();
         this.params.src = new EffectParameter<RGB>("Start Color", src, {type: "rgb"});
         this.params.dst = new EffectParameter<RGB>("End Color", dst, {type: "rgb"});
         this.params.duration = new EffectParameter<number>("Duration", duration, {range: defaultMillisecondRange});

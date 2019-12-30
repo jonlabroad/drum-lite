@@ -8,7 +8,7 @@ export class ConstantTargetsEffectParams extends EffectParameters {
     typeName = "Positional";
 
     constructor(targets: EffectTarget[] = []) {
-        super(0);
+        super();
         this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})
     }
 }

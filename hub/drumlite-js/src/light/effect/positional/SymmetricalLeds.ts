@@ -9,7 +9,7 @@ export class SymmetricalLedsParams extends EffectParameters {
     typeName = "Positional";
 
     constructor(targets: EffectTarget[] = [], numSym: number = 1, sectionsLength: number = 1, offset: number = 0) {
-        super(0);
+        super();
         this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})
         this.params.numSym = new EffectParameter<number>("Number", numSym)
         this.params.sectionLength = new EffectParameter<number>("Length", sectionsLength)

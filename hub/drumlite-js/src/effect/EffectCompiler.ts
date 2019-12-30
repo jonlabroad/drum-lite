@@ -1,13 +1,16 @@
-import BaseEffectConfig from "../effects/BaseEffectConfig"
+
 import CompiledEffect from "./CompiledEffect";
 import PartialEffect from "../light/effect/PartialEffect";
 import EffectCombiner from "./EffectCombiner";
+import FullEffectConfig from "../effects/FullEffectConfig";
+import EffectConfig from "../effects/EffectConfig";
+import { EffectPriority } from "./EffectPriority";
 
 export default class EffectCompiler {
-    config: BaseEffectConfig;
+    config: FullEffectConfig;
     timestepMillis: number;
     
-    constructor(config: BaseEffectConfig) {
+    constructor(config: FullEffectConfig) {
         this.timestepMillis = 50;
         this.config = config
     }
@@ -22,40 +25,49 @@ export default class EffectCompiler {
     }
 
     public compile() {
-        const compiled: CompiledEffect[][] = [[], []];
+        const compiled: CompiledEffect[] = [];
         for (let configEffect of this.config.effects) {
-            const compiledEffectElements: CompiledEffect[] = [];
-            const allEffects = configEffect.map(ce => {return {effects: ce.getEffects(), config: ce}});
-            allEffects.forEach(effectGroup => {
-                effectGroup.effects.forEach(effects => {
-                    let dt = 0;
-                    while (!this.effectsAreComplete(effects, dt)) {
-                        const combinedEffectElements = new EffectCombiner(effects).combine(dt);
-                        combinedEffectElements.forEach(combinedEffectElement => {
-                            const compiledEffectElement = new CompiledEffect(
-                                effectGroup.config.triggerEvents,
-                                combinedEffectElement,
-                                dt,
-                                this.timestepMillis,
-                                effectGroup.config.priority,
-                                effectGroup.config.isAmbient,
-                                effectGroup.config.isModifier);
-                            compiledEffectElements.push(compiledEffectElement);
-                        })
-                        dt = dt + this.timestepMillis;
-                    }
-
-                    if (effectGroup.config.isAmbient) {
-                        const ambientDuration = dt - this.timestepMillis;
-                        for (let el of compiledEffectElements) {
-                            el.ambientDuration = ambientDuration;
-                        }
-                    }
-                    compiled.push(compiledEffectElements);
-                });
-            });
+            this.compileEffect(configEffect, compiled);
         }
 
         return compiled
+    }
+
+    public compileEffect(effectConfig: EffectConfig<any>, compiled: CompiledEffect[])  {
+        const newCompiled: CompiledEffect[] = [];
+        if (effectConfig.effect && effectConfig.effect.partialEffects.length > 0) {
+            const partialEffects = effectConfig.effect.partialEffects;
+            let dt = 0;
+            const isAmbient = true; // TODO
+            while (!!partialEffects.find(pe => pe.isTemporal() && !pe.isComplete(dt))) {
+                const combinedEffects = new EffectCombiner(partialEffects).combine(dt);
+                combinedEffects.forEach(combinedEffect => {
+                    const compiledEffect = new CompiledEffect(
+                        [], // TODO triggerEvents
+                        combinedEffect,
+                        dt,
+                        this.timestepMillis,
+                        EffectPriority.LOWEST, // TODO priority
+                        isAmbient, // TODO ambient
+                        false // TODO modifier
+                    );
+
+                    newCompiled.push(compiledEffect);
+                });
+                dt = dt + this.timestepMillis;
+            }
+
+            const ambientDuration = dt - this.timestepMillis;
+            newCompiled.forEach(c => {
+                if (isAmbient) {
+                    c.ambientDuration = ambientDuration;
+                }
+            });
+            compiled.push(...newCompiled);
+        }
+        
+        if (effectConfig.children) {
+            effectConfig.children.forEach(child => this.compileEffect(child, compiled));
+        }
     }
 }

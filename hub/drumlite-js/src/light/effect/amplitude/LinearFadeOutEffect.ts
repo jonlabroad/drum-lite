@@ -6,7 +6,7 @@ export class LinearFadeOutEffectParams extends EffectParameters {
     typeName = "Amplitude";
 
     constructor(amplitude: number = 1, fadeOutDuration: number = 1) {
-        super(0);
+        super();
         this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
         this.params.fadeOutDuration = new EffectParameter<number>("Fade Out Duration", fadeOutDuration, {range: defaultMillisecondRange});
     }

@@ -10,7 +10,7 @@ export class ConstantSpinParams extends EffectParameters {
     typeName = "Positional";
 
     constructor(targets: EffectTarget[] = [], period: number = 1, num: number = 1, speed: number = 1, offset: number = 0, amplitude: number = 1) {
-        super(0);
+        super();
         this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true});
         this.params.period = new EffectParameter<number>("Period", period, {range: defaultMillisecondRange});
         this.params.num = new EffectParameter<number>("Number", num);

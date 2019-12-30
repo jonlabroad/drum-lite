@@ -7,7 +7,7 @@ export class BasicAmplitudeModifierParams extends EffectParameters {
     typeName = "Modifier";
 
     constructor(amplitude = 1) {
-        super(0);
+        super();
         this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
     }
 }
