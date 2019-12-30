@@ -9,7 +9,7 @@ export class ConstantTargetsEffectParams extends EffectParameters {
 
     constructor(targets: EffectTarget[] = []) {
         super(0);
-        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, "target", true)
+        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})
     }
 }
 
@@ -24,7 +24,7 @@ export default class ConstantTargetsEffect extends PartialEffect<ConstantTargets
             pos.push(...new LEDSelector().getAllTargetPositions(target));
         }
 
-        return ResolvedEffect.createTranslation(Array.from(new Set<number>(pos)));
+        return [[ResolvedEffect.createTranslation(Array.from(new Set<number>(pos)))]];
     }
 
     public isTemporal() {

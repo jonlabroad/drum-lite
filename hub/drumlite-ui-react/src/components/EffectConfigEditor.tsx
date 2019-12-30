@@ -19,7 +19,6 @@ const effectBoxStyle: CSSProperties = {
 }
 
 function renderEffects(config: BaseEffectConfig): JSX.Element {
-    console.log({config});
     return (
     <List
         dataSource={config.effects}
@@ -27,7 +26,7 @@ function renderEffects(config: BaseEffectConfig): JSX.Element {
         renderRow={(effect: PartialEffectConfig) => <ListItem>
         <Box display="flex" flexDirection="row">
             <List
-                dataSource={effect.effect}
+                dataSource={effect.getEffects()}
                 renderHeader={() => <ListHeader>{effect.name}</ListHeader>}
                 renderRow={(e) => {
                     return (
@@ -35,7 +34,7 @@ function renderEffects(config: BaseEffectConfig): JSX.Element {
                         <Box display="flex" flexDirection="column">
                             <div>{e.params.effectName}</div>
                             <div>{Object.keys(e.params.params)
-                                        .filter((key: string) => !e.params.params[key].isHidden)
+                                        .filter((key: string) => !e.params.params[key].options.isHidden)
                                         .map((key: string) => <EffectConfigParameterContainer 
                                 parameter={e.params.params[key]}
                             />)}</div>

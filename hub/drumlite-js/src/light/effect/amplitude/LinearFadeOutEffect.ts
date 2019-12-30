@@ -1,4 +1,4 @@
-import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export class LinearFadeOutEffectParams extends EffectParameters {
@@ -8,7 +8,7 @@ export class LinearFadeOutEffectParams extends EffectParameters {
     constructor(amplitude: number = 1, fadeOutDuration: number = 1) {
         super(0);
         this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude);
-        this.params.fadeOutDuration = new EffectParameter<number>("Fade Out Duration", fadeOutDuration);
+        this.params.fadeOutDuration = new EffectParameter<number>("Fade Out Duration", fadeOutDuration, {range: defaultMillisecondRange});
     }
 }
 
@@ -22,7 +22,7 @@ export default class LinearFadeOutEffect extends PartialEffect<LinearFadeOutEffe
         const startAmp = this.params.params.amplitude.val;
         const fadeOutDuration = this.params.params.fadeOutDuration.val as number;
         const scale = startAmp - dt / fadeOutDuration * startAmp;
-        return ResolvedEffect.createAmplitude(scale);
+        return [[ResolvedEffect.createAmplitude(scale)]];
     }
 
     public isTemporal() {

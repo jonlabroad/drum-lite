@@ -9,9 +9,9 @@ export class TripleCubicColorTransitionParams extends EffectParameters {
 
     constructor(src: RGB = new RGB(), dst1: RGB = new RGB(), dst2: RGB = new RGB(), duration: number = 1) {
         super(0);
-        this.params.src = new EffectParameter<RGB>("Start Color", src);
-        this.params.dst1 = new EffectParameter<RGB>("Intermediate Color", dst1);
-        this.params.dst2 = new EffectParameter<RGB>("End Color", dst2);
+        this.params.src = new EffectParameter<RGB>("Start Color", src, {type: "rgb"});
+        this.params.dst1 = new EffectParameter<RGB>("Intermediate Color", dst1, {type: "rgb"});
+        this.params.dst2 = new EffectParameter<RGB>("End Color", dst2, {type: "rgb"});
         this.params.duration = new EffectParameter<number>("Duration", duration);
     }
 }
@@ -30,7 +30,7 @@ export default class TripleCubicColorTransition extends PartialEffect<TripleCubi
         const src = tNorm > 0.5 ? this.params.params.src : this.params.params.dst1;
         const tNormAdjusted = tNorm <= 0.5 ? (tNorm * 2) : ((tNorm - 0.5) * 2);
         
-        return ResolvedEffect.createRgb(ColorTransition.linear(1 - tNormAdjusted, src.val, dst.val));
+        return [[ResolvedEffect.createRgb(ColorTransition.linear(1 - tNormAdjusted, src.val, dst.val))]];
     }
 
     isTemporal() {

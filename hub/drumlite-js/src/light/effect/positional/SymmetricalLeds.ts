@@ -10,7 +10,7 @@ export class SymmetricalLedsParams extends EffectParameters {
 
     constructor(targets: EffectTarget[] = [], numSym: number = 1, sectionsLength: number = 1, offset: number = 0) {
         super(0);
-        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, "target", true)
+        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})
         this.params.numSym = new EffectParameter<number>("Number", numSym)
         this.params.sectionLength = new EffectParameter<number>("Length", sectionsLength)
         this.params.offset = new EffectParameter<number>("Offset", offset)
@@ -41,7 +41,7 @@ export default class SymmetricalLeds extends PartialEffect<SymmetricalLedsParams
             }
         }
 
-        return ResolvedEffect.createTranslation([...new Set<number>(pos)]);
+        return [[ResolvedEffect.createTranslation([...new Set<number>(pos)])]];
     }
 
     public isTemporal() {

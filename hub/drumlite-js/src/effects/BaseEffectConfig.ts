@@ -1,6 +1,6 @@
 import PartialEffectConfig from "./PartialEffectConfig";
 
-export default abstract class BaseEffectConfig {
+export default abstract class FullEffectConfig {
     name: string = "Untitled";
-    effects: PartialEffectConfig[] = [];
+    effects: EffectConfigElement[] = [];
 }

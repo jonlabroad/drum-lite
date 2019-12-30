@@ -25,7 +25,6 @@ export interface PageContainerProps {
 }
 
 function compileAndRun(config: BaseEffectConfig, effectActivator: EffectActivator, runner: EffectRunner) {
-    console.log(config.effects[0].effect[0].params);
     const compiled = new EffectCompiler(config).compile();
     effectActivator.setEffects(compiled);
     runner.run();

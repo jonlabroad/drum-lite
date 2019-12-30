@@ -13,6 +13,8 @@ import Util from "../util/Util";
 import LinearFadeOutEffect, { LinearFadeOutEffectParams } from "../light/effect/amplitude/LinearFadeOutEffect";
 import LinearColorTransition, { LinearColorTransitionParams } from "../light/effect/color/LinearColorTransition";
 import SymmetricalLeds, { SymmetricalLedsParams } from "../light/effect/positional/SymmetricalLeds";
+import RacerEffect, { RacerParameters } from "../light/effect/composed/RacerEffect";
+import ComposedEffectConfig from "./ComposedEffectConfig";
 
 function arrayToRgb(arr: number[]) {
     return new RGB(arr[0], arr[1], arr[2]);
@@ -64,9 +66,21 @@ export default class TronConfig extends BaseEffectConfig {
     constructor() {
         super();
 
-        this.createRacer("Racer1 Snare", [EffectTarget.SNARE], 0, colors['tronBlueMain']);
-        this.createTrail("Racer1 Trail Snare", [EffectTarget.SNARE], -1, 20, colors['tronBlueTrail']);
+        const racer1Snare = new RacerEffect("Racer1 Snare",
+            new RacerParameters(ambientAmplitude, colors['tronBlueMain'], ambientAmplitude, colors['tronBlueTrail'], 20, ambientSpinPeriod, 0, [EffectTarget.SNARE])
+        );
+        //this.effects.push(racer1Snare.children.map(childEffect => new PartialEffectConfig("Racer1", [], childEffect, EffectPriority.LOWEST, true, false)));
+        this.effects.push([new ComposedEffectConfig("Racer1", racer1Snare, EffectPriority.LOWEST, true, false)]);
 
+/*
+        const racer2Snare = new RacerEffect("Racer2 Snare",
+            new RacerParameters(ambientAmplitude, colors['tronOrangeMain'], ambientAmplitude, colors['tronOrangeTrail'], 20, ambientSpinPeriod, 27, [EffectTarget.SNARE])
+        );
+        this.effects.push(racer2Snare.children.map(childEffect => new PartialEffectConfig("Racer1", [], childEffect, EffectPriority.LOWEST, true, false)));
+*/
+
+        //console.log(this.effects.map(e => JSON.stringify(e, null, 2)));
+/*
         this.createRacer("Racer2 Snare", [EffectTarget.SNARE], 27, colors['tronOrangeMain']);
         this.createTrail("Racer2 Trail Snare", [EffectTarget.SNARE], 26, 20, colors['tronOrangeTrail']);
     
@@ -97,64 +111,64 @@ export default class TronConfig extends BaseEffectConfig {
 
         this.createSparkle("Crash2 Sparkle", [HitType.CRASH2_EDGE], EffectTarget.TOM2, [EffectTarget.TOM1, EffectTarget.TOM3], [EffectTarget.SNARE], [15, 5, 3]);
         this.createSparkle("Crash1 Sparkle", [HitType.CRASH1_EDGE], EffectTarget.TOM1, [EffectTarget.TOM2, EffectTarget.SNARE], [EffectTarget.TOM3], [15, 5, 3]);
-
+*/
         //fs.writeFileSync("tron.config", JSON.stringify(this.effects, null, 2));
     }
 
     createRacer(name: string, targets: EffectTarget[], offset: number, color: RGB) {
         this.effects.push(
-            new PartialEffectConfig(name, [], [
+            [new PartialEffectConfig(name, [], [
                     new ConstantAmplitude(new ConstantAmplitudeParams(ambientAmplitude)),
                     new SingleColorEffect(new SingleColorEffectParams(color)),
                     new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1, 1, offset, 1.0)),
                 ], EffectPriority.LOWEST, true
-            )
+            )]
         );
     }
 
     createTrail(name: string, targets: EffectTarget[], offset: number, length: number, color: RGB) {
         for (let n of Util.range(0, length)) {
             this.effects.push(
-                new PartialEffectConfig(name, [], [
+                [new PartialEffectConfig(name, [], [
                     new ConstantAmplitude(new ConstantAmplitudeParams(ambientAmplitude)),
                     new SingleColorEffect(new SingleColorEffectParams(color)),
                     new ConstantSpin(new ConstantSpinParams(targets, ambientSpinPeriod, 1, 1, offset - n, 1.0)),
                 ], EffectPriority.LOWEST, true
-                )
+                )]
             );
         }
     }
 
     createPulseEffect(name: string, hitTypes: HitType[], targets: EffectTarget[], duration: number, amplitude: number) {
         this.effects.push(
-            new PartialEffectConfig(name, hitTypes, [
+            [new PartialEffectConfig(name, hitTypes, [
                 new LinearFadeOutEffect(new LinearFadeOutEffectParams(amplitude, duration)),
                 new ConstantTargetsEffect(new ConstantTargetsEffectParams(targets)),
             ],
             EffectPriority.VERY_HIGH,
-            false, true)
+            false, true)]
         );
 
         this.effects.push(
-            new PartialEffectConfig(name, hitTypes, [
+            [new PartialEffectConfig(name, hitTypes, [
                 new LinearFadeOutEffect(new LinearFadeOutEffectParams(amplitude / 20, duration)),
                 new LinearColorTransition(new LinearColorTransitionParams(colors["pinkPulse1"], colors["pinkPulse2"], duration)),
                 new SymmetricalLeds(new SymmetricalLedsParams(targets, 3, 3, 5)),
             ],
             EffectPriority.VERY_HIGH
-            )
+            )]
         )
     }
 
     createDrumHitEffect(name: string, hitTypes: HitType[], targets: EffectTarget[], color1: RGB, color2: RGB) {
         const hitDuration = 750;
         this.effects.push(
-                    new PartialEffectConfig(name, hitTypes, [
+                [new PartialEffectConfig(name, hitTypes, [
                     new LinearFadeOutEffect(new LinearFadeOutEffectParams(1, hitDuration)),
                     new LinearColorTransition(new LinearColorTransitionParams(color1, color2, hitDuration)),
                     new ConstantTargetsEffect(new ConstantTargetsEffectParams(targets))
                 ],
-                EffectPriority.HIGH)
+                EffectPriority.HIGH)]
         );
     }
 
@@ -164,13 +178,13 @@ export default class TronConfig extends BaseEffectConfig {
         targetGroups.forEach((tGroup, groupIndex) => {
             tGroup.forEach(target => {
                 this.effects.push(
-                    new PartialEffectConfig(`${name} ${target.toString()}`, hitTypes, [
+                    [new PartialEffectConfig(`${name} ${target.toString()}`, hitTypes, [
                         new ConstantAmplitude(new ConstantAmplitudeParams(1.0)),
                         new LinearColorTransition(new LinearColorTransitionParams(colors['sparkle1'], colors['sparkle3'], sparkleDuration)),
                         new Sparkle(new SparkleParams([target], densities[groupIndex], 1, sparkleDuration))
                     ],
                     EffectPriority.VERY_HIGH
-                ));
+                )]);
             });
         });
     }

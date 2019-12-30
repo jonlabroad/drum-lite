@@ -4,7 +4,7 @@ export default class ParameterHelpers {
     public static setValue(parameter: EffectParameter<any>, val: string) {
         // TODO handle arrays of each type
 
-        switch (parameter.type) {
+        switch (parameter.options.type) {
             case "number":
                 parameter.val = parseFloat(val);
                 console.log(parameter);

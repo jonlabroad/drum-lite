@@ -1,5 +1,5 @@
 import { EffectTarget } from "../EffectTarget";
-import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect";
+import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect";
 import ScaleFunctions from "../../../util/ScaleFunctions";
 import LEDSelector from "../../LEDSelector";
 import Util from "../../../util/Util";
@@ -11,9 +11,9 @@ export class CubicSingleSpiralParams extends EffectParameters {
 
     constructor(targets: EffectTarget[] = [], numChildren: number = 1, amplitude: number = 1, duration: number = 1) {
         super(0);
-        this.params.duration = new EffectParameter<number>("Duration", duration)
+        this.params.duration = new EffectParameter<number>("Duration", duration, {range: defaultMillisecondRange});
         this.params.numChildren = new EffectParameter<number>("Number", numChildren)
-        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, "target", true)
+        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})
         this.params.amplitude = new EffectParameter<number>("Amplitude", amplitude)
     }
 }
@@ -41,7 +41,7 @@ export default class CubicSingleSpiral extends PartialEffect<CubicSingleSpiralPa
             }
         }
 
-        return new ResolvedEffect(undefined, undefined, [...new Set<number>(ledPositions)]);
+        return [[new ResolvedEffect(undefined, undefined, [...new Set<number>(ledPositions)])]];
     }
 
     public isTemporal() {

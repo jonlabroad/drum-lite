@@ -1,5 +1,5 @@
 import { EffectTarget } from "../EffectTarget";
-import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect";
+import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import ScaleFunctions from "../../../util/ScaleFunctions";
 import Util from "../../../util/Util";
@@ -11,8 +11,8 @@ export class ConstantSpinParams extends EffectParameters {
 
     constructor(targets: EffectTarget[] = [], period: number = 1, num: number = 1, speed: number = 1, offset: number = 0, amplitude: number = 1) {
         super(0);
-        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, "target", true);
-        this.params.period = new EffectParameter<number>("Period", period);
+        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true});
+        this.params.period = new EffectParameter<number>("Period", period, {range: defaultMillisecondRange});
         this.params.num = new EffectParameter<number>("Number", num);
         this.params.speed = new EffectParameter<number>("Speed", speed);
         this.params.offset = new EffectParameter<number>("Offset", offset);
@@ -49,7 +49,7 @@ export default class ConstantSpin extends PartialEffect<ConstantSpinParams> {
             }
         }
 
-        return new ResolvedEffect(undefined, undefined, [...new Set<number>(ledPositions)]);
+        return [[new ResolvedEffect(undefined, undefined, [...new Set<number>(ledPositions)])]];
     }
 
     public isTemporal() {

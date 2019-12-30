@@ -18,7 +18,7 @@ export default class BasicAmplitudeModifier extends EffectModifier<BasicAmplitud
     }
 
     public getEffect(t: number) {
-        return ResolvedEffect.createAmplitude(this.params.params.amplitude.val as number);
+        return [[ResolvedEffect.createAmplitude(this.params.params.amplitude.val as number)]];
     }
 
     public isTemporal() {

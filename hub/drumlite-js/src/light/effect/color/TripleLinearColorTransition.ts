@@ -1,4 +1,4 @@
-import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect"
 import RGB from "../../RGB"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import ColorTransition from "../../../util/ColorTransition";
@@ -9,10 +9,10 @@ export class TripleLinearColorTransitionParams extends EffectParameters {
 
     constructor(src: RGB = new RGB(), dst1: RGB = new RGB(), dst2: RGB = new RGB(), duration: number = 1) {
         super(0);
-        this.params.src = new EffectParameter<RGB>("Start Color", src);
-        this.params.dst1 = new EffectParameter<RGB>("Intermediate Color", dst1);
-        this.params.dst2 = new EffectParameter<RGB>("End Color", dst2);
-        this.params.duration = new EffectParameter<number>("Duration", duration);
+        this.params.src = new EffectParameter<RGB>("Start Color", src, {type: "rgb"});
+        this.params.dst1 = new EffectParameter<RGB>("Intermediate Color", dst1, {type: "rgb"});
+        this.params.dst2 = new EffectParameter<RGB>("End Color", dst2, {type: "rgb"});
+        this.params.duration = new EffectParameter<number>("Duration", duration, {range: defaultMillisecondRange});
     }
 }
 
@@ -36,7 +36,7 @@ export default class TripleLinearColorTransition extends PartialEffect<TripleLin
         const srcRgb = (dt <= 0.5 ? src.val : dst1.val);
         const tNormAdjusted = dt <= 0.5 ? (tNorm * 2) : ((tNorm - 0.5) * 2);
 
-        return ResolvedEffect.createRgb(ColorTransition.linear(tNormAdjusted, srcRgb, dst))
+        return [[ResolvedEffect.createRgb(ColorTransition.linear(tNormAdjusted, srcRgb, dst))]];
     }
 
     public isTemporal() {

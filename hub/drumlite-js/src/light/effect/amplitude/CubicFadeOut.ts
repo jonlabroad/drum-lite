@@ -1,4 +1,4 @@
-import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 
 export class CubicFadeOutParameters extends EffectParameters {
@@ -7,7 +7,7 @@ export class CubicFadeOutParameters extends EffectParameters {
 
     constructor(fadeOutDuration: number = 0) {
         super(0);
-        this.params.fadeOutDuration = new EffectParameter<number>("Fade Out Duration", fadeOutDuration);
+        this.params.fadeOutDuration = new EffectParameter<number>("Fade Out Duration", fadeOutDuration, {range: defaultMillisecondRange});
     }
 }
 
@@ -20,7 +20,7 @@ export default class CubicFadeOut extends PartialEffect<CubicFadeOutParameters> 
         const dt = t - this.params.params.startTime.val;
         const tNorm = dt / (this.params.params.fadeOutDuration.val) - 1;
         const scale = 1 - (tNorm * tNorm * tNorm + 1);
-        return ResolvedEffect.createAmplitude(scale);
+        return [[ResolvedEffect.createAmplitude(scale)]];
     }
 
     public isTemporal(): boolean {

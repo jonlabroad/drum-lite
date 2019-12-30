@@ -1,7 +1,8 @@
 import { FunctionComponent, useState } from "react"
 import React from "react"
 import { Input } from "react-onsenui"
-import { EffectParameter, ParameterType } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect"
+import { EffectParameter, ParameterType, defaultAmplitudeRange } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect"
+import { NumberInputRange } from "./NumberInputRange";
 
 export interface EffectConfigParameterProps {
     parameter: EffectParameter<any>
@@ -21,9 +22,15 @@ function getInputType(paramType: ParameterType): string {
     }
 }
 
+function onSubmit(props: EffectConfigParameterProps, prevVal: any, newVal: any) {
+    if (prevVal !== newVal) {
+        props.onChange(props.parameter, newVal);
+    }
+}
+
 export const EffectConfigParameter: FunctionComponent<EffectConfigParameterProps> = (props: EffectConfigParameterProps) => {
-    const val = props.parameter.type === "number" ||
-                props.parameter.type === "string" ? props.parameter.val : JSON.stringify(props.parameter.val);
+    const val = props.parameter.options.type === "number" ||
+                props.parameter.options.type === "string" ? props.parameter.val : JSON.stringify(props.parameter.val);
 
     const [currentVal, setCurrentVal] = useState(val);
     
@@ -31,16 +38,21 @@ export const EffectConfigParameter: FunctionComponent<EffectConfigParameterProps
         <div>
         <Input
             value={currentVal} float
-            type={getInputType(props.parameter.type)}
+            type={getInputType(props.parameter.options.type || "number")}
             onChange={(event) => { setCurrentVal(event.target.value) } }
-            onBlur={(event) => { 
-                console.log({currentVal});
-                if (currentVal !== val) {
-                    props.onChange(props.parameter, currentVal);
-                }
-            }}
+            onBlur={(event) => onSubmit(props, val, currentVal)}
             modifier='material'
             placeholder={props.parameter.paramName} />
+        {props.parameter.options.type === "number" &&
+            <NumberInputRange
+                value={currentVal}
+                range={props.parameter.options.range || defaultAmplitudeRange}
+                onChange={(val: number) => {
+                    setCurrentVal(val);
+                    onSubmit(props, currentVal, val);
+                }}
+            />
+        }
         </div>
     );
 }

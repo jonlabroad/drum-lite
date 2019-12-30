@@ -9,41 +9,47 @@ export default class EffectCombiner {
         this.unresolvedEffects = effects;
     }
 
-    public combine(dt: number) {
-        const color = this.combineColors(dt);
-        const amplitude = this.combineAmplitude(dt);
-        const ledPositions = this.combinePositions(dt);
-        return new ResolvedEffect(color, amplitude, ledPositions);
+    public combine(dt: number): ResolvedEffect[] {
+        const resolvedEffects: ResolvedEffect[] = [];
+        let color = new RGB();
+        let amplitude = 0;
+        let ledPositions: number[] = [];
+        this.unresolvedEffects.forEach(unresolvedEffectGroup => {
+            unresolvedEffectGroup.getEffect(dt).forEach(resolvedEffect => {
+                color = this.combineColors(resolvedEffect, dt, color);
+                amplitude = this.combineAmplitude(resolvedEffect, dt, amplitude);
+                ledPositions = this.combinePositions(resolvedEffect, dt, ledPositions);
+            });
+        });
+        if (dt < 0.01) {
+            console.log(this.unresolvedEffects);
+        }
+        resolvedEffects.push(new ResolvedEffect(color, amplitude, ledPositions));
+        return resolvedEffects;
     }
 
-    public combineColors(dt: number) {
-        const combinedColor = new RGB(0, 0, 0);
-        for (let unresolvedEffect of this.unresolvedEffects) {
-            const resolvedEffect = unresolvedEffect.getEffect(dt);
-            if (resolvedEffect.rgb) {
-                combinedColor.add(resolvedEffect.rgb);
+    public combineColors(effectGroup: ResolvedEffect[], dt: number, color: RGB) {
+        for (let effect of effectGroup) {
+            if (effect.rgb) {
+                color.add(effect.rgb);
             }
         }
-        return combinedColor
+        return color;
     }
 
-    public combineAmplitude(dt: number) {
-        let amplitude = 0;
-        for (let unresolvedEffect of this.unresolvedEffects) {
-            const resolvedEffect = unresolvedEffect.getEffect(dt);
-            if (resolvedEffect.amplitude) {
-                amplitude = amplitude + resolvedEffect.amplitude;
+    public combineAmplitude(effectGroup: ResolvedEffect[], dt: number, amplitude: number) {
+        for (let effect of effectGroup) {
+            if (effect.amplitude) {
+                amplitude = amplitude + effect.amplitude;
             }
         }
         return amplitude;
     }
 
-    public combinePositions(dt: number): number[] {
-        const positions: number[] = [];
-        for (let unresolvedEffect of this.unresolvedEffects) {
-            const resolvedEffect = unresolvedEffect.getEffect(dt);
-            if (resolvedEffect.ledPositions) {
-                positions.push(...resolvedEffect.ledPositions);
+    public combinePositions(effectGroup: ResolvedEffect[], dt: number, positions: number[]): number[] {
+        for (let effect of effectGroup) {
+            if (effect.ledPositions) {
+                positions.push(...effect.ledPositions);
             }
         }
         return [...new Set<number>(positions).keys()];

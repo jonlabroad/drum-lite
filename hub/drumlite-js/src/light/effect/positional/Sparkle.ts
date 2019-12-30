@@ -1,5 +1,5 @@
 import { EffectTarget } from "../EffectTarget"
-import PartialEffect, { EffectParameters, EffectParameter } from "../PartialEffect"
+import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect"
 import ScaleFunctions from "../../../util/ScaleFunctions";
 import LEDSelector from "../../LEDSelector";
 import Util from "../../../util/Util";
@@ -11,10 +11,10 @@ export class SparkleParams extends EffectParameters {
 
     constructor(targets: EffectTarget[] = [], density: number = 1, sparkleSize: number = 1, duration: number = 0) {
         super(0);
-        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, "target", true)
+        this.params.targets = new EffectParameter<EffectTarget[]>("Targets", targets, {type: "target", isArray: true})
         this.params.density = new EffectParameter<number>("Density", density)
         this.params.sparkleSize = new EffectParameter<number>("Sparkle Size", sparkleSize)
-        this.params.duration = new EffectParameter<number>("Duration", duration)
+        this.params.duration = new EffectParameter<number>("Duration", duration, {range: defaultMillisecondRange});
     }
 }
 
@@ -41,7 +41,7 @@ export default class Sparkle extends PartialEffect<SparkleParams> {
             pos.push(...tempPos);
         }
 
-        return ResolvedEffect.createTranslation([...new Set<number>(pos)]);
+        return [[ResolvedEffect.createTranslation([...new Set<number>(pos)])]];
     }
 
     public isTemporal() {

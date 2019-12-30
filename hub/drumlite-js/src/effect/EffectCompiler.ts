@@ -24,29 +24,36 @@ export default class EffectCompiler {
     public compile() {
         const compiled: CompiledEffect[][] = [[], []];
         for (let configEffect of this.config.effects) {
-            let dt = 0;
             const compiledEffectElements: CompiledEffect[] = [];
-            while (!this.effectsAreComplete(configEffect.effect, dt)) {
-                const combinedEffectElement = new EffectCombiner(configEffect.effect).combine(dt);
-                const compiledEffectElement = new CompiledEffect(
-                    configEffect.triggerEvents,
-                    combinedEffectElement,
-                    dt,
-                    this.timestepMillis,
-                    configEffect.priority,
-                    configEffect.isAmbient,
-                    configEffect.isModifier);
-                compiledEffectElements.push(compiledEffectElement);
-                dt = dt + this.timestepMillis;
-            }
+            const allEffects = configEffect.map(ce => {return {effects: ce.getEffects(), config: ce}});
+            allEffects.forEach(effectGroup => {
+                effectGroup.effects.forEach(effects => {
+                    let dt = 0;
+                    while (!this.effectsAreComplete(effects, dt)) {
+                        const combinedEffectElements = new EffectCombiner(effects).combine(dt);
+                        combinedEffectElements.forEach(combinedEffectElement => {
+                            const compiledEffectElement = new CompiledEffect(
+                                effectGroup.config.triggerEvents,
+                                combinedEffectElement,
+                                dt,
+                                this.timestepMillis,
+                                effectGroup.config.priority,
+                                effectGroup.config.isAmbient,
+                                effectGroup.config.isModifier);
+                            compiledEffectElements.push(compiledEffectElement);
+                        })
+                        dt = dt + this.timestepMillis;
+                    }
 
-            if (configEffect.isAmbient) {
-                const ambientDuration = dt - this.timestepMillis;
-                for (let el of compiledEffectElements) {
-                    el.ambientDuration = ambientDuration;
-                }
-            }
-            compiled.push(compiledEffectElements);
+                    if (effectGroup.config.isAmbient) {
+                        const ambientDuration = dt - this.timestepMillis;
+                        for (let el of compiledEffectElements) {
+                            el.ambientDuration = ambientDuration;
+                        }
+                    }
+                    compiled.push(compiledEffectElements);
+                });
+            });
         }
 
         return compiled
