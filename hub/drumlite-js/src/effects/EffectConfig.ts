@@ -13,4 +13,8 @@ export default class EffectConfig<T extends EffectParameters> {
         this.params = params;
         this.effect = effect;
     }
+
+    public init() {
+        console.warn(`No init defined for ${this.name}`);
+    }
 }

@@ -18,13 +18,13 @@ import GlobalConfig from "../config/GlobalConfig"
 import EffectRunner from "@jonlabroad/drum-lite/dist/effect/EffectRunner"
 import EffectsLibraryContainer from "./EffectsLibraryContainer"
 import EffectsConfigEditorContainer from "./EffectsConfigEditorContainer"
-import BaseEffectConfig from "@jonlabroad/drum-lite/dist/effects/BaseEffectConfig"
+import FullEffectConfig from "@jonlabroad/drum-lite/dist/effects/FullEffectConfig"
 
 export interface PageContainerProps {
     runLeds: boolean
 }
 
-function compileAndRun(config: BaseEffectConfig, effectActivator: EffectActivator, runner: EffectRunner) {
+function compileAndRun(config: FullEffectConfig, effectActivator: EffectActivator, runner: EffectRunner) {
     const compiled = new EffectCompiler(config).compile();
     effectActivator.setEffects(compiled);
     runner.run();

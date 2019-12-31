@@ -71,6 +71,8 @@ export default class TronConfig extends FullEffectConfig {
             new RacerParameters(ambientAmplitude, colors['tronBlueMain'], ambientAmplitude, colors['tronBlueTrail'], 20, ambientSpinPeriod, 0, [EffectTarget.SNARE])
         );
         this.effects.push(racer1Snare);
+
+        this.effects.forEach(e => e.init());
         //this.effects.push(racer1Snare.children.map(childEffect => new PartialEffectConfig("Racer1", [], childEffect, EffectPriority.LOWEST, true, false)));
 
 /*

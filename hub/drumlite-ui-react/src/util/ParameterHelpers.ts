@@ -7,7 +7,6 @@ export default class ParameterHelpers {
         switch (parameter.options.type) {
             case "number":
                 parameter.val = parseFloat(val);
-                console.log(parameter);
                 return;
             case "boolean":
                 parameter.val = val.toUpperCase() === "TRUE";

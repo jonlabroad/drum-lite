@@ -3,11 +3,11 @@ import React from "react"
 import { connect } from "react-redux"
 import { MainState } from "../types"
 import { EffectsConfigEditor } from "../components/EffectConfigEditor"
-import BaseEffectConfig from "@jonlabroad/drum-lite/dist/effects/BaseEffectConfig"
+import FullEffectConfig from "@jonlabroad/drum-lite/dist/effects/FullEffectConfig"
 import { configurationChanged } from "../actions"
 
 export interface EffectsConfigEditorContainerProps {
-    config: BaseEffectConfig // TODO move to state
+    config: FullEffectConfig // TODO move to state
 
     configChanged: any
 }
@@ -27,7 +27,7 @@ const mapStateToProps = (state: MainState) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    configChanged: (config: BaseEffectConfig) => dispatch(configurationChanged({config}))
+    configChanged: (config: FullEffectConfig) => dispatch(configurationChanged({config}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EffectsLibraryContainer);

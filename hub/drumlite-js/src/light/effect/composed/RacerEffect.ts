@@ -37,7 +37,10 @@ export class RacerParameters extends EffectParameters {
 export default class RacerEffect extends EffectConfig<RacerParameters> {
     constructor(name: string, params: RacerParameters){
         super(name, params);
+    }
 
+    public init(): void {
+        this.children = [];
         this.children.push(new EffectConfig(name, new EffectParameters(), this.createRacer(this.params.params.offset.val)));
         this.createTrail();
     }
