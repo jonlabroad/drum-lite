@@ -1,5 +1,4 @@
 import BaseEffectConfig from "./FullEffectConfig";
-import PartialEffectConfig from "./PartialEffectConfig";
 import { HitType } from "../midi/HitType";
 import ConstantAmplitude, { ConstantAmplitudeParams } from "../light/effect/amplitude/ConstantAmplitude";
 import SingleColorEffect, { SingleColorEffectParams } from "../light/effect/color/SingleColorEffect";
@@ -14,7 +13,6 @@ import LinearFadeOutEffect, { LinearFadeOutEffectParams } from "../light/effect/
 import LinearColorTransition, { LinearColorTransitionParams } from "../light/effect/color/LinearColorTransition";
 import SymmetricalLeds, { SymmetricalLedsParams } from "../light/effect/positional/SymmetricalLeds";
 import RacerEffect, { RacerParameters } from "../light/effect/composed/RacerEffect";
-import ComposedEffectConfig from "./ComposedEffectConfig";
 import FullEffectConfig from "./FullEffectConfig";
 
 function arrayToRgb(arr: number[]) {
@@ -67,9 +65,9 @@ export default class TronConfig extends FullEffectConfig {
     constructor() {
         super();
 
-        const racer1Snare = new RacerEffect("Racer1 Snare",
-            new RacerParameters(ambientAmplitude, colors['tronBlueMain'], ambientAmplitude, colors['tronBlueTrail'], 20, ambientSpinPeriod, 0, [EffectTarget.SNARE])
-        );
+        const racerParams = new RacerParameters(ambientAmplitude, colors['tronBlueMain'], ambientAmplitude, colors['tronBlueTrail'], 20, ambientSpinPeriod, 0, [EffectTarget.SNARE]);
+        racerParams.params.isAmbient.val = true;
+        const racer1Snare = new RacerEffect("Racer1 Snare", racerParams);
         this.effects.push(racer1Snare);
 
         this.effects.forEach(e => e.init());

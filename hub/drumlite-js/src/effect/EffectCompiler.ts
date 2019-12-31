@@ -5,6 +5,7 @@ import EffectCombiner from "./EffectCombiner";
 import FullEffectConfig from "../effects/FullEffectConfig";
 import EffectConfig from "../effects/EffectConfig";
 import { EffectPriority } from "./EffectPriority";
+import { HitType } from "../midi/HitType";
 
 export default class EffectCompiler {
     config: FullEffectConfig;
@@ -38,18 +39,21 @@ export default class EffectCompiler {
         if (effectConfig.effect && effectConfig.effect.partialEffects.length > 0) {
             const partialEffects = effectConfig.effect.partialEffects;
             let dt = 0;
-            const isAmbient = true; // TODO
+            const isAmbient: boolean = effectConfig.params.params['isAmbient'] ? effectConfig.params.params['isAmbient'].val : false;
+            const priority: EffectPriority = effectConfig.params.params['Priority'] ? effectConfig.params.params['Priority'].val : EffectPriority.MEDIUM;
+            const modifier: boolean = effectConfig.params.params['isModifier'] ? effectConfig.params.params['isModifier'].val : false;
+            const triggerEffects: HitType[] = effectConfig.params.params['triggers'] ? effectConfig.params.params['triggers'].val : [];
             while (!!partialEffects.find(pe => pe.isTemporal() && !pe.isComplete(dt))) {
                 const combinedEffects = new EffectCombiner(partialEffects).combine(dt);
                 combinedEffects.forEach(combinedEffect => {
                     const compiledEffect = new CompiledEffect(
-                        [], // TODO triggerEvents
+                        triggerEffects,
                         combinedEffect,
                         dt,
                         this.timestepMillis,
-                        EffectPriority.LOWEST, // TODO priority
-                        isAmbient, // TODO ambient
-                        false // TODO modifier
+                        priority,
+                        isAmbient,
+                        modifier
                     );
 
                     newCompiled.push(compiledEffect);

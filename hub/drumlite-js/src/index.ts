@@ -14,6 +14,7 @@ async function sleep(ms: number) {
 
 export default async function main() {
     const config = new TronConfig();
+    config.init();
     const compiled = new EffectCompiler(config).compile();
     const effectActivator = new EffectActivator(compiled);
     const msgHandler = new MidiMessageHandler(effectActivator);

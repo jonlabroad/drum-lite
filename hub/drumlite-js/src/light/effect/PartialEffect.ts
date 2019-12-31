@@ -1,7 +1,8 @@
 import ResolvedEffect from "../../effect/ResolvedEffect";
 import JsonEffectConfig from "./JsonEffectConfig";
+import { EffectPriority } from "../../effect/EffectPriority";
 
-export type ParameterType = "number" | "boolean" | "string" | "rgb" | "target";
+export type ParameterType = "number" | "boolean" | "string" | "rgb" | "target" | "priority";
 
 export class EffectParameterOptions {
     type?: ParameterType = "number";
@@ -50,6 +51,8 @@ export class EffectParameters {
 
     constructor(startTime: number = 0) {
         this.params.startTime = new EffectParameter<number>("Start Time", startTime, {type: "number", isHidden: true});
+        this.params.isAmbient = new EffectParameter<boolean>("Ambient", true, {type: "boolean"});
+        this.params.priority = new EffectParameter<EffectPriority>("Priority", EffectPriority.MEDIUM, {type: "priority"});
     }
 }
 

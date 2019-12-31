@@ -7,6 +7,7 @@ import ConstantSpin, { ConstantSpinParams } from "../positional/ConstantSpin";
 import Util from "../../../util/Util";
 import EffectConfig from "../../../effects/EffectConfig";
 import SingleEffect from "../../../effects/SingleEffect";
+import { EffectPriority } from "../../../effect/EffectPriority";
 
 export class RacerParameters extends EffectParameters {
     effectName = "Racer";
@@ -41,7 +42,7 @@ export default class RacerEffect extends EffectConfig<RacerParameters> {
 
     public init(): void {
         this.children = [];
-        this.children.push(new EffectConfig(name, new EffectParameters(), this.createRacer(this.params.params.offset.val)));
+        this.children.push(new EffectConfig(this.name, new EffectParameters(), this.createRacer(this.params.params.offset.val)));
         this.createTrail();
     }
 
@@ -50,7 +51,7 @@ export default class RacerEffect extends EffectConfig<RacerParameters> {
                     new ConstantAmplitude(new ConstantAmplitudeParams(this.params.params.racerAmplitude.val)),
                     new SingleColorEffect(new SingleColorEffectParams(this.params.params.racerColor.val)),
                     new ConstantSpin(new ConstantSpinParams(this.params.params.targets.val, this.params.params.spinPeriod.val, 1, 1, offset, this.params.params.racerAmplitude.val)),
-                ]
+                ], this.params.params.isAmbient.val, this.params.params.priority.val
         );
     }
 
@@ -64,7 +65,7 @@ export default class RacerEffect extends EffectConfig<RacerParameters> {
                         new ConstantAmplitude(new ConstantAmplitudeParams(params.trailAmplitude.val)),
                         new SingleColorEffect(new SingleColorEffectParams(params.trailColor.val)),
                         new ConstantSpin(new ConstantSpinParams(params.targets.val, params.spinPeriod.val, 1, 1, baseOffset - n, params.trailAmplitude.val)),
-                    ])
+                    ], this.params.params.isAmbient.val, this.params.params.priority.val)
                 )
             )
         }
