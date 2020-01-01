@@ -14,7 +14,6 @@ export const initialState: MainState = {
 
 export const mainReducer: Reducer<MainState, any> = createReducer(initialState, {
     [socketConnect.type]: (state: MainState, action: PayloadAction<SocketConnect>) => {
-        console.log(action);
         const newState = { ...state, data: { ...state.data, connected: action.payload.connected } };
         return newState;
     },

@@ -21,9 +21,6 @@ export default class EffectCombiner {
                 ledPositions = this.combinePositions(resolvedEffect, dt, ledPositions);
             });
         });
-        if (dt < 0.01) {
-            console.log(this.unresolvedEffects);
-        }
         resolvedEffects.push(new ResolvedEffect(color, amplitude, ledPositions));
         return resolvedEffects;
     }

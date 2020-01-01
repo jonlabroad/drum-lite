@@ -40,7 +40,7 @@ export default class EffectCompiler {
             const partialEffects = effectConfig.effect.partialEffects;
             let dt = 0;
             const isAmbient: boolean = effectConfig.params.params['isAmbient'] ? effectConfig.params.params['isAmbient'].val : false;
-            const priority: EffectPriority = effectConfig.params.params['Priority'] ? effectConfig.params.params['Priority'].val : EffectPriority.MEDIUM;
+            const priority: EffectPriority = effectConfig.params.params['priority'] ? effectConfig.params.params['priority'].val : EffectPriority.MEDIUM;
             const modifier: boolean = effectConfig.params.params['isModifier'] ? effectConfig.params.params['isModifier'].val : false;
             const triggerEffects: HitType[] = effectConfig.params.params['triggers'] ? effectConfig.params.params['triggers'].val : [];
             while (!!partialEffects.find(pe => pe.isTemporal() && !pe.isComplete(dt))) {

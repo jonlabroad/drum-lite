@@ -9,7 +9,7 @@ export default class ParameterHelpers {
                 parameter.val = parseFloat(val);
                 return;
             case "boolean":
-                parameter.val = val.toUpperCase() === "TRUE";
+                parameter.val = val;
                 return;
             case "rgb":
                 // TODO

@@ -46,7 +46,6 @@ function renderEffectCategory(type: string) {
 
 function renderAllEffects() {
     const categories = EffectUtil.getAllEffectTypes();
-    console.log({categories});
     return categories.map(renderEffectCategory);
 }
 

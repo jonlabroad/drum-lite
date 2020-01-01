@@ -23,7 +23,6 @@ function getRealValue(props: NumberInputRangeProps, sliderValue: number) {
     if (val >= props.range.max - 1e-3) {
         val = props.range.max;
     }
-    console.log(val);
     return val;
 }
 

@@ -1,6 +1,6 @@
 import { FunctionComponent, useState } from "react"
 import React from "react"
-import { Input } from "react-onsenui"
+import { Input, Checkbox } from "react-onsenui"
 import { EffectParameter, ParameterType, defaultAmplitudeRange } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect"
 import { NumberInputRange } from "./NumberInputRange";
 
@@ -30,29 +30,46 @@ function onSubmit(props: EffectConfigParameterProps, prevVal: any, newVal: any) 
 
 export const EffectConfigParameter: FunctionComponent<EffectConfigParameterProps> = (props: EffectConfigParameterProps) => {
     const val = props.parameter.options.type === "number" ||
-                props.parameter.options.type === "string" ? props.parameter.val : JSON.stringify(props.parameter.val);
+                props.parameter.options.type === "string" ||
+                props.parameter.options.type === "boolean"
+                ? props.parameter.val : JSON.stringify(props.parameter.val);
 
     const [currentVal, setCurrentVal] = useState(val);
-    
-    return (
-        <div>
-        <Input
-            value={currentVal} float
-            type={getInputType(props.parameter.options.type || "number")}
-            onChange={(event) => { setCurrentVal(event.target.value) } }
-            onBlur={(event) => onSubmit(props, val, currentVal)}
-            modifier='material'
-            placeholder={props.parameter.paramName} />
-        {props.parameter.options.type === "number" &&
-            <NumberInputRange
-                value={currentVal}
-                range={props.parameter.options.range || defaultAmplitudeRange}
-                onChange={(val: number) => {
-                    setCurrentVal(val);
-                    onSubmit(props, currentVal, val);
-                }}
-            />
-        }
-        </div>
-    );
+    const type = props.parameter.options.type || "number";
+    if (type === "boolean") {
+        return (
+            <div>
+            <Checkbox
+                checked={currentVal}
+                onChange={(event) => {
+                    setCurrentVal(!currentVal);
+                    onSubmit(props, currentVal, !currentVal);
+                } }
+                modifier='material'
+                />
+            </div>
+        );
+    } else {
+        return (
+            <div>
+            <Input
+                value={currentVal} float
+                type={getInputType(props.parameter.options.type || "number")}
+                onChange={(event) => { setCurrentVal(event.target.value) } }
+                onBlur={(event) => onSubmit(props, val, currentVal)}
+                modifier='material'
+                placeholder={props.parameter.paramName} />
+            {props.parameter.options.type === "number" &&
+                <NumberInputRange
+                    value={currentVal}
+                    range={props.parameter.options.range || defaultAmplitudeRange}
+                    onChange={(val: number) => {
+                        setCurrentVal(val);
+                        onSubmit(props, currentVal, val);
+                    }}
+                />
+            }
+            </div>
+        );
+    };
 }

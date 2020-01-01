@@ -12,8 +12,9 @@ import Util from "../util/Util";
 import LinearFadeOutEffect, { LinearFadeOutEffectParams } from "../light/effect/amplitude/LinearFadeOutEffect";
 import LinearColorTransition, { LinearColorTransitionParams } from "../light/effect/color/LinearColorTransition";
 import SymmetricalLeds, { SymmetricalLedsParams } from "../light/effect/positional/SymmetricalLeds";
-import RacerEffect, { RacerParameters } from "../light/effect/composed/RacerEffect";
 import FullEffectConfig from "./FullEffectConfig";
+import RacerEffect, { RacerParameters } from "../light/effect/composed/RacerEffect";
+import ColorTransitionFadeOutEffect, { ColorTransitionFadeOutParameters, ColorTransitionFadeOutOptions } from "../light/effect/composed/ColorTransitionFadeOut";
 
 function arrayToRgb(arr: number[]) {
     return new RGB(arr[0], arr[1], arr[2]);
@@ -49,9 +50,6 @@ colors['drumHit2b'] = arrayToRgb([140, 0, 0])
 colors['drumHit3a'] = arrayToRgb([243, 140, 2])
 colors['drumHit3b'] = arrayToRgb([120, 40, 0])
 
-colors['drumHit3a'] = arrayToRgb([243, 140, 2])
-colors['drumHit3b'] = arrayToRgb([120, 40, 0])
-
 // Sparkle
 colors['sparkle1'] = arrayToRgb([250, 250, 250])
 colors['sparkle2'] = arrayToRgb([128, 128, 128])
@@ -65,44 +63,125 @@ export default class TronConfig extends FullEffectConfig {
     constructor() {
         super();
 
-        const racerParams = new RacerParameters(ambientAmplitude, colors['tronBlueMain'], ambientAmplitude, colors['tronBlueTrail'], 20, ambientSpinPeriod, 0, [EffectTarget.SNARE]);
-        racerParams.params.isAmbient.val = true;
+        const racerConfig = {
+            racerAmplitude: ambientAmplitude,
+            racerColor: colors['tronBlueMain'],
+            trailAmplitude: ambientAmplitude,
+            trailColor: colors['tronBlueTrail'],
+            trailLength: 20,
+            spinPeriod: ambientSpinPeriod,
+            offset: 0,
+            targets: [EffectTarget.SNARE],
+            isAmbient: true,
+            priority: EffectPriority.LOWEST,
+            isModifier: false,
+            startTime: 0,
+            triggers: []
+        };
+        const racerParams = new RacerParameters(racerConfig);
         const racer1Snare = new RacerEffect("Racer1 Snare", racerParams);
         this.effects.push(racer1Snare);
 
-        this.effects.forEach(e => e.init());
-        //this.effects.push(racer1Snare.children.map(childEffect => new PartialEffectConfig("Racer1", [], childEffect, EffectPriority.LOWEST, true, false)));
+        const racer2Snare = new RacerEffect("Racer2 Snare", new RacerParameters({
+            ...racerConfig,
+            racerColor: colors['tronOrangeMain'],
+            trailColor: colors['tronOrangeTrail'],
+            offset: 27
+        }));
+        this.effects.push(racer2Snare);
+
+        const racer1Tom1 = new RacerEffect("Racer1 Tom1", new RacerParameters({
+            ...racerConfig,
+            trailLength: 13,
+            targets: [EffectTarget.TOM1]
+        }));
+        this.effects.push(racer1Tom1);
+        const racer2Tom1 = new RacerEffect("Racer1 Tom1", new RacerParameters({
+            ...racerConfig,
+            trailLength: 13,
+            targets: [EffectTarget.TOM1],
+            racerColor: colors['tronOrangeMain'],
+            trailColor: colors['tronOrangeTrail'],
+            offset: 18
+        }));
+        this.effects.push(racer2Tom1);
+
+        const racer1Tom2 = new RacerEffect("Racer1 Tom2", new RacerParameters({
+            ...racerConfig,
+            trailLength: 12,
+            targets: [EffectTarget.TOM2]
+        }));
+        this.effects.push(racer1Tom2);
+        const racer2Tom2 = new RacerEffect("Racer1 Tom2", new RacerParameters({
+            ...racerConfig,
+            trailLength: 12,
+            targets: [EffectTarget.TOM2],
+            racerColor: colors['tronOrangeMain'],
+            trailColor: colors['tronOrangeTrail'],
+            offset: 16
+        }));
+        this.effects.push(racer2Tom2);
+
+        const racer1Tom3 = new RacerEffect("Racer1 Tom3", new RacerParameters({
+            ...racerConfig,
+            trailLength: 13,
+            targets: [EffectTarget.TOM3]
+        }));
+        this.effects.push(racer1Tom3);
+        const racer2Tom3 = new RacerEffect("Racer1 Tom3", new RacerParameters({
+            ...racerConfig,
+            trailLength: 13,
+            targets: [EffectTarget.TOM3],
+            racerColor: colors['tronOrangeMain'],
+            trailColor: colors['tronOrangeTrail'],
+            offset: 18
+        }));
+        this.effects.push(racer2Tom3);
+
+        const drumHitConfig: ColorTransitionFadeOutOptions = {
+            amplitude: 1.0,
+            startColor: colors['tronBlueMain'],
+            endColor: colors['tronBlueTrail'],
+            duration: 1000.0,
+            triggers: [HitType.SNARE_HEAD, HitType.SNARE_RIM],
+            targets: [EffectTarget.SNARE],
+            isAmbient: false,
+            priority: EffectPriority.HIGH,
+            isModifier: false,
+            startTime: 0
+        };
+        const snareHit = new ColorTransitionFadeOutEffect("Snare Hit", new ColorTransitionFadeOutParameters(drumHitConfig));
+        this.effects.push(snareHit);
+
+        const tom1Hit = new ColorTransitionFadeOutEffect("Tom1 Hit", new ColorTransitionFadeOutParameters({
+            ...drumHitConfig,
+            startColor: colors['drumHit1a'],
+            endColor: colors['drumHit1b'],
+            targets: [EffectTarget.TOM1],
+            triggers: [HitType.TOM1]
+        }));
+        this.effects.push(tom1Hit);
+
+        const tom2Hit = new ColorTransitionFadeOutEffect("Tom2 Hit", new ColorTransitionFadeOutParameters({
+            ...drumHitConfig,
+            startColor: colors['drumHit2a'],
+            endColor: colors['drumHit2b'],
+            targets: [EffectTarget.TOM2],
+            triggers: [HitType.TOM2]
+        }));
+        this.effects.push(tom2Hit);
+
+        const tom3Hit = new ColorTransitionFadeOutEffect("Tom3 Hit", new ColorTransitionFadeOutParameters({
+            ...drumHitConfig,
+            startColor: colors['drumHit3a'],
+            endColor: colors['drumHit3b'],
+            targets: [EffectTarget.TOM3],
+            triggers: [HitType.TOM3]
+        }));
+        this.effects.push(tom3Hit);
+
 
 /*
-        const racer2Snare = new RacerEffect("Racer2 Snare",
-            new RacerParameters(ambientAmplitude, colors['tronOrangeMain'], ambientAmplitude, colors['tronOrangeTrail'], 20, ambientSpinPeriod, 27, [EffectTarget.SNARE])
-        );
-        this.effects.push(racer2Snare.children.map(childEffect => new PartialEffectConfig("Racer1", [], childEffect, EffectPriority.LOWEST, true, false)));
-*/
-
-        //console.log(this.effects.map(e => JSON.stringify(e, null, 2)));
-/*
-        this.createRacer("Racer2 Snare", [EffectTarget.SNARE], 27, colors['tronOrangeMain']);
-        this.createTrail("Racer2 Trail Snare", [EffectTarget.SNARE], 26, 20, colors['tronOrangeTrail']);
-    
-        this.createRacer("Racer1 Tom1", [EffectTarget.TOM1], 0, colors['tronBlueMain']);
-        this.createTrail("Racer1 Trail Tom1", [EffectTarget.TOM1], -1, 13, colors['tronBlueTrail']);
-    
-        this.createRacer("Racer2 Tom1", [EffectTarget.TOM1], 17, colors['tronRedMain']);
-        this.createTrail("Racer2 Trail Tom1", [EffectTarget.TOM1], 16, 13, colors['tronRedTrail']);
-
-        this.createRacer("Racer1 Tom2", [EffectTarget.TOM2], 0, colors['tronBlueMain']);
-        this.createTrail("Racer1 Trail Tom2", [EffectTarget.TOM2], -1, 13, colors['tronBlueTrail']);
-    
-        this.createRacer("Racer2 Tom2", [EffectTarget.TOM2], 17, colors['tronOrangeMain']);
-        this.createTrail("Racer2 Trail Tom2", [EffectTarget.TOM2], 16, 13, colors['tronOrangeTrail']);
-
-        this.createRacer("Racer1 Tom3", [EffectTarget.TOM3], 0, colors['tronBlueMain']);
-        this.createTrail("Racer1 Trail Tom3", [EffectTarget.TOM3], -1, 13, colors['tronBlueTrail']);
-    
-        this.createRacer("Racer2 Tom3", [EffectTarget.TOM3], 17, colors['tronRedMain']);
-        this.createTrail("Racer2 Trail Tom3", [EffectTarget.TOM3], 16, 13, colors['tronRedTrail']);
-
         this.createPulseEffect("Kick Pulse", [HitType.KICK], allTargets, 300, kickAmplitudeMod);
     
         this.createDrumHitEffect("Snare Hit", [HitType.SNARE_HEAD, HitType.SNARE_XSTICK], [EffectTarget.SNARE], colors['tronBlueMain'], colors['tronBlueTrail']);
@@ -114,6 +193,8 @@ export default class TronConfig extends FullEffectConfig {
         this.createSparkle("Crash1 Sparkle", [HitType.CRASH1_EDGE], EffectTarget.TOM1, [EffectTarget.TOM2, EffectTarget.SNARE], [EffectTarget.TOM3], [15, 5, 3]);
 */
         //fs.writeFileSync("tron.config", JSON.stringify(this.effects, null, 2));
+        this.effects.forEach(e => e.init());
+
     }
 
 /*

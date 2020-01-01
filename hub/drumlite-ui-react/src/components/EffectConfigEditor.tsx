@@ -19,7 +19,9 @@ const effectBoxStyle: CSSProperties = {
     borderStyle: 'solid'
 }
 
-function renderEffect(effect: EffectConfig<any>): JSX.Element {
+const maxChildLevel = 0;
+
+function renderEffect(effect: EffectConfig<any>, level: number): JSX.Element {
     const elements: JSX.Element[] = [];
     if (effect.effect) {
         elements.push(
@@ -65,8 +67,8 @@ function renderEffect(effect: EffectConfig<any>): JSX.Element {
         )
     }
 
-    if (effect.children) {
-        elements.push(...effect.children.map(child => renderEffect(child)));
+    if (effect.children && level < maxChildLevel) {
+        elements.push(...effect.children.map(child => renderEffect(child, level +  1)));
     }
 
     return (
@@ -77,7 +79,7 @@ function renderEffect(effect: EffectConfig<any>): JSX.Element {
 }
 
 function renderEffects(config: FullEffectConfig): (JSX.Element | null)[] {
-    return config.effects.map(effect => renderEffect(effect));
+    return config.effects.map(effect => renderEffect(effect, 0));
 }
 
 
