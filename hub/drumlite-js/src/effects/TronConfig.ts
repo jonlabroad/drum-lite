@@ -15,6 +15,7 @@ import SymmetricalLeds, { SymmetricalLedsParams } from "../light/effect/position
 import FullEffectConfig from "./FullEffectConfig";
 import RacerEffect, { RacerParameters } from "../light/effect/composed/RacerEffect";
 import ColorTransitionFadeOutEffect, { ColorTransitionFadeOutParameters, ColorTransitionFadeOutOptions } from "../light/effect/composed/ColorTransitionFadeOut";
+import SparklerEffect, { SparklerOptions, SparklerParameters } from "../light/effect/composed/Sparkler";
 
 function arrayToRgb(arr: number[]) {
     return new RGB(arr[0], arr[1], arr[2]);
@@ -100,8 +101,8 @@ export default class TronConfig extends FullEffectConfig {
             ...racerConfig,
             trailLength: 13,
             targets: [EffectTarget.TOM1],
-            racerColor: colors['tronOrangeMain'],
-            trailColor: colors['tronOrangeTrail'],
+            racerColor: colors['tronRedMain'],
+            trailColor: colors['tronRedTrail'],
             offset: 18
         }));
         this.effects.push(racer2Tom1);
@@ -132,8 +133,8 @@ export default class TronConfig extends FullEffectConfig {
             ...racerConfig,
             trailLength: 13,
             targets: [EffectTarget.TOM3],
-            racerColor: colors['tronOrangeMain'],
-            trailColor: colors['tronOrangeTrail'],
+            racerColor: colors['tronRedMain'],
+            trailColor: colors['tronRedTrail'],
             offset: 18
         }));
         this.effects.push(racer2Tom3);
@@ -180,6 +181,36 @@ export default class TronConfig extends FullEffectConfig {
         }));
         this.effects.push(tom3Hit);
 
+        const sparkleConfig: SparklerOptions = {
+            amplitude: 1.0,
+            color1: colors['sparkle1'],
+            color2: colors['sparkle3'],
+            level1Targets: [EffectTarget.TOM1],
+            level2Targets: [EffectTarget.SNARE, EffectTarget.TOM2],
+            level3Targets: [EffectTarget.TOM3],
+            level1Density: 15,
+            level2Density: 5,
+            level3Density: 3,
+            duration: 1750,
+            priority: EffectPriority.HIGH,
+            isAmbient: false,
+            triggers: [HitType.CRASH1_EDGE],
+            isModifier: false,
+            startTime: 0
+        };
+        const crash1Hit = new SparklerEffect("Sparkle Crash 1", new SparklerParameters({
+            ...sparkleConfig
+        }));
+        this.effects.push(crash1Hit);
+
+        const crash2Hit = new SparklerEffect("Sparkle Crash 2", new SparklerParameters({
+            ...sparkleConfig,
+            level1Targets: [EffectTarget.TOM2],
+            level2Targets: [EffectTarget.TOM1, EffectTarget.TOM3],
+            level3Targets: [EffectTarget.SNARE],
+            triggers: [HitType.CRASH2_EDGE]
+        }));
+        this.effects.push(crash2Hit);
 
 /*
         this.createPulseEffect("Kick Pulse", [HitType.KICK], allTargets, 300, kickAmplitudeMod);
