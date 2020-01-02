@@ -51,7 +51,7 @@ export default class ColorTransitionFadeOutEffect extends EffectConfig<ColorTran
             new LinearFadeOutEffect(new LinearFadeOutEffectParams(params.amplitude.val, params.duration.val)),
             new LinearColorTransition(new LinearColorTransitionParams(params.startColor.val, params.endColor.val, params.duration.val)),
             new ConstantTargetsEffect(new ConstantTargetsEffectParams(params.targets.val))
-        ], params.isAmbient.val, params.priority.val
+        ]
         );
     }
 }

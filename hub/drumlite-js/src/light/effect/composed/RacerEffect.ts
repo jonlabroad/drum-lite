@@ -56,7 +56,7 @@ export default class RacerEffect extends EffectConfig<RacerParameters> {
                     new ConstantAmplitude(new ConstantAmplitudeParams(this.params.params.racerAmplitude.val)),
                     new SingleColorEffect(new SingleColorEffectParams(this.params.params.racerColor.val)),
                     new ConstantSpin(new ConstantSpinParams(this.params.params.targets.val, this.params.params.spinPeriod.val, 1, 1, this.params.params.offset.val, this.params.params.racerAmplitude.val)),
-                ], this.params.params.isAmbient.val, this.params.params.priority.val
+                ]
         );
     }
 
@@ -70,7 +70,7 @@ export default class RacerEffect extends EffectConfig<RacerParameters> {
                         new ConstantAmplitude(new ConstantAmplitudeParams(params.trailAmplitude.val)),
                         new SingleColorEffect(new SingleColorEffectParams(params.trailColor.val)),
                         new ConstantSpin(new ConstantSpinParams(params.targets.val, params.spinPeriod.val, 1, 1, baseOffset - n, params.trailAmplitude.val)),
-                    ], this.params.params.isAmbient.val, this.params.params.priority.val)
+                    ])
                 )
             )
         }

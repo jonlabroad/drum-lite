@@ -66,6 +66,7 @@ export class EffectParameters {
     } = {
         startTime: new EffectParameter<number>("Start Time", 0, {type: "number", isHidden: true}),
         isAmbient: new EffectParameter<boolean>("Ambient", true, {type: "boolean", isHidden: true}),
+        isModifier: new EffectParameter<boolean>("IsModifier", true, {type: "boolean", isHidden: true}),
         priority: new EffectParameter<EffectPriority>("Priority", EffectPriority.MEDIUM, {isHidden: true, type: "priority"}),
         triggers: new EffectParameter<HitType[]>("Triggers", [], {isHidden: true, type: "hittype", isArray: true}),
     }
@@ -76,16 +77,15 @@ export class EffectParameters {
             this.params.isAmbient.val = effectOptions.isAmbient;
             this.params.priority.val = effectOptions.priority;
             this.params.triggers.val = effectOptions.triggers;
+            this.params.isModifier.val = effectOptions.isModifier;
         }
     }
 }
 
 export default class PartialEffect<T extends EffectParameters> {
-    isModifier = false
     public params: T;
 
-    constructor(params: T, startTime: number, isModifier = false) {
-        this.isModifier = isModifier;
+    constructor(params: T, startTime: number) {
         this.params = params;
         this.params.params.startTime.val = startTime;
     }

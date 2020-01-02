@@ -65,8 +65,7 @@ export default class SparklerEffect extends EffectConfig<SparklerParameters> {
                             new ConstantAmplitude(new ConstantAmplitudeParams(1.0)),
                             new LinearColorTransition(new LinearColorTransitionParams(params.color1.val, params.color2.val, params.duration.val)),
                             new Sparkle(new SparkleParams([target], densities[groupIndex], 1, params.duration.val))
-                        ],
-                        params.isAmbient.val, params.priority.val
+                        ]
                     )
             }))
         });

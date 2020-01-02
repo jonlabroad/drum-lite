@@ -1,14 +1,7 @@
-import BaseEffectConfig from "./FullEffectConfig";
 import { HitType } from "../midi/HitType";
-import ConstantAmplitude, { ConstantAmplitudeParams } from "../light/effect/amplitude/ConstantAmplitude";
-import SingleColorEffect, { SingleColorEffectParams } from "../light/effect/color/SingleColorEffect";
-import ConstantTargetsEffect, { ConstantTargetsEffectParams } from "../light/effect/positional/ConstantTargetsEffect";
 import { EffectTarget } from "../light/effect/EffectTarget";
 import RGB from "../light/RGB";
 import { EffectPriority } from "../effect/EffectPriority";
-import ConstantSpin, { ConstantSpinParams } from "../light/effect/positional/ConstantSpin";
-import Sparkle, { SparkleParams } from "../light/effect/positional/Sparkle";
-import Util from "../util/Util";
 import LinearFadeOutEffect, { LinearFadeOutEffectParams } from "../light/effect/amplitude/LinearFadeOutEffect";
 import LinearColorTransition, { LinearColorTransitionParams } from "../light/effect/color/LinearColorTransition";
 import SymmetricalLeds, { SymmetricalLedsParams } from "../light/effect/positional/SymmetricalLeds";
@@ -16,6 +9,9 @@ import FullEffectConfig from "./FullEffectConfig";
 import RacerEffect, { RacerParameters } from "../light/effect/composed/RacerEffect";
 import ColorTransitionFadeOutEffect, { ColorTransitionFadeOutParameters, ColorTransitionFadeOutOptions } from "../light/effect/composed/ColorTransitionFadeOut";
 import SparklerEffect, { SparklerOptions, SparklerParameters } from "../light/effect/composed/Sparkler";
+import TronPulseEffect, { TronPulseOptions, TronPulseParameters } from "../light/effect/composed/TronPulse";
+import SingleEffect from "./SingleEffect";
+import EffectConfig from "./EffectConfig";
 
 function arrayToRgb(arr: number[]) {
     return new RGB(arr[0], arr[1], arr[2]);
@@ -187,7 +183,7 @@ export default class TronConfig extends FullEffectConfig {
             color2: colors['sparkle3'],
             level1Targets: [EffectTarget.TOM1],
             level2Targets: [EffectTarget.SNARE, EffectTarget.TOM2],
-            level3Targets: [EffectTarget.TOM3],
+                level3Targets: [EffectTarget.TOM3],
             level1Density: 15,
             level2Density: 5,
             level3Density: 3,
@@ -212,71 +208,32 @@ export default class TronConfig extends FullEffectConfig {
         }));
         this.effects.push(crash2Hit);
 
-/*
-        this.createPulseEffect("Kick Pulse", [HitType.KICK], allTargets, 300, kickAmplitudeMod);
-    
-        this.createDrumHitEffect("Snare Hit", [HitType.SNARE_HEAD, HitType.SNARE_XSTICK], [EffectTarget.SNARE], colors['tronBlueMain'], colors['tronBlueTrail']);
-        this.createDrumHitEffect("Tom1 Hit", [HitType.TOM1], [EffectTarget.TOM1], colors['drumHit1a'], colors['drumHit1b']);
-        this.createDrumHitEffect("Tom2 Hit", [HitType.TOM2], [EffectTarget.TOM2], colors['drumHit3a'], colors['drumHit3b']);
-        this.createDrumHitEffect("Tom3 Hit", [HitType.TOM3], [EffectTarget.TOM3], colors['drumHit2a'], colors['drumHit2b']);
+        const kickConfig: TronPulseOptions = {
+            amplitude: kickAmplitudeMod,
+            color1: colors['pinkPulse1'],
+            color2: colors['pinkPulse2'],
+            targets: allTargets,
+            duration: 300,
+            isModifier: true,
+            isAmbient: false,
+            priority: EffectPriority.HIGH,
+            triggers: [HitType.KICK],
+            startTime: 0
+        };
+        const kickHit = new TronPulseEffect("Kick Pulse", new TronPulseParameters(kickConfig));
+        this.effects.push(kickHit);
 
-        this.createSparkle("Crash2 Sparkle", [HitType.CRASH2_EDGE], EffectTarget.TOM2, [EffectTarget.TOM1, EffectTarget.TOM3], [EffectTarget.SNARE], [15, 5, 3]);
-        this.createSparkle("Crash1 Sparkle", [HitType.CRASH1_EDGE], EffectTarget.TOM1, [EffectTarget.TOM2, EffectTarget.SNARE], [EffectTarget.TOM3], [15, 5, 3]);
-*/
-        //fs.writeFileSync("tron.config", JSON.stringify(this.effects, null, 2));
+        this.effects.push(
+            new EffectConfig("Kick Pulse Lights", new TronPulseParameters({
+                ...kickConfig,
+                isModifier: false
+            }),
+            new SingleEffect("Kick Pulse Lights", [
+                new LinearFadeOutEffect(new LinearFadeOutEffectParams(kickConfig.amplitude / 20, kickConfig.duration)),
+                new LinearColorTransition(new LinearColorTransitionParams(kickConfig.color1, kickConfig.color2, kickConfig.duration)),
+                new SymmetricalLeds(new SymmetricalLedsParams(kickConfig.targets, 3, 3, 5)),
+            ]))
+        );
         this.effects.forEach(e => e.init());
-
     }
-
-/*
-    createPulseEffect(name: string, hitTypes: HitType[], targets: EffectTarget[], duration: number, amplitude: number) {
-        this.effects.push(
-            [new PartialEffectConfig(name, hitTypes, [
-                new LinearFadeOutEffect(new LinearFadeOutEffectParams(amplitude, duration)),
-                new ConstantTargetsEffect(new ConstantTargetsEffectParams(targets)),
-            ],
-            EffectPriority.VERY_HIGH,
-            false, true)]
-        );
-
-        this.effects.push(
-            [new PartialEffectConfig(name, hitTypes, [
-                new LinearFadeOutEffect(new LinearFadeOutEffectParams(amplitude / 20, duration)),
-                new LinearColorTransition(new LinearColorTransitionParams(colors["pinkPulse1"], colors["pinkPulse2"], duration)),
-                new SymmetricalLeds(new SymmetricalLedsParams(targets, 3, 3, 5)),
-            ],
-            EffectPriority.VERY_HIGH
-            )]
-        )
-    }
-
-    createDrumHitEffect(name: string, hitTypes: HitType[], targets: EffectTarget[], color1: RGB, color2: RGB) {
-        const hitDuration = 750;
-        this.effects.push(
-                [new PartialEffectConfig(name, hitTypes, [
-                    new LinearFadeOutEffect(new LinearFadeOutEffectParams(1, hitDuration)),
-                    new LinearColorTransition(new LinearColorTransitionParams(color1, color2, hitDuration)),
-                    new ConstantTargetsEffect(new ConstantTargetsEffectParams(targets))
-                ],
-                EffectPriority.HIGH)]
-        );
-    }
-
-    createSparkle(name: string, hitTypes: HitType[], mainTarget: EffectTarget, targets2: EffectTarget[], target3: EffectTarget[], densities: number[]) {
-        const sparkleDuration = 1750;
-        const targetGroups = [[mainTarget], targets2, target3];
-        targetGroups.forEach((tGroup, groupIndex) => {
-            tGroup.forEach(target => {
-                this.effects.push(
-                    [new PartialEffectConfig(`${name} ${target.toString()}`, hitTypes, [
-                        new ConstantAmplitude(new ConstantAmplitudeParams(1.0)),
-                        new LinearColorTransition(new LinearColorTransitionParams(colors['sparkle1'], colors['sparkle3'], sparkleDuration)),
-                        new Sparkle(new SparkleParams([target], densities[groupIndex], 1, sparkleDuration))
-                    ],
-                    EffectPriority.VERY_HIGH
-                )]);
-            });
-        });
-    }
-*/
 }
