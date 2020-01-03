@@ -17,13 +17,23 @@ const effectBoxStyle: CSSProperties = {
     borderStyle: 'solid'
 }
 
+const effectContainerStyle: CSSProperties = {
+    borderRadius: "10px",
+    marginBottom: "10px",
+    backgroundColor: "#FFFFFF"
+}
+
+const paramStyle: CSSProperties = {
+    marginBottom: "10px"
+}
+
 const maxChildLevel = 0;
 
 function renderEffect(effect: EffectConfig<any>, level: number): JSX.Element {
     const elements: JSX.Element[] = [];
     if (effect.effect) {
         elements.push(
-            <Box key={effect.name} display="flex" flexDirection="column">
+            <Box key={effect.name} style={effectContainerStyle} display="flex" flexDirection="column">
                 <div>{effect.name}</div>
                 <div>
                     {(effect.effect ? effect.effect.partialEffects : []).map(e => {
@@ -42,17 +52,17 @@ function renderEffect(effect: EffectConfig<any>, level: number): JSX.Element {
     }
     else if (effect.params) {
         elements.push(
-            <Box key={effect.name} display="flex" flexDirection="column">
+            <Box key={effect.name} style={effectContainerStyle} display="flex" flexDirection="column">
                 <div>{effect.name}</div>
                 {Object.keys(effect.params.params).filter(k => !effect.params.params[k].options.isHidden).map((paramKey: string) => {
                     const param = effect.params.params[paramKey];
                     return (
-                        <div key={`${param.paramName}${effect.name}`}>
-                            <Box display="flex" flexDirection="column">
-                                <EffectConfigParameterContainer 
-                                    parameter={param}
-                                />
-                            </Box>
+                        <div key={`${param.paramName}${effect.name}`}
+                            style={paramStyle}
+                        >
+                            <EffectConfigParameterContainer 
+                                parameter={param}
+                            />
                         </div>
                     )
                 })}

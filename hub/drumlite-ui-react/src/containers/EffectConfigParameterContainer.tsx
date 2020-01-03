@@ -14,11 +14,6 @@ export interface EffectConfigParameterContainerProps {
     configChanged: any
 }
 
-const style: CSSProperties = {
-    //marginTop: "5px",
-    //marginBottom: "5px"
-}
-
 function onChange(parameter: EffectParameter<any>, val: any) {
     ParameterHelpers.setValue(parameter, val);
     
@@ -26,16 +21,14 @@ function onChange(parameter: EffectParameter<any>, val: any) {
 
 export const EffectConfigParameterContainer: FunctionComponent<EffectConfigParameterContainerProps> = (props: EffectConfigParameterContainerProps) => {
     return (
-        <div style={style}>
-            <EffectConfigParameter
-                parameter={props.parameter}
+        <EffectConfigParameter
+            parameter={props.parameter}
 
-                onChange={(parameter: EffectParameter<any>, val: any) => {
-                    onChange(parameter, val);
-                    props.configChanged();
-                }}
-            />
-        </div>
+            onChange={(parameter: EffectParameter<any>, val: any) => {
+                onChange(parameter, val);
+                props.configChanged();
+            }}
+        />
     )
 }
 
