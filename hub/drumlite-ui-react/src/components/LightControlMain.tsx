@@ -1,6 +1,5 @@
 import { FunctionComponent } from "react"
 import React from "react"
-import { Page } from "react-onsenui"
 import { Grid } from "@material-ui/core"
 import DrumButtonsContainer from "../containers/DrumButtonsContainer"
 

@@ -23,8 +23,8 @@ export class TronPulseParameters extends EffectParameters {
     constructor(config: TronPulseOptions) {
         super(config);
         this.params.amplitude = new EffectParameter<number>("Amplitude", config.amplitude);
-        this.params.color1 = new EffectParameter<RGB>("Color 1", config.color1);
-        this.params.color2 = new EffectParameter<RGB>("Color 2", config.color2);
+        this.params.color1 = new EffectParameter<RGB>("Color 1", config.color1, {type: "rgb"});
+        this.params.color2 = new EffectParameter<RGB>("Color 2", config.color2, {type: "rgb"});
         this.params.targets = new EffectParameter<EffectTarget[]>("Targets", config.targets, {type: "target", isArray: true});
         this.params.duration = new EffectParameter<number>("Duration", config.duration);
         this.params.priority.options.isHidden = false;

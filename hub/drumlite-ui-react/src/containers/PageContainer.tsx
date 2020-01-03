@@ -1,13 +1,10 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import React from "react"
-import { Button, Page, Col, Row } from "react-onsenui"
 import { Grid, Box } from "@material-ui/core"
 import { connect } from "react-redux"
 import { MainState } from "../types"
-import { LightControlMain } from "../components/LightControlMain"
 import { handleDrumTrigger, enableLeds } from "../actions"
 import { HitType } from "@jonlabroad/drum-lite/dist/midi/HitType"
-import { DrumButtons } from "../components/DrumButtons"
 import WebsocketContainer from "./WebsocketContainer"
 import LightControlMainContainer from "./LightControlMainContainer"
 import WebsocketsDriver from "../driver/WebsocketsDriver"
@@ -59,8 +56,7 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
     });
 
     return (
-        <Page>
-            <div className="App">
+        <div className="App">
             <WebsocketContainer driver={driver.current}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
@@ -76,8 +72,7 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
                     </Grid>
                 </Grid>
             </WebsocketContainer>
-            </div>
-        </Page>
+        </div>
     )
 }
 

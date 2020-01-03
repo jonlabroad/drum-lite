@@ -28,8 +28,8 @@ export class SparklerParameters extends EffectParameters {
     constructor(config: SparklerOptions) {
         super(config);
         this.params.amplitude = new EffectParameter<number>("Amplitude", config.amplitude);
-        this.params.color1 = new EffectParameter<RGB>("Color 1", config.color1);
-        this.params.color2 = new EffectParameter<RGB>("Color 2", config.color2);
+        this.params.color1 = new EffectParameter<RGB>("Color 1", config.color1, {type: "rgb"});
+        this.params.color2 = new EffectParameter<RGB>("Color 2", config.color2, {type: "rgb"});
         this.params.level1Targets = new EffectParameter<EffectTarget[]>("Targets Level 1", config.level1Targets, {type: "target", isArray: true});
         this.params.level2Targets = new EffectParameter<EffectTarget[]>("Targets Level 2", config.level2Targets, {type: "target", isArray: true});
         this.params.level3Targets = new EffectParameter<EffectTarget[]>("Targets Level 3", config.level3Targets, {type: "target", isArray: true});

@@ -1,7 +1,8 @@
 import { EffectParameter } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect";
+import RGB from "@jonlabroad/drum-lite/dist/light/RGB";
 
 export default class ParameterHelpers {
-    public static setValue(parameter: EffectParameter<any>, val: string) {
+    public static setValue(parameter: EffectParameter<any>, val: any) {
         // TODO handle arrays of each type
 
         switch (parameter.options.type) {
@@ -12,10 +13,11 @@ export default class ParameterHelpers {
                 parameter.val = val;
                 return;
             case "rgb":
-                // TODO
+                parameter.val = new RGB(val.r, val.b, val.g);
                 return;
             case "target":
                 parameter.val = val;
+                return;
             default:
                 parameter.val = val;
         }

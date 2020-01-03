@@ -15,8 +15,8 @@ export interface EffectConfigParameterContainerProps {
 }
 
 const style: CSSProperties = {
-    marginTop: "20px",
-    marginBottom: "25px"
+    //marginTop: "5px",
+    //marginBottom: "5px"
 }
 
 function onChange(parameter: EffectParameter<any>, val: any) {

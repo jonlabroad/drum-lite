@@ -28,9 +28,9 @@ export class RacerParameters extends EffectParameters {
     constructor(config: RacerOptions) {
         super(config);
         this.params.racerAmplitude = new EffectParameter<number>("Racer Amplitude", config.racerAmplitude);
-        this.params.racerColor = new EffectParameter<RGB>("Racer Color", config.racerColor);
+        this.params.racerColor = new EffectParameter<RGB>("Racer Color", config.racerColor, {type: "rgb"});
         this.params.trailAmplitude = new EffectParameter<number>("Trail Amplitude", config.trailAmplitude);
-        this.params.trailColor = new EffectParameter<RGB>("Trail Color", config.trailColor);
+        this.params.trailColor = new EffectParameter<RGB>("Trail Color", config.trailColor, {type: "rgb"});
         this.params.trailLength = new EffectParameter<number>("Trail Length", config.trailLength);
         this.params.spinPeriod = new EffectParameter<number>("Spin Period", config.spinPeriod, {range: defaultMillisecondRange});
         this.params.offset = new EffectParameter<number>("Offset", config.offset, {range: {min: 0, max: 100, inc: 1}});

@@ -65,8 +65,8 @@ export class EffectParameters {
         [key: string]: EffectParameter<any>
     } = {
         startTime: new EffectParameter<number>("Start Time", 0, {type: "number", isHidden: true}),
-        isAmbient: new EffectParameter<boolean>("Ambient", true, {type: "boolean", isHidden: true}),
-        isModifier: new EffectParameter<boolean>("IsModifier", true, {type: "boolean", isHidden: true}),
+        isAmbient: new EffectParameter<boolean>("Is Ambient", true, {type: "boolean", isHidden: true}),
+        isModifier: new EffectParameter<boolean>("Is Modifier", true, {type: "boolean", isHidden: true}),
         priority: new EffectParameter<EffectPriority>("Priority", EffectPriority.MEDIUM, {isHidden: true, type: "priority"}),
         triggers: new EffectParameter<HitType[]>("Triggers", [], {isHidden: true, type: "hittype", isArray: true}),
     }

@@ -4,7 +4,6 @@ import { Box } from "@material-ui/core"
 import { CSSProperties } from "@material-ui/styles";
 import { Add } from "@material-ui/icons";
 import EffectUtil from "../util/EffectUtil";
-import { List, ListHeader, ListItem } from "react-onsenui";
 import { EffectParameters } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect";
 
 export interface EffectsLibraryProps {
@@ -26,21 +25,19 @@ function renderEffectCategory(type: string) {
     const effects = EffectUtil.getEffectsOfType(type);
     
     return (
-        <List dataSource={effects}
-            renderHeader={() => <ListHeader>{type}</ListHeader>}
-            renderRow={(effect: EffectParameters) => <ListItem>
-            <Box display="flex" flexDirection="row">
-                <div>{effect.effectName}</div>
-                <Add fontSize="small"></Add>
-            </Box>
-        </ListItem>}
-        />
-/*
         <Box display="flex" flexDirection="column">
-            <h4>{type}</h4>
-            {effects.map(renderEffect)}
+            <div>{type}</div>
+            {
+                effects.map(effect => {
+                    return (
+                        <Box display="flex" flexDirection="row">
+                            <div>{effect.effectName}</div>
+                            <Add fontSize="small"></Add>
+                        </Box>
+                    );
+                })
+            }
         </Box>
-*/
     );
 }
 

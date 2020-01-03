@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react"
-import { Range } from "react-onsenui"
 import React from "react"
 import { EffectParameterRange } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect";
+import { Slider } from "@material-ui/core";
 
 export interface NumberInputRangeProps {
     value: number
@@ -28,10 +28,15 @@ function getRealValue(props: NumberInputRangeProps, sliderValue: number) {
 
 export const NumberInputRange: FunctionComponent<NumberInputRangeProps> = (props: NumberInputRangeProps) => {
     return (
-        <Range
-            modifier="material"
-            value={getSliderValue(props)}
-            onChange={(event: any) => props.onChange(getRealValue(props, parseFloat(event.target.value)))}
+        <Slider
+            min={props.range.min}
+            max={props.range.max}
+            step={props.range.inc}
+            value={props.value}
+            valueLabelDisplay="auto"
+            onChange={(event: any, newValue: any) => {
+                props.onChange(newValue)
+            }}
         />
     )
 }
