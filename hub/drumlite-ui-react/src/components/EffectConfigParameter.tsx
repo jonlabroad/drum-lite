@@ -4,7 +4,9 @@ import { EffectParameter } from "@jonlabroad/drum-lite/dist/light/effect/Partial
 import { ColorEffectPicker } from "./ColorEffectPicker";
 import { BooleanEffectValue } from "./BooleanEffectValue";
 import { NumberEffectValue } from "./NumberEffectValue";
-import { Box } from "@material-ui/core";
+import { Box, Typography, InputLabel } from "@material-ui/core";
+import { TargetEffectValue } from "./TargetEffectValue";
+import { HitTypeEffectValue } from "./HitTypeEffectValue";
 
 const parameterLabelStyle: CSSProperties = {
     marginRight: "20px",
@@ -41,6 +43,16 @@ function renderFieldValue(props: EffectConfigParameterProps, type: string) {
                 parameter={props.parameter}
                 onSubmit={(newValue: any) => onSubmit(props, undefined, newValue)}
             />
+        case "target":
+            return <TargetEffectValue
+                parameter={props.parameter}
+                onSubmit={(newValue: any) => onSubmit(props, undefined, newValue)}
+            />
+        case "hittype":
+            return <HitTypeEffectValue
+                parameter={props.parameter}
+                onSubmit={(newValue: any) => onSubmit(props, undefined, newValue)}
+            />
         default:
             return <div>UNKNOWN TYPE {type}</div>
     }
@@ -50,7 +62,7 @@ export const EffectConfigParameter: FunctionComponent<EffectConfigParameterProps
     const type = props.parameter.options.type || "number";
     return <React.Fragment>
         <Box display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
-            <div style={parameterLabelStyle}>{props.parameter.paramName}:</div>
+            <div style={parameterLabelStyle}><InputLabel>{props.parameter.paramName}</InputLabel></div>
             {renderFieldValue(props, type)}
         </Box>
     </React.Fragment>

@@ -1,7 +1,7 @@
 import { FunctionComponent, useState, CSSProperties } from "react"
 import React from "react"
 import { EffectParameter, ParameterType, defaultAmplitudeRange } from "@jonlabroad/drum-lite/dist/light/effect/PartialEffect"
-import { Input } from "@material-ui/core";
+import { Input, Box, TextField } from "@material-ui/core";
 import { NumberInputRange } from "./NumberInputRange";
 
 export interface NumberEffectValueProps {
@@ -11,7 +11,7 @@ export interface NumberEffectValueProps {
 }
 
 const inputStyle: CSSProperties = {
-    width: "120px",
+    width: "100px",
     marginRight: "20px"
 }
 
@@ -34,7 +34,8 @@ export const NumberEffectValue: FunctionComponent<NumberEffectValueProps> = (pro
 
     const type = props.parameter.options.type || "number";
     return <React.Fragment>
-            <Input
+        <Box display="flex" flexDirection="row">
+            <TextField
                 style={inputStyle}
                 value={currentVal}
                 type={getInputType(type)}
@@ -51,5 +52,6 @@ export const NumberEffectValue: FunctionComponent<NumberEffectValueProps> = (pro
                     props.onSubmit(val);
                 }}
             />}
+        </Box>
         </React.Fragment>
 }

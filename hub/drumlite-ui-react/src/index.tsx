@@ -15,14 +15,6 @@ const store = configureStore({
     middleware: [thunk as ThunkMiddleware<any, AnyAction>],
 });
 
-/*
-const store = createStore(
-    mainReducer as Reducer<MainState, RootAction>,
-    initialState,
-    applyMiddleware(thunk as ThunkMiddleware<any, AnyAction>)
-)
-*/
-
 ReactDOM.render(
     <Provider store={store}>
         <App />

@@ -11,7 +11,7 @@ export interface NumberInputRangeProps {
 }
 
 const sliderStyle: CSSProperties = {
-    maxWidth: "140px"
+    width: "140px"
 }
 
 export const NumberInputRange: FunctionComponent<NumberInputRangeProps> = (props: NumberInputRangeProps) => {

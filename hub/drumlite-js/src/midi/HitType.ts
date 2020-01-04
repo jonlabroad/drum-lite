@@ -25,3 +25,31 @@ export enum HitType {
     AUX_RIM = 28,
     UNKNOWN = 0
 }
+
+export const HitTypeString: {[key: number]: string} = {
+    [HitType.KICK]: "Kick",
+    [HitType.SNARE_HEAD]: "Snare Head",
+    [HitType.SNARE_RIM]: "Snare Rim",
+    [HitType.SNARE_XSTICK]: "Snare XStick",
+    [HitType.TOM1]: "Tom 1",
+    [HitType.TOM1_RIM]: "Tom 2 Rim",
+    [HitType.TOM2]: "Tom 2",
+    [HitType.TOM2_RIM]: "Tom 2 Rim",
+    [HitType.TOM3]: "Tom 3",
+    [HitType.TOM3_RIM]: "Tom 3 Rim",
+    [HitType.HH_OPEN_BOW]: "Hihat Open Bow",
+    [HitType.HH_OPEN_EDGE]: "Hihat Open Edge",
+    [HitType.HH_CLOSED_BOW]: "Hihat Closed Bow",
+    [HitType.HH_CLOSED_EDGE]: "Hihat Closed Edge",
+    [HitType.HH_PEDAL]: "Hihat Pedal",
+    [HitType.CRASH1_BOW]: "Crash 1 Bow",
+    [HitType.CRASH1_EDGE]: "Crash 1 Edge",
+    [HitType.CRASH2_BOW]: "Crash 2 Bow",
+    [HitType.CRASH2_EDGE]: "Crash 2 Edge",
+    [HitType.RIDE_BOW]: "Ride Bow",
+    [HitType.RIDE_EDGE]: "Ride Edge",
+    [HitType.RIDE_BELL]: "Ride Bell",
+    [HitType.AUX_HEAD]: "Aux Head",
+    [HitType.AUX_RIM]: "Aux Rim",
+    [HitType.UNKNOWN]: "Unknown",
+}
