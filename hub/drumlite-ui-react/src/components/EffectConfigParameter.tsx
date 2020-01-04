@@ -7,6 +7,7 @@ import { NumberEffectValue } from "./NumberEffectValue";
 import { Box, Typography, InputLabel } from "@material-ui/core";
 import { TargetEffectValue } from "./TargetEffectValue";
 import { HitTypeEffectValue } from "./HitTypeEffectValue";
+import { PriorityEditor } from "./PriorityEditor";
 
 const parameterLabelStyle: CSSProperties = {
     marginRight: "20px",
@@ -50,6 +51,11 @@ function renderFieldValue(props: EffectConfigParameterProps, type: string) {
             />
         case "hittype":
             return <HitTypeEffectValue
+                parameter={props.parameter}
+                onSubmit={(newValue: any) => onSubmit(props, undefined, newValue)}
+            />
+        case "priority":
+            return <PriorityEditor
                 parameter={props.parameter}
                 onSubmit={(newValue: any) => onSubmit(props, undefined, newValue)}
             />

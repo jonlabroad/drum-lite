@@ -9,3 +9,15 @@ export enum EffectPriority {
     HIGHEST = 100,
     ANY = 1000
 };
+
+export const EffectPriorityString: {[key: number]: string} = {
+    [EffectPriority.LOWEST]: "Lowest",
+    [EffectPriority.LOW]: "Low",
+    [EffectPriority.MEDIUM_LOW]: "Medium Low",
+    [EffectPriority.MEDIUM]: "Medium",
+    [EffectPriority.MEDIUM_HIGH]: "Medium High",
+    [EffectPriority.HIGH]: "High",
+    [EffectPriority.VERY_HIGH]: "Very High",
+    [EffectPriority.HIGHEST]: "Highest",
+    [EffectPriority.ANY]: "Any"
+}

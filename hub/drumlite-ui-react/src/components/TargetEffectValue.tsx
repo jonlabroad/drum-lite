@@ -29,6 +29,17 @@ export const TargetEffectValue: FunctionComponent<TargetEffectValueProps> = (pro
                 </div>
                 <Checkbox
                     checked={currentVal.includes(target)}
+                    onChange={() => {
+                        const valSet = new Set<EffectTarget>(currentVal);
+                        if (valSet.has(target)) {
+                            valSet.delete(target);
+                        } else {
+                            valSet.add(target);
+                        }
+                        const newVal = [...valSet.keys()];
+                        setCurrentVal(newVal);
+                        props.onSubmit(newVal);
+                    }}
                 />
             </React.Fragment>
         })}
