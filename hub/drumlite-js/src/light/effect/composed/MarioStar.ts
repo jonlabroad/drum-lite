@@ -63,7 +63,8 @@ export default class MarioStarEffect extends EffectConfig<MarioStarParameters> {
                 new SingleEffect("Star Main", [
                     new ConstantAmplitude(new ConstantAmplitudeParams(params.amplitude.val)),
                     new ConstantSpin(new ConstantSpinParams(params.targets.val, params.period.val, 1, 1, 0)),
-                    new NColorTransition(new NColorTransitionParams(params.starColors.val, params.starColorPeriod.val))
+                    //new NColorTransition(new NColorTransitionParams(params.starColors.val, params.starColorPeriod.val))
+                    new SingleColorEffect(new SingleColorEffectParams(new RGB(230, 230, 230)))
                 ])
         ));
     }

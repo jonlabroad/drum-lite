@@ -52,6 +52,7 @@ const defaultOptions = new EffectParameterOptions();
 
 export class EffectOptions {
     isAmbient: boolean = false
+    isJit?: boolean = false
     isModifier: boolean = false
     startTime: number = 0
     priority: EffectPriority = EffectPriority.MEDIUM
@@ -78,12 +79,14 @@ export class EffectParameters {
     public params: {
         startTime: EffectParameter<number>
         isAmbient: EffectParameter<boolean>
+        isJit: EffectParameter<boolean>
         priority: EffectParameter<EffectPriority>
         triggers: EffectParameter<HitType[]>
         [key: string]: EffectParameter<any>
     } = {
         startTime: new EffectParameter<number>("Start Time", 0, {type: "number", isHidden: true}),
         isAmbient: new EffectParameter<boolean>("Is Ambient", true, {type: "boolean", isHidden: true}),
+        isJit: new EffectParameter<boolean>("Is JIT", false, {type: "boolean", isHidden: false}),
         isModifier: new EffectParameter<boolean>("Is Modifier", true, {type: "boolean", isHidden: true}),
         priority: new EffectParameter<EffectPriority>("Priority", EffectPriority.MEDIUM, {isHidden: true, type: "priority"}),
         triggers: new EffectParameter<HitType[]>("Triggers", [], {isHidden: true, type: "hittype", isArray: true}),
@@ -96,6 +99,10 @@ export class EffectParameters {
             this.params.priority.val = effectOptions.priority;
             this.params.triggers.val = effectOptions.triggers;
             this.params.isModifier.val = effectOptions.isModifier;
+            if (effectOptions?.isJit) {
+                console.log("JIT!");
+            }
+            this.params.isJit.val = effectOptions?.isJit ?? false;
         }
     }
 }
@@ -118,6 +125,13 @@ export default class PartialEffect<T extends EffectParameters> {
 
     public isComplete(t: number) {
         return false;
+    }
+
+    public isJit(): boolean {
+        if (this.params?.params?.isJit.val) {
+            console.log(this.params?.params?.isJit);
+        }
+        return this.params?.params?.isJit?.val ?? false;
     }
 
     public getAmbientDuration(): number {

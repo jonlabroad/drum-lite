@@ -1,19 +1,27 @@
 import { HitType } from "../midi/HitType";
 import CompiledEffect from "./CompiledEffect";
+import FullEffectConfig from "../effects/FullEffectConfig";
+import EffectCombiner from "./EffectCombiner";
+import EffectCompiler from "./EffectCompiler";
 
 export default class EffectActivator {
+    timestepMillis: number;
+
     compiledEffects: CompiledEffect[] = [];
     activeEffects: CompiledEffect[] = [];
     ambientEffects: CompiledEffect[] = [];
-    //jitEffects: FullEffectConfig[] = [];
+    jitEffects: FullEffectConfig[] = [];
 
-    constructor(compiledEffects: CompiledEffect[]) {
+    constructor(compiledEffects: CompiledEffect[], jitEffects: FullEffectConfig[], timestep: number) {
+        this.timestepMillis = timestep;
+        this.jitEffects = jitEffects;
         this.setEffects(compiledEffects);
     }
 
     public handleNote(hitType: HitType) {
         const noteTime = new Date();
         const effects = this.findNewEffects(hitType);
+        effects.push(...this.findNewJitEffects(hitType, this.timestepMillis));
         for (let effectElement of effects) {
             effectElement = Object.assign({}, effectElement);
             effectElement.t = noteTime.getTime() + effectElement.dt;
@@ -40,6 +48,9 @@ export default class EffectActivator {
         const t = new Date().getTime();
         const currentActive =  this.activeEffects.filter(e => (!e.isAmbient && e.t <= t && e.t + e.duration > t) || (e.isAmbient && t % e.ambientDuration >= e.t && t % e.ambientDuration < (e.t + e.duration)))
         this.activeEffects = this.activeEffects.filter(e => e.isAmbient || e.t + e.duration >= t, this.activeEffects);
+
+        currentActive.push(...this.findNewJitEffects(undefined, t));
+
         return currentActive
     }
 
@@ -50,6 +61,15 @@ export default class EffectActivator {
     public findNewEffects(hitType: HitType) {
         const effects = this.compiledEffects.filter(e => e && e.hitTypes.find(h => h === hitType), this.compiledEffects);
         return effects
+    }
+
+    public findNewJitEffects(hitType: HitType | undefined, t: number): CompiledEffect[] {
+        // TODO filter by hittype if necessary?
+        const effects: CompiledEffect[] = [];
+        this.jitEffects.forEach(config => config.effects.filter(effect => effect.params.params.isJit.val).forEach(effect => {
+            effects.push(...EffectCompiler.compileEffectTimestep(effect, t, this.timestepMillis, true));
+        }));
+        return effects;
     }
 
     public removeActiveEffectsForTarget(hitType: HitType) {

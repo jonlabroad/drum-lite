@@ -40,38 +40,57 @@ export default class EffectCompiler {
             const partialEffects = effectConfig.effect.partialEffects;
             let dt = 0;
             const isAmbient: boolean = effectConfig.params.params['isAmbient'] ? effectConfig.params.params['isAmbient'].val : false;
-            const priority: EffectPriority = effectConfig.params.params['priority'] ? effectConfig.params.params['priority'].val : EffectPriority.MEDIUM;
-            const modifier: boolean = effectConfig.params.params['isModifier'] ? effectConfig.params.params['isModifier'].val : false;
-            const triggerEffects: HitType[] = effectConfig.params.params['triggers'] ? effectConfig.params.params['triggers'].val : [];
-            while (!!partialEffects.find(pe => pe.isTemporal() && !pe.isComplete(dt))) {
-                const combinedEffects = new EffectCombiner(partialEffects).combine(dt);
-                combinedEffects.forEach(combinedEffect => {
-                    const compiledEffect = new CompiledEffect(
-                        triggerEffects,
-                        combinedEffect,
-                        dt,
-                        this.timestepMillis,
-                        priority,
-                        isAmbient,
-                        modifier
-                    );
-
-                    newCompiled.push(compiledEffect);
-                });
-                dt = dt + this.timestepMillis;
-            }
-
-            const ambientDuration = dt - this.timestepMillis;
-            newCompiled.forEach(c => {
-                if (isAmbient) {
-                    c.ambientDuration = ambientDuration;
+            const isJit: boolean = effectConfig.params.params['isJit'] ? effectConfig.params.params['isJit'].val : false;
+            if (!isJit) {
+                while (!!partialEffects.find(pe => pe.isTemporal() && !pe.isComplete(dt))) {
+                    newCompiled.push(...EffectCompiler.compileEffectTimestep(effectConfig, dt, this.timestepMillis));
+                    dt = dt + this.timestepMillis;
                 }
-            });
-            compiled.push(...newCompiled);
+
+                const ambientDuration = dt - this.timestepMillis;
+                newCompiled.forEach(c => {
+                    if (isAmbient) {
+                        c.ambientDuration = ambientDuration;
+                    }
+                });
+                compiled.push(...newCompiled);
+            }
         }
         
         if (effectConfig.children) {
             effectConfig.children.forEach(child => this.compileEffect(child, compiled));
         }
+    }
+
+    public static compileEffectTimestep(effectConfig: EffectConfig<any>, t: number, timestepMillis: number, isJit = false): CompiledEffect[] {
+        const isAmbient: boolean = effectConfig.params.params['isAmbient'] ? effectConfig.params.params['isAmbient'].val : false;
+        const priority: EffectPriority = effectConfig.params.params['priority'] ? effectConfig.params.params['priority'].val : EffectPriority.MEDIUM;
+        const modifier: boolean = effectConfig.params.params['isModifier'] ? effectConfig.params.params['isModifier'].val : false;
+        const triggerEffects: HitType[] = effectConfig.params.params['triggers'] ? effectConfig.params.params['triggers'].val : [];
+        
+        const compiled: CompiledEffect[] = [];
+        const partialEffects = effectConfig.effect?.partialEffects;
+        if (partialEffects) {
+            const combinedEffects = new EffectCombiner(partialEffects).combine(t);
+            combinedEffects.forEach(combinedEffect => {
+                const compiledEffect = new CompiledEffect(
+                    triggerEffects,
+                    combinedEffect,
+                    t,
+                    timestepMillis,
+                    priority,
+                    isAmbient,
+                    modifier
+                );
+
+                compiled.push(compiledEffect);
+            });
+        }
+
+        if (isJit && effectConfig.children) {
+            effectConfig.children.forEach(child => compiled.push(...this.compileEffectTimestep(child, t, timestepMillis)));
+        }
+
+        return compiled;
     }
 }

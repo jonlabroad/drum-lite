@@ -70,6 +70,7 @@ export default class RainbowRoadConfig extends FullEffectConfig {
                 starColors: [new RGB(128, 128, 128), new RGB(250, 250, 250)],
                 targets: [EffectTarget.SNARE],
                 isAmbient: true,
+                isJit: true,
                 priority: EffectPriority.HIGH
             }))
         );

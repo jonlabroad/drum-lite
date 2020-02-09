@@ -2,7 +2,7 @@ import PartialEffect, { EffectParameters } from "../light/effect/PartialEffect";
 import SingleEffect from "./SingleEffect";
 
 export default class EffectConfig<T extends EffectParameters> {
-    static readonly globalParams = ["isAmbient", "priority", "isModifier", "triggers"]
+    static readonly globalParams = ["isAmbient", "priority", "isModifier", "triggers", "isJit"]
     
     name: string;
     params: EffectParameters;
