@@ -20,14 +20,32 @@ export interface EffectParameterRange {
 
 export const defaultAmplitudeRange = {
     min: 0,
-    max: 10,
-    inc: 0.1
+    max: 3.0,
+    inc: 0.01
 }
 
 export const defaultMillisecondRange = {
     min: 0,
     max: 10000,
     inc: 50
+}
+
+export const defaultLedRange = {
+    min: 0,
+    max: 60,
+    inc: 1
+}
+
+export const defaultSymmetryRange = {
+    min: 1,
+    max: 25,
+    inc: 1
+}
+
+export const defaultPercentageRange = {
+    min: 0,
+    max: 100,
+    inc: 1
 }
 
 const defaultOptions = new EffectParameterOptions();

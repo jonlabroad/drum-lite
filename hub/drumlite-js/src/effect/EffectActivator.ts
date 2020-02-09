@@ -5,6 +5,7 @@ export default class EffectActivator {
     compiledEffects: CompiledEffect[] = [];
     activeEffects: CompiledEffect[] = [];
     ambientEffects: CompiledEffect[] = [];
+    //jitEffects: FullEffectConfig[] = [];
 
     constructor(compiledEffects: CompiledEffect[]) {
         this.setEffects(compiledEffects);
@@ -37,7 +38,7 @@ export default class EffectActivator {
 
     public getCurrentActiveEffects() {
         const t = new Date().getTime();
-        const currentActive =  this.activeEffects.filter(e => (!e.isAmbient && e.t < t && e.t + e.duration > t) || (e.isAmbient && t % e.ambientDuration >= e.t && t % e.ambientDuration < (e.t + e.duration)))
+        const currentActive =  this.activeEffects.filter(e => (!e.isAmbient && e.t <= t && e.t + e.duration > t) || (e.isAmbient && t % e.ambientDuration >= e.t && t % e.ambientDuration < (e.t + e.duration)))
         this.activeEffects = this.activeEffects.filter(e => e.isAmbient || e.t + e.duration >= t, this.activeEffects);
         return currentActive
     }
