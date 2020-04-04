@@ -15,6 +15,7 @@ export interface EffectConfigParameterContainerProps {
 }
 
 function onChange(parameter: EffectParameter<any>, val: any) {
+    console.log({setValue: {parameter, val}});
     ParameterHelpers.setValue(parameter, val);
     
 }

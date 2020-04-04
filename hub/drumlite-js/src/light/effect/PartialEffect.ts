@@ -99,9 +99,6 @@ export class EffectParameters {
             this.params.priority.val = effectOptions.priority;
             this.params.triggers.val = effectOptions.triggers;
             this.params.isModifier.val = effectOptions.isModifier;
-            if (effectOptions?.isJit) {
-                console.log("JIT!");
-            }
             this.params.isJit.val = effectOptions?.isJit ?? false;
         }
     }
@@ -128,9 +125,6 @@ export default class PartialEffect<T extends EffectParameters> {
     }
 
     public isJit(): boolean {
-        if (this.params?.params?.isJit.val) {
-            console.log(this.params?.params?.isJit);
-        }
         return this.params?.params?.isJit?.val ?? false;
     }
 

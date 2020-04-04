@@ -9,6 +9,7 @@ import WebsocketContainer from "./WebsocketContainer"
 import LightControlMainContainer from "./LightControlMainContainer"
 import WebsocketsDriver from "../driver/WebsocketsDriver"
 import TronConfig from "@jonlabroad/drum-lite/dist/effects/TronConfig"
+import RainbowRoadConfig from "@jonlabroad/drum-lite/dist/effects/RainbowRoadConfig"
 import EffectCompiler from "@jonlabroad/drum-lite/dist/effect/EffectCompiler"
 import EffectActivator from "@jonlabroad/drum-lite/dist/effect/EffectActivator"
 import GlobalConfig from "../config/GlobalConfig"
@@ -28,15 +29,16 @@ function compileAndRun(config: FullEffectConfig, effectActivator: EffectActivato
 }
 
 export const PageContainer: FunctionComponent<PageContainerProps> = (props: PageContainerProps) => {
+    const timestepMillis = 25;
     const driver = useRef(new WebsocketsDriver());
-    const config = useRef(new TronConfig());
+    const config = useRef(new RainbowRoadConfig());
     const compiled = useRef(new EffectCompiler(config.current).compile());
-    const effectActivator = useRef(new EffectActivator(compiled.current));
+    const effectActivator = useRef(new EffectActivator(compiled.current, [config.current], timestepMillis));
     GlobalConfig.effectActivator = effectActivator.current;
     GlobalConfig.config = config.current;
   
     const runner = useRef(new EffectRunner(effectActivator.current, driver.current, {
-        periodMillis: 25
+        periodMillis: timestepMillis
     }));
     const [isRunning, setIsRunning] = useState(false);
   

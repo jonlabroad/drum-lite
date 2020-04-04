@@ -33,7 +33,8 @@ export default class NColorTransition extends PartialEffect<NColorTransitionPara
 
     getEffect(t: number) {
         const { params } = this.params;
-        const tNorm = ScaleFunctions.linear(t + params.offset.val, params.startTime.val, params.duration.val);
+        const tWrapped = t - Math.floor(t / params.duration.val) * params.duration.val;
+        const tNorm = ScaleFunctions.linear(tWrapped + params.offset.val, params.startTime.val, params.duration.val);
         const color = this.findColor(tNorm);
         
         return [[ResolvedEffect.createRgb(color)]];

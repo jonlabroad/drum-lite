@@ -20,10 +20,6 @@ const effectContainerStyle: CSSProperties = {
     backgroundColor: "#FFFFFF"
 }
 
-const paramStyle: CSSProperties = {
-    marginBottom: "10px"
-}
-
 const maxChildLevel = 0;
 
 function renderEffectHeader(name: string, params: EffectParameters, expanded: boolean, setExpanded: Function) {
@@ -39,13 +35,9 @@ function renderParameters(effectName: string, params: EffectParameters) {
     return Object.keys(params.params).filter(k => !params.params[k].options.isHidden).map((paramKey: string) => {
         const param = params.params[paramKey];
         return (
-            <div key={`${param.paramName}${effectName}`}
-                style={paramStyle}
-            >
                 <EffectConfigParameterContainer 
                     parameter={param}
                 />
-            </div>
         )
     })
 }

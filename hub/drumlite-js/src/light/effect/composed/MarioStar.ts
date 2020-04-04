@@ -4,16 +4,10 @@ import { EffectTarget } from "../EffectTarget";
 import ConstantAmplitude, { ConstantAmplitudeParams } from "../amplitude/ConstantAmplitude";
 import SingleColorEffect, { SingleColorEffectParams } from "../color/SingleColorEffect";
 import ConstantSpin, { ConstantSpinParams } from "../positional/ConstantSpin";
-import Util from "../../../util/Util";
 import EffectConfig from "../../../effects/EffectConfig";
 import SingleEffect from "../../../effects/SingleEffect";
-import { EffectPriority } from "../../../effect/EffectPriority";
-import NColorTransitionEffect from "./NColorTransitionComposed";
 import NColorTransition, { NColorTransitionParams } from "../color/NColorTransition";
-import ConstantTargetsEffect, { ConstantTargetsEffectParams } from "../positional/ConstantTargetsEffect";
-import SymmetricalLeds, { SymmetricalLedsParams } from "../positional/SymmetricalLeds";
-import { HitType } from "../../../midi/HitType";
-import LEDSelector from "../../LEDSelector";
+import Flicker, { FlickerParams } from "../amplitude/Flicker";
 
 export class MarioStarOptions extends EffectOptions {
     constructor() {
@@ -21,6 +15,7 @@ export class MarioStarOptions extends EffectOptions {
     }
 
     amplitude: number = 1.0
+    flickerIntensity: number = 0.5
     period: number = 2000.0
     starColors: RGB[] = []
     colorPeriod: number = 500
@@ -36,10 +31,14 @@ export class MarioStarParameters extends EffectParameters {
         super({ ...defaultMarioStarOptions, ...config});
         const fullConfig = { ...defaultMarioStarOptions, ...config};
         this.params.amplitude = new EffectParameter<number>("Amplitude", fullConfig.amplitude);
+        this.params.flickerIntensity = new EffectParameter<number>("Flicker Intensity", fullConfig.flickerIntensity, {range: {min: 0.0, max: 1.0, inc: 0.05}});
+        this.params.flickerDuration = new EffectParameter<number>("Flicker Duration", fullConfig.flickerIntensity, {range: {min: 0.0, max: 1000.0, inc: 10}});
         this.params.period = new EffectParameter<number>("Period", fullConfig.period, {range: defaultMillisecondRange});
         this.params.starColors = new EffectParameter<RGB[]>("Star Colors", fullConfig.starColors, {type: "rgb", isArray: true});
         this.params.starColorPeriod = new EffectParameter<number>("Star Color Period", fullConfig.colorPeriod, {range: defaultMillisecondRange});
         this.params.targets = new EffectParameter<EffectTarget[]>("Targets", fullConfig.targets, {type: "target", isArray: true});
+        this.params.isJit.options.isHidden = true;
+        this.params.isJit.val = true;
         this.params.triggers.options.isHidden = false;
         this.params.isAmbient.options.isHidden = false;
     }
@@ -61,10 +60,10 @@ export default class MarioStarEffect extends EffectConfig<MarioStarParameters> {
         this.children.push(
             new EffectConfig("Star Main", new EffectParameters(),
                 new SingleEffect("Star Main", [
-                    new ConstantAmplitude(new ConstantAmplitudeParams(params.amplitude.val)),
+                    //new ConstantAmplitude(new ConstantAmplitudeParams(params.amplitude.val)),
+                    new Flicker(new FlickerParams(params.amplitude.val, params.flickerIntensity.val, params.flickerDuration.val)),
                     new ConstantSpin(new ConstantSpinParams(params.targets.val, params.period.val, 1, 1, 0)),
-                    //new NColorTransition(new NColorTransitionParams(params.starColors.val, params.starColorPeriod.val))
-                    new SingleColorEffect(new SingleColorEffectParams(new RGB(230, 230, 230)))
+                    new NColorTransition(new NColorTransitionParams(params.starColors.val, params.starColorPeriod.val))
                 ])
         ));
     }

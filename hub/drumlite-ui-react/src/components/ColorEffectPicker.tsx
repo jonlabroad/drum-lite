@@ -6,7 +6,7 @@ import { PhotoshopPicker, ColorResult } from "react-color";
 import RGB from "@jonlabroad/drum-lite/dist/light/RGB";
 
 export interface ColorEffectPickerProps {
-    parameter: EffectParameter<any>
+    val: RGB
 
     onSubmit: Function
 }
@@ -17,37 +17,36 @@ const colorIconStyle: CSSProperties = {
 }
 
 export const ColorEffectPicker: FunctionComponent<ColorEffectPickerProps> = (props: ColorEffectPickerProps) => {
-    const val = props.parameter.val;
+    const { val } = props;
 
     const [currentVal, setCurrentVal] = useState(val);
     const [prevVal, setPrevVal] = useState(val);
     const [isOpen, setIsOpen] = useState(false);
 
-    const type = props.parameter.options.type || "number";
     return <React.Fragment>
         <Box display="flex">
             {isOpen && 
             <PhotoshopPicker
                 color={{
-                    r: props.parameter.val.r,
-                    b: props.parameter.val.b,
-                    g: props.parameter.val.g
+                    r: currentVal.r,
+                    b: currentVal.b,
+                    g: currentVal.g
                 }}
                 onChange={(color: ColorResult) => {
                     if (color.rgb) {
-                        const rgb = new RGB(color.rgb.r, color.rgb.b, color.rgb.g);
+                        const rgb = new RGB(color.rgb.r, color.rgb.g, color.rgb.b);
                         setCurrentVal(rgb);
                         props.onSubmit(rgb);
                     }
                 }}
                 onChangeComplete={(color: ColorResult) => {
                     if (color.rgb) {
-                        const rgb = new RGB(color.rgb.r, color.rgb.b, color.rgb.g);
+                        const rgb = new RGB(color.rgb.r, color.rgb.g, color.rgb.b);
                         setCurrentVal(rgb);
                         props.onSubmit(rgb);
                     }
                 }}
-                onAccept={(color: ColorResult) => {
+                onAccept={() => {
                     setPrevVal(currentVal);
                     setIsOpen(false);
                 }}

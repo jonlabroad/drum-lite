@@ -15,6 +15,22 @@ export interface EffectHeaderProps {
     onExpand: Function
 }
 
+const column1Style: CSSProperties = {
+    width: "20%"
+}
+
+const column2Style: CSSProperties = {
+    width: "35%"
+}
+
+const column3Style: CSSProperties = {
+    width: "40%"
+}
+
+const column4Style: CSSProperties = {
+    width: "5%"
+}
+
 const effectNameStyle: CSSProperties = {
     margin: "10px"
 }
@@ -36,7 +52,7 @@ function renderColor(rgb: RGB) {
 
 function renderTriggers(params: EffectParameters) {
     const triggers = params.params.triggers || [];
-    return <Box display="flex" flexDirection="row" alignItems="center">
+    return <Box style={{...column2Style}} display="flex" flexDirection="row" alignItems="center">
         {triggers.val.map((trigger: HitType) => {
             return <Typography style={triggerStyle} variant="overline">{HitTypeString[trigger]}</Typography>
         })}
@@ -44,7 +60,7 @@ function renderTriggers(params: EffectParameters) {
 }
 
 function renderExpandable(props: EffectHeaderProps) {
-    return <Box display="flex" onClick={() => props.onExpand(!props.expanded)} >
+    return <Box style={{...column4Style}} display="flex" onClick={() => props.onExpand(!props.expanded)} >
         {props.expanded ? <ExpandMore/> : <ExpandLess/>}
     </Box>
 }
@@ -54,9 +70,9 @@ export const EffectHeader: FunctionComponent<EffectHeaderProps> = (props: Effect
 
     return <React.Fragment>
         <Box display="flex" style={effectNameStyle} flexDirection="row" justifyContent="space-between" alignContent="center">
-            <Typography variant="body1">{props.name}</Typography>
-            {params.params.isAmbient.val ? <Typography variant="overline">Ambient</Typography> : renderTriggers(params)}
-            <Box display="flex" flexDirection="row" alignItems="center">
+            <Typography style={{...column1Style}} variant="body1">{props.name}</Typography>
+            {params.params.isAmbient.val ? <Typography style={{...column2Style}} variant="overline">Ambient</Typography> : renderTriggers(params)}
+            <Box style={{...column3Style}} display="flex" flexDirection="row" alignItems="center">
                 {Object.keys(params.params).filter(k => params.params[k].options.type === "rgb" && !params.params[k].options.isArray).map(colorParamKey => {
                 return renderColor(params.params[colorParamKey].val);
             })}

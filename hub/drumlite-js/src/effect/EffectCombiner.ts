@@ -22,9 +22,6 @@ export default class EffectCombiner {
             });
         });
         resolvedEffects.push(new ResolvedEffect(color, amplitude, ledPositions));
-        if (this.unresolvedEffects.find(e => e.isJit())) {
-            console.log({resolved: resolvedEffects});
-        }
         return resolvedEffects;
     }
 

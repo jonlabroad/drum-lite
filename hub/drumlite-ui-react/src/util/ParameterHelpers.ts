@@ -13,7 +13,7 @@ export default class ParameterHelpers {
                 parameter.val = val;
                 return;
             case "rgb":
-                parameter.val = new RGB(val.r, val.b, val.g);
+                parameter.val = val;
                 return;
             case "target":
                 parameter.val = val;
