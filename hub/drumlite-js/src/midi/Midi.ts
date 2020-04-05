@@ -17,10 +17,13 @@ export default class Midi {
         }
 
         for (let i = 0; i < portCount; i++) {
-            console.log(`Trying port ${i}`);
-            this.midiInput.openPort(i);
-            this.connected = true;
-            return true;
+            const portName: string = this.midiInput.getPortName(i);
+            if (portName.includes("USB MIDI Interface")) {
+                console.log(`Trying port ${i}`);
+                this.midiInput.openPort(i);
+                this.connected = true;
+                return true;
+            }
         }
         console.warn("NOT CONNECTED TO MIDI");
         return false;
