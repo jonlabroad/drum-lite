@@ -13,7 +13,7 @@ export default class Midi {
         const portCount = this.midiInput.getPortCount();
         console.log(`Num ports: ${portCount}`);
         for (let i=0; i<portCount; i++) {
-            console.log(`Trying port ${i}`);
+            console.log(`Trying port ${this.midiInput.getPortName(i)}`);
             this.midiInput.openPort(i);
             this.connected = true;
             return true;
