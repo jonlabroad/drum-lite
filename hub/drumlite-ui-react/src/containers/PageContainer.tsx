@@ -31,7 +31,8 @@ function compileAndRun(config: FullEffectConfig, effectActivator: EffectActivato
 export const PageContainer: FunctionComponent<PageContainerProps> = (props: PageContainerProps) => {
     const timestepMillis = 25;
     const driver = useRef(new WebsocketsDriver());
-    const config = useRef(new RainbowRoadConfig());
+    //const config = useRef(new RainbowRoadConfig());
+    const config = useRef(new TronConfig());
     const compiled = useRef(new EffectCompiler(config.current).compile());
     const effectActivator = useRef(new EffectActivator(compiled.current, [config.current], timestepMillis));
     GlobalConfig.effectActivator = effectActivator.current;

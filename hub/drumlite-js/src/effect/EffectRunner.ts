@@ -1,8 +1,7 @@
 import EffectActivator from "./EffectActivator"
 import EffectPriorityHandler from "./EffectPriorityHandler";
 import BasicCombiner from "./combiners/BasicCombiner";
-import SocketIODriver from "../light/drivers/SocketIODriver";
-import LEDDriver from "../light/drivers/LedDriver";
+import LEDDriver from "../light/drivers/LEDDriver";
 import Util from "../util/Util";
 import IRemoteDriver from "../light/drivers/IRemoteDriver";
 
