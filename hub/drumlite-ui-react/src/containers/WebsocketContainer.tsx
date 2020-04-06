@@ -18,7 +18,10 @@ export const WebsocketContainer: FunctionComponent<WebsocketContainerProps> = (p
     useEffect(() => {
         props.driver.connect(
             () => props.socketConnect(true),
-            () => props.socketConnect(false));
+            () => props.socketConnect(false),
+            (data: any) => {
+                console.log(data);
+            });
     }, []);
 
     return (

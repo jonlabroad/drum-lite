@@ -2,10 +2,15 @@ import IRemoteDriver from "@jonlabroad/drum-lite/dist/light/drivers/IRemoteDrive
 
 export default class WebsocketsDriver implements IRemoteDriver {
     ws: any;
+    host: string;
     connected: boolean = false;
 
-    connect(onOpen: any, onClose: any) {
-        this.ws = new WebSocket('ws://10.0.0.27:3000');
+    constructor(host: string) {
+        this.host = host;
+    }
+
+    connect(onOpen: any, onClose: any, onMessage: (data: any) => void) {
+        this.ws = new WebSocket(this.host);
         this.ws.onopen = () => {
             this.connected = true;
             onOpen();

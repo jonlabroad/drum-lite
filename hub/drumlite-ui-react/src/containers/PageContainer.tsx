@@ -30,7 +30,9 @@ function compileAndRun(config: FullEffectConfig, effectActivator: EffectActivato
 
 export const PageContainer: FunctionComponent<PageContainerProps> = (props: PageContainerProps) => {
     const timestepMillis = 25;
-    const driver = useRef(new WebsocketsDriver());
+    const driver = useRef(new WebsocketsDriver('ws://10.0.0.27:3000'));
+    const commandDriver = useRef(new WebsocketsDriver('ws://localhost:3003'));
+
     //const config = useRef(new RainbowRoadConfig());
     const config = useRef(new TronConfig());
     const compiled = useRef(new EffectCompiler(config.current).compile());
@@ -43,6 +45,17 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
     }));
     const [isRunning, setIsRunning] = useState(false);
   
+    useEffect(() => {
+        commandDriver.current.connect(
+            () => {
+                console.log("MSG CONNECT");
+                commandDriver.current.send('message', { mymessage: 'data data data' })
+            },
+            () => console.log('msg disconnect'),
+            (data: any) => console.log(data)
+        )
+    }, [])
+
     useEffect(() => {
         function run() {
             if (!isRunning && props.runLeds) {

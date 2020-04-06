@@ -4,25 +4,27 @@ const Websockets = require('ws');
 
 export default class WebsocketsDriver implements IRemoteDriver {
     ws: any;
+    host: string = '';
     connected: boolean = false;
 
-    connect() {
-        //this.ws = new Websockets('ws://localhost:3000', {
-            this.ws = new Websockets('ws://10.0.0.27:3000', {
+    connect(host: string, onMessage: (data: any) => void) {
+        this.host = host;
+        this.ws = new Websockets(this.host, {
             perMessageDeflate: false
         });
 
+        this.ws.on('message', onMessage);
         this.ws.on('open', this.onConnection.bind(this));
         this.ws.on('close', this.onDisconnection.bind(this));
     }
 
     onConnection() {
-        console.log('connected');
+        console.log(`connected ${this.host}`);
         this.connected = true;
     }
 
     onDisconnection() {
-        console.log('disconnected');
+        console.log(`disconnected ${this.host}`);
         this.connected = false;
     }
 
