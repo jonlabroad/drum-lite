@@ -19,7 +19,8 @@ export interface CommandDrumButtonsContainerProps {
 }
 
 export const CommandDrumButtonsContainer: FunctionComponent<CommandDrumButtonsContainerProps> = (props: CommandDrumButtonsContainerProps) => {
-    const commandSender = useRef(new CommandSender("ws://localhost:3003"));
+    //const commandSender = useRef(new CommandSender("ws://localhost:3003"));
+    const commandSender = useRef(new CommandSender("ws://10.0.0.27:3003"));
 
     useEffect(() => {
         commandSender.current.connect();
