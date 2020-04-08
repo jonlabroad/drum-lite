@@ -4,16 +4,20 @@ import WebsocketsDriver from "../driver/WebsocketsDriver";
 export default class CommandSender {
     host: string
     websocketsDriver: WebsocketsDriver
+    onConnect: () => void
+    onDisconnect: () => void
     
-    constructor(host: string) {
+    constructor(host: string, onConnect: () => void, onDisconnect: () => void) {
         this.host = host;
         this.websocketsDriver = new WebsocketsDriver(this.host);
+        this.onConnect = onConnect;
+        this.onDisconnect = onDisconnect;
     }
 
     public connect() {
         this.websocketsDriver.connect(
-            () => console.log(`Connected to ${this.host}`),
-            () => console.log(`Disconnected from ${this.host}`),
+            this.onConnect,
+            this.onDisconnect,
             (data: any) => console.log("RECV MESSAGE")
         );
     }
