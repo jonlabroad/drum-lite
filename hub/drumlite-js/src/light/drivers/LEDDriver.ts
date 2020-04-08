@@ -81,6 +81,15 @@ export default class LEDDriver {
         }
     }
 
+    public clear() {
+        this.pixels = {};
+        for (let i = 0; i < LEDDriver.ledsOnStrip; i++) {
+            //this.pixels.set(i, [0,0,0]);
+            this.pixels[i] = [0,0,0];
+        }
+        this.driverImpl.send('command_leds', this.pixels);
+    }
+
     private scaleByAmplitude(rgb: number[], amplitude: number) {
         const maxValue = Math.max(rgb[0], rgb[1], rgb[2]);
         if (maxValue <= 0) {

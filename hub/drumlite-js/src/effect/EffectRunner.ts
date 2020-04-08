@@ -46,6 +46,10 @@ export default class EffectRunner {
         }
     }
 
+    public clear() {
+        this.driver.clear();
+    }
+
     public stop() {
         this.runLeds = false;
     }

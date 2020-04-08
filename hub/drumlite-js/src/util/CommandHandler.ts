@@ -38,11 +38,10 @@ export default class CommandHandler {
 
     private async handleRunControl(cmd: RunCommand) {
         if (cmd.command === "RUN") {
-            console.log("RUN");
             this.runner.run();
         } else if (cmd.command === "STOP") {
-            console.log("STOP");
             await this.runner.stop();
+            await this.runner.clear();
         }
     }
 }
