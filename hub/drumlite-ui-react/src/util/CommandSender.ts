@@ -38,11 +38,15 @@ export default class CommandSender {
 
     protected tryConnect() {
         if (!this.connected) {
-            this.websocketsDriver.connect(
-                () => this.onConnected(),
-                () => this.onDisconnected(),
-                (data: any) => console.log("RECV MESSAGE")
-            );
+            try {
+                this.websocketsDriver.connect(
+                    () => this.onConnected(),
+                    () => this.onDisconnected(),
+                    (data: any) => console.log("RECV MESSAGE")
+                );
+            } catch {
+                console.warn("Error trying to connect. Will try again soon");
+            }
         }
     }
 }
