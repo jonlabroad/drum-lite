@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react"
 import React from "react"
-import { Grid } from "@material-ui/core"
+import { Grid, Box } from "@material-ui/core"
 import DrumButtonsContainer from "../containers/DrumButtonsContainer"
 import CommandDrumButtonsContainer from "../containers/CommandDrumButtonsContainer"
 
@@ -13,9 +13,9 @@ export interface LightControlMainProps {
 
 export const LightControlMain: FunctionComponent<LightControlMainProps> = (props: LightControlMainProps) => {
     return (
-        <Grid container spacing={2}>
+        <Box style={{marginTop: "10px"}} flexDirection={"column"} justifyContent={"center"}>
             {/*<DrumButtonsContainer />*/}
             {<CommandDrumButtonsContainer />}
-        </Grid>
+        </Box>
     )
 }

@@ -75,13 +75,13 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
         <div className="App">
             <WebsocketContainer driver={driver.current}>
                 <Grid container spacing={2}>
-                    <Grid item xs={2}>
-                        <Box display="flex" flexDirection="column">
+                    <Grid item xs={6} sm={2}>
+                        <Box display="flex" flexDirection="column" justifyContent={"center"}>
                             <LightControlMainContainer/>
                             <EffectsLibraryContainer/>
                         </Box>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6} sm={4}>
                         <EffectsConfigEditorContainer
                             config={config.current}
                         />

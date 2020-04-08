@@ -22,22 +22,22 @@ export const CommandDrumButtons: FunctionComponent<CommandDrumButtonsProps> = (p
         <Box display="flex" flexDirection="column" justifyContent="center">
             <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center">
                 <Button variant="contained" color={"primary"} style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onRunClick()}>Run</Button>
-                <Button variant="contained" color={"primary"} style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onStopClick()}>Stop</Button>
+                <Button variant="contained" color={"secondary"} style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onStopClick()}>Stop</Button>
             </Box>
             <Box display="flex" flexDirection="row" justifyContent="center">
-                <Button variant="contained" color="primary" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(55)}>Crash 1</Button>
-                <Button variant="contained" color="primary" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(52)}>Crash 2</Button>
+                <Button variant="contained" color="default" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(55)}>Crash 1</Button>
+                <Button variant="contained" color="default" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(52)}>Crash 2</Button>
             </Box>
             <Box display="flex" flexDirection="row" justifyContent="center">
-                <Button variant="contained" color="primary" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(48)}>Tom 1</Button>
-                <Button variant="contained" color="primary" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(45)}>Tom 2</Button>
+                <Button variant="contained" color="default" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(48)}>Tom 1</Button>
+                <Button variant="contained" color="default" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(45)}>Tom 2</Button>
             </Box>
             <Box display="flex" flexDirection="row" justifyContent="center">
-                <Button variant="contained" color="primary" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(38)}>Snare</Button>
-                <Button variant="contained" color="primary" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(43)}>Tom 3</Button>
+                <Button variant="contained" color="default" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(38)}>Snare</Button>
+                <Button variant="contained" color="default" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(43)}>Tom 3</Button>
             </Box>
             <Box display="flex" flexDirection="row" justifyContent="center">
-                <Button variant="contained" color="primary" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(36)}>Kick</Button>
+                <Button variant="contained" color="default" style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onTriggerClick(36)}>Kick</Button>
             </Box>
 
         </Box>
