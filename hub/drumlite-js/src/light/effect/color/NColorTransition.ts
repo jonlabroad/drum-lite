@@ -3,6 +3,7 @@ import RGB from "../../RGB"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import ColorTransition from "../../../util/ColorTransition";
 import ScaleFunctions from "../../../util/ScaleFunctions";
+import MidiDrumNote from "../../../midi/MidiDrumNote";
 
 export class NColorTransitionParams extends EffectParameters {
     effectName = "Generic N Color Transition";
@@ -44,7 +45,11 @@ export default class NColorTransition extends PartialEffect<NColorTransitionPara
         return !!this.params.params.duration.val;
     }
 
-    public isComplete(t:  number) {
+    public isComplete(t:  number, note?: MidiDrumNote) {
+        if (note && note.velocity < this.params.params.minTriggerVelocity.val) {
+            return true;
+        }
+
         if (this.params.params.duration.val) {
             return t > this.params.params.duration.val;
         }

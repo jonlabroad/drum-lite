@@ -16,4 +16,15 @@ export default class ScaleFunctions {
         const tNorm = (1 - dt / duration);
         return 1 - tNorm * tNorm * tNorm;
     }
+
+    public static cubicEaseInOut(currentVal: number, startVal: number, length: number) {
+        const dv = currentVal - startVal;
+        const vNorm = dv / length;
+        if (vNorm < 0.5) {
+            const vCalc = vNorm * 2;
+            return vCalc * vCalc * vCalc / 2;
+        }
+        const vCalc = 2 - 2 * vNorm;
+        return 1 - vCalc * vCalc * vCalc / 2;
+    }
 }

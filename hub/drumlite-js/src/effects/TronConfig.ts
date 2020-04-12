@@ -64,6 +64,8 @@ export default class TronConfig extends FullEffectConfig {
             isJit: true
         }
 
+        const minPadVelocity = 15;
+
         const racerConfig = {
             ...commonConfig,
             racerAmplitude: ambientAmplitude,
@@ -79,7 +81,8 @@ export default class TronConfig extends FullEffectConfig {
             isModifier: false,
             startTime: 0,
             triggers: [],
-            isJit: true
+            isJit: true,
+            minTriggerVelocity: 0
         };
         const racerParams = new RacerParameters(racerConfig);
         const racer1Snare = new RacerEffect("Racer1 Snare", racerParams);
@@ -152,7 +155,8 @@ export default class TronConfig extends FullEffectConfig {
             isAmbient: false,
             priority: EffectPriority.HIGH,
             isModifier: false,
-            startTime: 0
+            startTime: 0,
+            minTriggerVelocity: minPadVelocity
         };
         const snareHit = new ColorTransitionFadeOutEffect("Snare Hit", new ColorTransitionFadeOutParameters(drumHitConfig));
         this.effects.push(snareHit);
@@ -204,7 +208,8 @@ export default class TronConfig extends FullEffectConfig {
             isAmbient: false,
             triggers: [HitType.CRASH1_EDGE],
             isModifier: false,
-            startTime: 0
+            startTime: 0,
+            minTriggerVelocity: 0
         };
         const crash1Hit = new SparklerEffect("Sparkle Crash 1", new SparklerParameters({
             ...commonConfig,
@@ -233,7 +238,8 @@ export default class TronConfig extends FullEffectConfig {
             isAmbient: false,
             priority: EffectPriority.HIGH,
             triggers: [HitType.KICK],
-            startTime: 0
+            startTime: 0,
+            minTriggerVelocity: 0
         };
         const kickHit = new TronPulseEffect("Kick Pulse", new TronPulseParameters(kickConfig));
         this.effects.push(kickHit);

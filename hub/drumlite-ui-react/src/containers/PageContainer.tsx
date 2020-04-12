@@ -20,6 +20,7 @@ import FullEffectConfig from "@jonlabroad/drum-lite/dist/effects/FullEffectConfi
 
 export interface PageContainerProps {
     runLeds: boolean
+    editorMode: boolean
 }
 
 function compileAndRun(config: FullEffectConfig, effectActivator: EffectActivator, runner: EffectRunner) {
@@ -30,8 +31,7 @@ function compileAndRun(config: FullEffectConfig, effectActivator: EffectActivato
 
 export const PageContainer: FunctionComponent<PageContainerProps> = (props: PageContainerProps) => {
     const timestepMillis = 25;
-    const driver = useRef(new WebsocketsDriver('ws://10.0.0.27:3000'));
-    const commandDriver = useRef(new WebsocketsDriver('ws://localhost:3003'));
+    const driver = useRef(new WebsocketsDriver(GlobalConfig.ledMessageHost));
 
     //const config = useRef(new RainbowRoadConfig());
     const config = useRef(new TronConfig());
@@ -45,17 +45,6 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
     }));
     const [isRunning, setIsRunning] = useState(false);
   
-    useEffect(() => {
-        commandDriver.current.connect(
-            () => {
-                console.log("MSG CONNECT");
-                commandDriver.current.send('message', { mymessage: 'data data data' })
-            },
-            () => console.log('msg disconnect'),
-            (data: any) => console.log(data)
-        )
-    }, [])
-
     useEffect(() => {
         function run() {
             if (!isRunning && props.runLeds) {
@@ -75,17 +64,19 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
         <div className="App">
             <WebsocketContainer driver={driver.current}>
                 <Grid container spacing={2}>
-                    <Grid item xs={6} sm={2}>
+                    <Grid item sm={6} md={2}>
                         <Box display="flex" flexDirection="column" justifyContent={"center"}>
                             <LightControlMainContainer/>
-                            <EffectsLibraryContainer/>
+                            {props.editorMode && <EffectsLibraryContainer/>}
                         </Box>
                     </Grid>
-                    <Grid item xs={6} sm={4}>
+                    {props.editorMode && (
+                    <Grid item sm={6} md={4}>
                         <EffectsConfigEditorContainer
                             config={config.current}
                         />
                     </Grid>
+                    )}
                 </Grid>
             </WebsocketContainer>
         </div>
@@ -95,7 +86,8 @@ export const PageContainer: FunctionComponent<PageContainerProps> = (props: Page
 const mapStateToProps = (state: MainState) => {
     return {
         connected: state.data.connected,
-        runLeds: state.nav.runLeds
+        runLeds: state.nav.runLeds,
+        editorMode: state.nav.editorMode
     }
 };
 

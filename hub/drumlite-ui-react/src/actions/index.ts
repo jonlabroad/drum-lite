@@ -6,6 +6,7 @@ import { createAction } from '@reduxjs/toolkit';
 import { HitType } from '@jonlabroad/drum-lite/dist/midi/HitType';
 import FullEffectConfig from '@jonlabroad/drum-lite/dist/effects/FullEffectConfig';
 import EffectCompiler from '@jonlabroad/drum-lite/dist/effect/EffectCompiler';
+import MidiDrumNote from '@jonlabroad/drum-lite/dist/midi/MidiDrumNote';
 
 export interface SocketConnect {
     connected: boolean;
@@ -36,7 +37,13 @@ export function handleDrumTrigger(hitType: HitType): any {
         const state = getState() as MainState;
 
         if (GlobalConfig.effectActivator) {
-            GlobalConfig.effectActivator.handleNote(hitType);
+            const note: MidiDrumNote = new MidiDrumNote(
+                5, // is this note on?
+                hitType,
+                127,
+                new Date()
+            );
+            GlobalConfig.effectActivator.handleNote(note);
         }
     }
 }

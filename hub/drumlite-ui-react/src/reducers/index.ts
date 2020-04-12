@@ -8,7 +8,8 @@ export const initialState: MainState = {
         connected: false
     },
     nav: {
-        runLeds: false
+        runLeds: false,
+        editorMode: false
     }
 };
 

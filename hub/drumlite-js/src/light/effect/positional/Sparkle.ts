@@ -4,6 +4,7 @@ import ScaleFunctions from "../../../util/ScaleFunctions";
 import LEDSelector from "../../LEDSelector";
 import Util from "../../../util/Util";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
+import MidiDrumNote from "../../../midi/MidiDrumNote";
 
 export class SparkleParams extends EffectParameters {
     effectName = "Sparkle";
@@ -23,12 +24,13 @@ export default class Sparkle extends PartialEffect<SparkleParams> {
         super(params, dt);
     }
 
-    public getEffect(t: number) {
+    public getEffect(t: number, note?: MidiDrumNote) {
+        const startTime = note ? note.time.getTime() : this.params.params.startTime.val;
         const ledSelector = new LEDSelector();
         const pos: number[] = [];
         for (let target of this.params.params.targets.val) {
             const tempPos: number[] = [];
-            const tNorm = 1 - ScaleFunctions.linear(t, this.params.params.startTime.val, this.params.params.duration.val);
+            const tNorm = 1 - ScaleFunctions.linear(t, startTime, this.params.params.duration.val);
             const targetPos = ledSelector.getAllTargetPositions(target);
             const numLeds = targetPos.length;
             
@@ -49,7 +51,8 @@ export default class Sparkle extends PartialEffect<SparkleParams> {
         return true;
     }
 
-    public isComplete(t: number) {
-        return t > this.params.params.duration.val;
+    public isComplete(t: number, note?: MidiDrumNote) {
+        const startTime = note ? note.time.getTime() : this.params.params.startTime.val;
+        return (t - startTime) > this.params.params.duration.val;
     }
 }

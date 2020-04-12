@@ -6,6 +6,7 @@ import CommandDrumButtonsContainer from "../containers/CommandDrumButtonsContain
 
 export interface LightControlMainProps {
     disabled: boolean
+    editorMode: boolean
 
     onDrumButtonClick: any
     onEnableClick: any
@@ -14,8 +15,8 @@ export interface LightControlMainProps {
 export const LightControlMain: FunctionComponent<LightControlMainProps> = (props: LightControlMainProps) => {
     return (
         <Box style={{marginTop: "10px"}} flexDirection={"column"} justifyContent={"center"}>
-            {/*<DrumButtonsContainer />*/}
-            {<CommandDrumButtonsContainer />}
+            {props.editorMode && <DrumButtonsContainer />}
+            {!props.editorMode && <CommandDrumButtonsContainer />}
         </Box>
     )
 }

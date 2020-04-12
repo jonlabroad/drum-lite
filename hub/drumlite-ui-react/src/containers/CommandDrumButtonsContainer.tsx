@@ -8,6 +8,7 @@ import { HitType } from "@jonlabroad/drum-lite/dist/midi/HitType";
 import CommandSender from "../util/CommandSender"
 import { RunCommand } from "@jonlabroad/drum-lite/dist/util/CommandHandler"
 import { CommandDrumButtons } from "../components/CommandDrumButtons"
+import GlobalConfig from "../config/GlobalConfig"
 
 export interface CommandDrumButtonsContainerProps {
     connected: boolean
@@ -21,7 +22,7 @@ export interface CommandDrumButtonsContainerProps {
 export const CommandDrumButtonsContainer: FunctionComponent<CommandDrumButtonsContainerProps> = (props: CommandDrumButtonsContainerProps) => {
     //const commandSender = useRef(new CommandSender("ws://localhost:3003"));
     const commandSender = useRef(new CommandSender(
-        "ws://10.0.0.27:3003",
+        GlobalConfig.commandMessageHost,
         () => props.socketConnect(true),
         () => props.socketConnect(false)
         ));

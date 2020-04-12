@@ -2,6 +2,7 @@ import RGB from "../../RGB";
 import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import { EffectTarget } from "../EffectTarget";
+import MidiDrumNote from "../../../midi/MidiDrumNote";
 
 export class EmberParams extends EffectParameters {
     effectName = "Ember Generator";
@@ -50,7 +51,11 @@ export default class EmberGenerator extends PartialEffect<EmberParams> {
         return !!this.params.params.durationMilliseconds.val;
     }
 
-    public isComplete(t:  number) {
+    public isComplete(t:  number, note?: MidiDrumNote) {
+        if (note && note.velocity < this.params.params.minTriggerVelocity.val) {
+            return true;
+        }
+        
         if (this.params.params.durationMilliseconds.val) {
             return t > this.params.params.durationMilliseconds.val;
         }

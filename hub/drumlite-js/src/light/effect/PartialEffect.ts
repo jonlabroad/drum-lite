@@ -58,6 +58,7 @@ export class EffectOptions {
     startTime: number = 0
     priority: EffectPriority = EffectPriority.MEDIUM
     triggers: HitType[] = []
+    minTriggerVelocity: number = 0
 }
 
 export class EffectParameter<T> {
@@ -83,6 +84,7 @@ export class EffectParameters {
         isJit: EffectParameter<boolean>
         priority: EffectParameter<EffectPriority>
         triggers: EffectParameter<HitType[]>
+        minTriggerVelocity: EffectParameter<number>
         [key: string]: EffectParameter<any>
     } = {
         startTime: new EffectParameter<number>("Start Time", 0, {type: "number", isHidden: true}),
@@ -91,6 +93,7 @@ export class EffectParameters {
         isModifier: new EffectParameter<boolean>("Is Modifier", true, {type: "boolean", isHidden: true}),
         priority: new EffectParameter<EffectPriority>("Priority", EffectPriority.MEDIUM, {isHidden: true, type: "priority"}),
         triggers: new EffectParameter<HitType[]>("Triggers", [], {isHidden: true, type: "hittype", isArray: true}),
+        minTriggerVelocity: new EffectParameter<number>("Trigger Velocity", 0, {isHidden: false, type: "number", isArray: false})
     }
 
     constructor(effectOptions?: EffectOptions) {
@@ -101,6 +104,7 @@ export class EffectParameters {
             this.params.triggers.val = effectOptions.triggers;
             this.params.isModifier.val = effectOptions.isModifier;
             this.params.isJit.val = effectOptions?.isJit ?? false;
+            this.params.minTriggerVelocity.val = effectOptions?.minTriggerVelocity ?? 0;
         }
     }
 }

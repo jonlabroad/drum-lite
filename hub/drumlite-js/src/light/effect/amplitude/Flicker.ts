@@ -1,5 +1,6 @@
 import PartialEffect, { EffectParameter, EffectParameters, defaultMillisecondRange } from "../PartialEffect";
 import ResolvedEffect from "../../../effect/ResolvedEffect";
+import MidiDrumNote from "../../../midi/MidiDrumNote";
 
 export class FlickerParams extends EffectParameters {
     effectName = "Flicker";
@@ -45,7 +46,11 @@ export default class Flicker extends PartialEffect<FlickerParams> {
         return !!this.params.params.durationMilliseconds.val;
     }
 
-    public isComplete(t:  number) {
+    public isComplete(t:  number, note?: MidiDrumNote) {
+        if (note && note.velocity < this.params.params.minTriggerVelocity.val) {
+            return true;
+        }
+
         if (this.params.params.durationMilliseconds.val) {
             return t > this.params.params.durationMilliseconds.val;
         }

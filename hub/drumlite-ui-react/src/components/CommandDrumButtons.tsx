@@ -13,13 +13,17 @@ export interface CommandDrumButtonsProps {
 const drumButtonStyle: CSSProperties = {
     marginRight: 10,
     marginBottom: 10,
-    height: 50,
-    width: 100
+    height: 60,
+    width: 120
 };
+
+const containerStyle: CSSProperties = {
+    marginLeft: 10
+}
 
 export const CommandDrumButtons: FunctionComponent<CommandDrumButtonsProps> = (props: CommandDrumButtonsProps) => {
     return (
-        <Box display="flex" flexDirection="column" justifyContent="center">
+        <Box style={containerStyle} display="flex" flexDirection="column" justifyContent="center">
             <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center">
                 <Button variant="contained" color={"primary"} style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onRunClick()}>Run</Button>
                 <Button variant="contained" color={"secondary"} style={drumButtonStyle} disabled={props.disabled} onClick={() => props.onStopClick()}>Stop</Button>

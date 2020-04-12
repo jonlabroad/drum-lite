@@ -48,9 +48,9 @@ export default class ColorTransitionFadeOutEffect extends EffectConfig<ColorTran
     create(): SingleEffect {
         const params = this.params.params;
         return new SingleEffect(this.name, [
-            new LinearFadeOutEffect(new LinearFadeOutEffectParams(params.amplitude.val, params.duration.val)),
-            new LinearColorTransition(new LinearColorTransitionParams(params.startColor.val, params.endColor.val, params.duration.val)),
-            new ConstantTargetsEffect(new ConstantTargetsEffectParams(params.targets.val))
+            new LinearFadeOutEffect({...this.params, ...new LinearFadeOutEffectParams(params.amplitude.val, params.duration.val, params.minTriggerVelocity.val)}),
+            new LinearColorTransition({...this.params, ...new LinearColorTransitionParams(params.startColor.val, params.endColor.val, params.duration.val, params.minTriggerVelocity.val)}),
+            new ConstantTargetsEffect({...this.params, ...new ConstantTargetsEffectParams(params.targets.val)})
         ]
         );
     }

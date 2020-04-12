@@ -1,5 +1,6 @@
 import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
+import MidiDrumNote from "../../../midi/MidiDrumNote";
 
 export class CubicFadeOutParameters extends EffectParameters {
     effectName = "Cubic Fade Out";
@@ -27,7 +28,11 @@ export default class CubicFadeOut extends PartialEffect<CubicFadeOutParameters> 
         return true;
     }
 
-    public isComplete(t: number) {
+    public isComplete(t: number, note?: MidiDrumNote) {
+        if (note && note.velocity < this.params.params.minTriggerVelocity.val) {
+            return true;
+        }
+
         return t - this.params.params.startTime.val >= (this.params.params.fadeOutDuration.val);
     }
 }

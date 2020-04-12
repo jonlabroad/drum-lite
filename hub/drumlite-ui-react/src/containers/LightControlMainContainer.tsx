@@ -8,6 +8,7 @@ import { HitType } from "@jonlabroad/drum-lite/dist/midi/HitType"
 
 export interface LightControlMainContainerProps {
     connected: boolean
+    editorMode: boolean
 
     handleDrumTrigger: any
     enableLeds: any
@@ -16,6 +17,7 @@ export interface LightControlMainContainerProps {
 export const LightControlMainContainer: FunctionComponent<LightControlMainContainerProps> = (props: LightControlMainContainerProps) => {
     return (
         <LightControlMain
+            editorMode={props.editorMode}
             disabled={!props.connected}
             onDrumButtonClick={props.handleDrumTrigger}
             onEnableClick={props.enableLeds}
@@ -25,13 +27,14 @@ export const LightControlMainContainer: FunctionComponent<LightControlMainContai
 
 const mapStateToProps = (state: MainState) => {
     return {
-        connected: state.data.connected
+        connected: state.data.connected,
+        editorMode: state.nav.editorMode
     }
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
     handleDrumTrigger: (hitType: HitType) => dispatch(handleDrumTrigger(hitType)),
-    enableLeds: (enable: boolean) => dispatch(enableLeds({enable}))
+    enableLeds: (enable: boolean) => dispatch(enableLeds({enable})),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LightControlMainContainer);

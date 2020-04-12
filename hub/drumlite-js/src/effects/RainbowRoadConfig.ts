@@ -62,7 +62,8 @@ export default class RainbowRoadConfig extends FullEffectConfig {
                 startTime: 0,
                 isAmbient: true,
                 isModifier: false,
-                triggers: []
+                triggers: [],
+                minTriggerVelocity: 0
         })));
 
         this.effects.push(

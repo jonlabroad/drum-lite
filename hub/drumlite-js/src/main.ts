@@ -8,6 +8,8 @@ import RainbowRoadConfig from "./effects/RainbowRoadConfig";
 import TronConfig from "./effects/TronConfig";
 import WebsocketServer from "./util/WebsocketServer";
 import CommandHandler, { CommandMessage } from "./util/CommandHandler";
+import Util from "./util/Util";
+import ScaleFunctions from "./util/ScaleFunctions";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
