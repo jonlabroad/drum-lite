@@ -60,7 +60,12 @@ export default class TronConfig extends FullEffectConfig {
     constructor() {
         super();
 
+        const commonConfig = {
+            isJit: true
+        }
+
         const racerConfig = {
+            ...commonConfig,
             racerAmplitude: ambientAmplitude,
             racerColor: colors['tronBlueMain'],
             trailAmplitude: ambientAmplitude,
@@ -73,7 +78,8 @@ export default class TronConfig extends FullEffectConfig {
             priority: EffectPriority.LOWEST,
             isModifier: false,
             startTime: 0,
-            triggers: []
+            triggers: [],
+            isJit: true
         };
         const racerParams = new RacerParameters(racerConfig);
         const racer1Snare = new RacerEffect("Racer1 Snare", racerParams);
@@ -136,6 +142,7 @@ export default class TronConfig extends FullEffectConfig {
         this.effects.push(racer2Tom3);
 
         const drumHitConfig: ColorTransitionFadeOutOptions = {
+            ...commonConfig,
             amplitude: 1.0,
             startColor: colors['tronBlueMain'],
             endColor: colors['tronBlueTrail'],
@@ -151,15 +158,18 @@ export default class TronConfig extends FullEffectConfig {
         this.effects.push(snareHit);
 
         const tom1Hit = new ColorTransitionFadeOutEffect("Tom1 Hit", new ColorTransitionFadeOutParameters({
+            ...commonConfig,
             ...drumHitConfig,
             startColor: colors['drumHit1a'],
             endColor: colors['drumHit1b'],
             targets: [EffectTarget.TOM1],
-            triggers: [HitType.TOM1]
+            triggers: [HitType.TOM1],
+            isJit: true
         }));
         this.effects.push(tom1Hit);
 
         const tom2Hit = new ColorTransitionFadeOutEffect("Tom2 Hit", new ColorTransitionFadeOutParameters({
+            ...commonConfig,
             ...drumHitConfig,
             startColor: colors['drumHit2a'],
             endColor: colors['drumHit2b'],
@@ -169,6 +179,7 @@ export default class TronConfig extends FullEffectConfig {
         this.effects.push(tom2Hit);
 
         const tom3Hit = new ColorTransitionFadeOutEffect("Tom3 Hit", new ColorTransitionFadeOutParameters({
+            ...commonConfig,
             ...drumHitConfig,
             startColor: colors['drumHit3a'],
             endColor: colors['drumHit3b'],
@@ -178,6 +189,7 @@ export default class TronConfig extends FullEffectConfig {
         this.effects.push(tom3Hit);
 
         const sparkleConfig: SparklerOptions = {
+            ...commonConfig,
             amplitude: 1.0,
             color1: colors['sparkle1'],
             color2: colors['sparkle3'],
@@ -195,11 +207,13 @@ export default class TronConfig extends FullEffectConfig {
             startTime: 0
         };
         const crash1Hit = new SparklerEffect("Sparkle Crash 1", new SparklerParameters({
+            ...commonConfig,
             ...sparkleConfig
         }));
         this.effects.push(crash1Hit);
 
         const crash2Hit = new SparklerEffect("Sparkle Crash 2", new SparklerParameters({
+            ...commonConfig,
             ...sparkleConfig,
             level1Targets: [EffectTarget.TOM2],
             level2Targets: [EffectTarget.TOM1, EffectTarget.TOM3],
@@ -209,6 +223,7 @@ export default class TronConfig extends FullEffectConfig {
         this.effects.push(crash2Hit);
 
         const kickConfig: TronPulseOptions = {
+            ...commonConfig,
             amplitude: kickAmplitudeMod,
             color1: colors['pinkPulse1'],
             color2: colors['pinkPulse2'],
@@ -225,6 +240,7 @@ export default class TronConfig extends FullEffectConfig {
 
         this.effects.push(
             new EffectConfig("Kick Pulse Lights", new TronPulseParameters({
+                ...commonConfig,
                 ...kickConfig,
                 isModifier: false
             }),

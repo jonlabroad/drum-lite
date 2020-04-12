@@ -2,6 +2,7 @@ import RGB from "../../RGB"
 import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
 import ColorTransition from "../../../util/ColorTransition";
+import MidiDrumNote from "../../../midi/MidiDrumNote";
 
 export class LinearColorTransitionParams extends EffectParameters {
     effectName = "Linear Color Transition";
@@ -20,8 +21,9 @@ export default class LinearColorTransition extends PartialEffect<LinearColorTran
         super(params, 0);
     }
     
-    public getEffect(t: number) {
-        const dt = t - this.params.params.startTime.val;
+    public getEffect(t: number, note?: MidiDrumNote) {
+        const startTime = this.getStartTime(note);
+        const dt = t - startTime;
         const tNorm = dt / (this.params.params.duration.val);
         return [[ResolvedEffect.createRgb(ColorTransition.linear(tNorm, this.params.params.src.val, this.params.params.dst.val))]];
     }

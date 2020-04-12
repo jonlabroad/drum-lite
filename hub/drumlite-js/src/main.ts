@@ -39,6 +39,4 @@ export default async function main() {
     commandReceiver.connect(async (msg: string) => {
         await commandHandler.handle(JSON.parse(msg) as CommandMessage);
     });
-
-    //await runner.run();
 }

@@ -2,6 +2,7 @@ import ResolvedEffect from "../../effect/ResolvedEffect";
 import JsonEffectConfig from "./JsonEffectConfig";
 import { EffectPriority } from "../../effect/EffectPriority";
 import { HitType } from "../../midi/HitType";
+import MidiDrumNote from "../../midi/MidiDrumNote";
 
 export type ParameterType = "number" | "boolean" | "string" | "rgb" | "target" | "priority" | "hittype";
 
@@ -112,7 +113,7 @@ export default class PartialEffect<T extends EffectParameters> {
         this.params.params.startTime.val = startTime;
     }
 
-    public getEffect(t: number): ResolvedEffect[][] {
+    public getEffect(t: number, note?: MidiDrumNote): ResolvedEffect[][] {
         return [];
     }
 
@@ -120,7 +121,7 @@ export default class PartialEffect<T extends EffectParameters> {
         return false;
     }
 
-    public isComplete(t: number) {
+    public isComplete(t: number, note?: MidiDrumNote) {
         return false;
     }
 
@@ -135,5 +136,9 @@ export default class PartialEffect<T extends EffectParameters> {
     public fromJson(json: string) {
         const config = JSON.parse(json) as JsonEffectConfig;
         this.params = {...this.params, ...config.parameters};
+    }
+
+    protected getStartTime(note?: MidiDrumNote) {
+        return note ? note.time.getTime() : this.params.params.startTime.val;
     }
 }

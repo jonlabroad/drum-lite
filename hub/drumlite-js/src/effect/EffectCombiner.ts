@@ -1,6 +1,7 @@
 import PartialEffect from "../light/effect/PartialEffect";
 import ResolvedEffect from "./ResolvedEffect";
 import RGB from "../light/RGB";
+import MidiDrumNote from "../midi/MidiDrumNote";
 
 export default class EffectCombiner {
     unresolvedEffects: PartialEffect<any>[];
@@ -9,13 +10,13 @@ export default class EffectCombiner {
         this.unresolvedEffects = effects;
     }
 
-    public combine(dt: number): ResolvedEffect[] {
+    public combine(dt: number, note?: MidiDrumNote): ResolvedEffect[] {
         const resolvedEffects: ResolvedEffect[] = [];
         let color = new RGB();
         let amplitude = 0;
         let ledPositions: number[] = [];
         this.unresolvedEffects.forEach(unresolvedEffectGroup => {
-            unresolvedEffectGroup.getEffect(dt).forEach(resolvedEffect => {
+            unresolvedEffectGroup.getEffect(dt, note).forEach(resolvedEffect => {
                 color = this.combineColors(resolvedEffect, dt, color);
                 amplitude = this.combineAmplitude(resolvedEffect, dt, amplitude);
                 ledPositions = this.combinePositions(resolvedEffect, dt, ledPositions);

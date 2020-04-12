@@ -1,5 +1,6 @@
 import PartialEffect, { EffectParameters, EffectParameter, defaultMillisecondRange } from "../PartialEffect"
 import ResolvedEffect from "../../../effect/ResolvedEffect";
+import MidiDrumNote from "../../../midi/MidiDrumNote";
 
 export class LinearFadeOutEffectParams extends EffectParameters {
     effectName = "Linear Fade Out";
@@ -17,8 +18,9 @@ export default class LinearFadeOutEffect extends PartialEffect<LinearFadeOutEffe
         super(params, dt);
     }
 
-    public getEffect(t: number) {
-        const dt = t - this.params.params.startTime.val;
+    public getEffect(t: number, note?: MidiDrumNote) {
+        const startTime = note ? note.time.getTime() : this.params.params.startTime.val;
+        const dt = t - startTime;
         const startAmp = this.params.params.amplitude.val;
         const fadeOutDuration = this.params.params.fadeOutDuration.val as number;
         const scale = startAmp - dt / fadeOutDuration * startAmp;
@@ -29,8 +31,8 @@ export default class LinearFadeOutEffect extends PartialEffect<LinearFadeOutEffe
         return true;
     }
 
-    public isComplete(t: number) {
-        const startTime = this.params.params.startTime.val;
+    public isComplete(t: number, note?: MidiDrumNote) {
+        const startTime = note ? note.time.getTime() : this.params.params.startTime.val;
         const fadeOutDuration = this.params.params.fadeOutDuration.val;
         return t - startTime >= fadeOutDuration;
     }

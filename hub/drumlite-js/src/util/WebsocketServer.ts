@@ -13,7 +13,7 @@ export default class WebsocketServer {
         this.server = new Websockets.Server({ port: this.port });
 
         this.server.on('connection', (socket: any) => {
-            console.log(`Server is up at ${this.port}`);
+            console.log(`Client connection up at ${this.port}`);
             socket.on('message', onMessage);
             socket.on('open', this.onConnection.bind(this));
             socket.on('close', this.onDisconnection.bind(this));

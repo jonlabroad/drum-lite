@@ -3,6 +3,9 @@ import CompiledEffect from "./CompiledEffect";
 import FullEffectConfig from "../effects/FullEffectConfig";
 import EffectCombiner from "./EffectCombiner";
 import EffectCompiler from "./EffectCompiler";
+import MidiDrumNote from "../midi/MidiDrumNote";
+import EffectConfig from "../effects/EffectConfig";
+import PartialEffect from "../light/effect/PartialEffect";
 
 export default class EffectActivator {
     timestepMillis: number;
@@ -10,18 +13,28 @@ export default class EffectActivator {
     compiledEffects: CompiledEffect[] = [];
     activeEffects: CompiledEffect[] = [];
     ambientEffects: CompiledEffect[] = [];
-    jitEffects: FullEffectConfig[] = [];
+    jitEffects: EffectConfig<any>[] = [];
+    triggeredJitEffects: {
+        effect: EffectConfig<any>,
+        note: MidiDrumNote
+    }[] = [];
 
     constructor(compiledEffects: CompiledEffect[], jitEffects: FullEffectConfig[], timestep: number) {
         this.timestepMillis = timestep;
-        this.jitEffects = jitEffects;
+        this.jitEffects = jitEffects.map(e => e.effects).flat();
         this.setEffects(compiledEffects);
     }
 
-    public handleNote(hitType: HitType) {
+    public handleNote(note: MidiDrumNote) {
         const noteTime = new Date();
-        const effects = this.findNewEffects(hitType);
-        effects.push(...this.findNewJitEffects(hitType, this.timestepMillis));
+        const effects = this.findNewEffects(note.note);
+        this.triggeredJitEffects.push(
+            ...this.getTriggeredJitConfigs(note, this.timestepMillis).map(ef => ({
+                effect: ef,
+                note: note
+            }))
+        );
+
         for (let effectElement of effects) {
             effectElement = Object.assign({}, effectElement);
             effectElement.t = noteTime.getTime() + effectElement.dt;
@@ -46,10 +59,28 @@ export default class EffectActivator {
 
     public getCurrentActiveEffects() {
         const t = new Date().getTime();
-        const currentActive =  this.activeEffects.filter(e => (!e.isAmbient && e.t <= t && e.t + e.duration > t) || (e.isAmbient && t % e.ambientDuration >= e.t && t % e.ambientDuration < (e.t + e.duration)))
-        this.activeEffects = this.activeEffects.filter(e => e.isAmbient || e.t + e.duration >= t, this.activeEffects);
+        const currentActive =  this.activeEffects.filter(e => this.filterActiveEffects(e, t));
+        this.activeEffects = this.activeEffects.filter(e => e.isAmbient || e.t + e.duration >= t);//, this.activeEffects);
 
         currentActive.push(...this.findNewJitEffects(undefined, t));
+
+        // Get any triggered effects
+        const newTriggeredJitEffects: {
+            effect: EffectConfig<any>,
+            note: MidiDrumNote
+         }[] = [];
+        this.triggeredJitEffects.forEach(ec => {
+            const compiled = EffectCompiler.compileEffectTimestep(ec.effect, t, this.timestepMillis, true, ec.note);
+            currentActive.push(...compiled.compiled);
+            if (!compiled.completed) {
+                newTriggeredJitEffects.push({
+                    effect: ec.effect,
+                    note: ec.note,
+                });
+            }
+        });
+
+        this.triggeredJitEffects = newTriggeredJitEffects;
 
         return currentActive
     }
@@ -63,16 +94,41 @@ export default class EffectActivator {
         return effects
     }
 
-    public findNewJitEffects(hitType: HitType | undefined, t: number): CompiledEffect[] {
+    public getTriggeredJitConfigs(note: MidiDrumNote | undefined, t: number): EffectConfig<any>[] {
+        const triggered: EffectConfig<any>[] = [];
+        const selectedEffects = this.jitEffects.filter(effect => this.isJit(effect) && this.isTriggered(effect, note));
+        triggered.push(...selectedEffects);
+        return triggered;
+    }
+
+    public findNewJitEffects(note: MidiDrumNote | undefined, t: number): CompiledEffect[] {
         // TODO filter by hittype if necessary?
         const effects: CompiledEffect[] = [];
-        this.jitEffects.forEach(config => config.effects.filter(effect => effect.params.params.isJit.val).forEach(effect => {
-            effects.push(...EffectCompiler.compileEffectTimestep(effect, t, this.timestepMillis, true));
-        }));
+        this.jitEffects.filter(effect => {
+            return this.isJit(effect) && (this.isJitAmbient(effect) || this.isTriggered(effect, note));
+        }).forEach(effect => {
+            effects.push(...EffectCompiler.compileEffectTimestep(effect, t, this.timestepMillis, true, note).compiled);
+        });
         return effects;
     }
 
     public removeActiveEffectsForTarget(hitType: HitType) {
         this.activeEffects = this.activeEffects.filter(e => !(e.hitTypes.find(h => h === hitType)), this.activeEffects);
+    }
+
+    private filterActiveEffects(e: CompiledEffect, t: number) {
+        return (!e.isAmbient && e.t <= t && e.t + e.duration > t) || (e.isAmbient && t % e.ambientDuration >= e.t && t % e.ambientDuration < (e.t + e.duration));
+    }
+
+    private isJit(e: EffectConfig<any>) {
+        return e.params.params.isJit.val;
+    }
+
+    private isTriggered(e: EffectConfig<any>, note: MidiDrumNote | undefined) {
+        return (note !== undefined && e.params.params.triggers.val.includes(note.note));
+    }
+
+    private isJitAmbient(e: EffectConfig<any>) {
+        return e.params.params.isAmbient.val;
     }
 }
