@@ -7,6 +7,6 @@ export default class GlobalConfig {
     public static config?: FullEffectConfig = undefined;
 
     public static ledMessageHost = "ws://10.0.0.27:3000";
-    //public static commandMessageHost = "ws://10.0.0.27:3003";
-    public static commandMessageHost = "ws://localhost:3003";
+    public static commandMessageHost = "ws://10.0.0.27:3003";
+    //public static commandMessageHost = "ws://localhost:3003";
 }
