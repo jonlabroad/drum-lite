@@ -1,4 +1,4 @@
-import { EffectTarget } from "../light/effect/EffectTarget";
+import { EffectTarget } from "../config/EffectTarget";
 
 export default class Util {
     public static range(start: number, stop: number, inc: number = 1): number[] {

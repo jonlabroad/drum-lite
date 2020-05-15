@@ -1,11 +1,10 @@
-import EffectActivator from "../effect/EffectActivator";
 import MidiDrumNote from "./MidiDrumNote";
 import MidiFilter from "./MidiFilter";
 
 export default class MidiMessageHandler {
-    activator: EffectActivator;
-    filter: MidiFilter;
-
+//    activator: EffectActivator;
+    //filter: MidiFilter;
+/*
     constructor(activator: EffectActivator) {
         this.activator = activator;
         this.filter = new MidiFilter();
@@ -19,4 +18,5 @@ export default class MidiMessageHandler {
             this.activator.handleNote(note);
         }
     }
+*/
 }

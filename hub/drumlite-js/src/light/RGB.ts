@@ -15,6 +15,10 @@ export default class RGB {
         this.b = this.b + other.b;
     }
 
+    public static fromRGB(rgb: RGB) {
+        return new RGB(rgb.r, rgb.g, rgb.b);
+    }
+
     public static fromArray(rgb: number[]) {
         return new RGB(rgb[0], rgb[1], rgb[2]);
     }
