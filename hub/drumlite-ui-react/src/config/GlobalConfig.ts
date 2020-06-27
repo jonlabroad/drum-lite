@@ -6,7 +6,7 @@ export default class GlobalConfig {
     public static effectActivator?: EffectActivator = undefined;
     public static config?: FullEffectConfig = undefined;
 
-    public static ledMessageHost = "ws://10.0.0.27:3000";
-    public static commandMessageHost = "ws://10.0.0.27:3003";
+    public static ledMessageHost = "ws://drumlite-hub.jdl.local:3000";
+    public static commandMessageHost = "ws://drumlite-hub.jdl.local:3003";
     //public static commandMessageHost = "ws://localhost:3003";
 }

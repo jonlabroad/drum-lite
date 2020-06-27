@@ -30,7 +30,7 @@ export default async function main() {
     midi.openPort();
 
     const ledDriver = new WebsocketsDriver();
-    ledDriver.connect('ws://10.0.0.23:3000', (data: any) => {} );
+    ledDriver.connect('ws://drumlite-hub.jdl.local:3000', (data: any) => {} );
 
     const runner = new EffectRunner(effectActivator, ledDriver, {
         periodMillis: timestepMillis
