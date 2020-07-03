@@ -10,6 +10,7 @@ export default abstract class RunnableEffect {
         this.config = config;
     };
     public abstract getInstructions(t: number): LedInstruction[];
+    public abstract isComplete(t: number): boolean;
 }
 
 export abstract class PartialRunnableEffect {

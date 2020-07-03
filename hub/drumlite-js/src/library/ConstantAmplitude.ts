@@ -28,5 +28,8 @@ export default class ConstantAmplitudeEffect extends RunnableEffect {
             new ColorElementEffect(this.config).getInstructions(t)
         ]
     }
-    
+
+    public isComplete(t: number) {
+        return false;
+    }
 }

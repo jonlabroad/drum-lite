@@ -17,11 +17,11 @@ export class RacerConfig extends EffectConfig {
         this.params["Targets"] = CommonParams.targets(values);
         this.params["Color"] = CommonParams.color(values);
         this.params["Amplitude"] = CommonParams.amplitude(values);
-        this.params["Period"] = new EffectParameter<number>("Period", values.Period, {range: defaultMillisecondRange});
-        this.params["Num"] = new EffectParameter<number>("Number", values.Number ?? 0);
-        this.params["Speed"] = new EffectParameter<number>("Speed", values.Speed ?? 0);
-        this.params["Offset"] = new EffectParameter<number>("Offset", values.Offset ?? 0);
-        this.params["Transition"] = new EffectParameter<TransitionType>("Transition", values.Transition ?? 0);
+        this.params["Period"] = new EffectParameter<number>("Period", values.period, {range: defaultMillisecondRange});
+        this.params["Num"] = new EffectParameter<number>("Number", values.number ?? 0);
+        this.params["Speed"] = new EffectParameter<number>("Speed", values.speed ?? 0);
+        this.params["Offset"] = new EffectParameter<number>("Offset", values.offset ?? 0);
+        this.params["Transition"] = new EffectParameter<TransitionType>("Transition", values.transition ?? "linear", {type: "transition"});
     }
 }
 
@@ -31,5 +31,12 @@ export default class RacerEffect extends RunnableEffect {
         const color = new ColorElementEffect(this.config).getInstructions(t);
         const amplitude = new AmplitudeElementEffect(this.config).getInstructions(t);
         return [new LedInstruction(color.rgb, amplitude.amplitude, ledPositions.ledPositions)];
+    }
+
+    public isComplete(t: number) {
+        const startTime = this.config.params.StartTime.val;
+        const period = this.config.params.Period.val;
+        const dt = t - startTime;
+        return dt > period;
     }
 }
