@@ -59,7 +59,7 @@ export default class EffectPriorityHandler {
                 newEffectsAtLed.push(Object.assign({}, currEffect));
             }
 
-            newEffectsAtLed.push(Object.assign({}, effect));
+            newEffectsAtLed.push(effect.copy());
             newEffectsAtLed.sort((a, b) => a.getNoteTime() - b.getNoteTime());
             this.leds[ledPos] = newEffectsAtLed;
         }

@@ -9,6 +9,7 @@ import AmplitudeElementEffect from "./elements/rudiments/AmplitudeElement";
 import MidiDrumNote from "../midi/MidiDrumNote";
 import { TransitionType } from "../config/transitions/TransitionType";
 import SpinEffect from "./elements/behaviors/Spin";
+import { HitType } from "../midi/HitType";
 
 export class RacerConfig extends EffectConfig {
     constructor(values: {[key: string]: any}) {
@@ -22,6 +23,7 @@ export class RacerConfig extends EffectConfig {
         this.params["Speed"] = new EffectParameter<number>("Speed", values.speed ?? 0);
         this.params["Offset"] = new EffectParameter<number>("Offset", values.offset ?? 0);
         this.params["Transition"] = new EffectParameter<TransitionType>("Transition", values.transition ?? "linear", {type: "transition"});
+        this.params["Triggers"] = new EffectParameter<HitType>("Triggers", values.triggers ?? [], {type: "hittype"});
     }
 }
 

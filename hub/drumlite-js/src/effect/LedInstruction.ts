@@ -17,6 +17,10 @@ export default class LedInstruction {
        this.note = note;
     }
 
+    public copy() {
+        return new LedInstruction(this.rgb, this.amplitude, this.ledPositions, this.priority, this.note);
+    }
+
     public getNoteTime(): number {
         return this.note?.time?.getTime() ?? 0;
     }

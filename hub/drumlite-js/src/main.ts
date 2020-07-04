@@ -8,6 +8,9 @@ import WebsocketsDriver from "./driver/WebsocketsDriver";
 import Util from "./util/Util";
 import EffectRunner from "./effect/EffectRunner";
 import EffectActivator from "./effect/EffectActivator";
+import Midi from "./midi/Midi";
+import MidiDrumNote from "./midi/MidiDrumNote";
+import { HitType } from "./midi/HitType";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -24,53 +27,36 @@ export default async function main() {
         targets: [
             EffectTarget.SNARE,
             EffectTarget.TOM1,
-            EffectTarget.TOM2,
             EffectTarget.TOM3,
         ],
         color: new RGB(200, 100, 200),
-        amplitude: 1,
         period: 2000,
         number: 8,
-        speed: 1,
-        offset: 0,
-        transition: "cubicEaseInOut"
-    }));
-/*
-    const racerEffect2 = new RacerEffect(new RacerConfig({
-        starttime: startTime.getTime(),
-        targets: [
-            EffectTarget.SNARE,
-            EffectTarget.TOM1,
-            EffectTarget.TOM2,
-            EffectTarget.TOM3,
-        ],
-        color: new RGB(100, 200, 50),
-        amplitude: 1,
-        period: 2000,
-        number: 8,
-        speed: 1,
-        offset: 1,
         transition: "cubicEaseInOut"
     }));
 
-    const racerEffect3 = new RacerEffect(new RacerConfig({
+    const racerEffect2 = new RacerEffect(new RacerConfig({
         starttime: startTime.getTime(),
-        targets: [
-            EffectTarget.SNARE,
-            EffectTarget.TOM1,
-            EffectTarget.TOM2,
-            EffectTarget.TOM3,
+        triggers: [
+            HitType.TOM2
         ],
-        color: new RGB(50, 50, 200),
-        amplitude: 1,
+        targets: [
+            EffectTarget.TOM2,
+        ],
+        color: new RGB(200, 100, 200),
         period: 2000,
         number: 8,
-        speed: 1,
-        offset: 2,
         transition: "cubicEaseInOut"
     }));
-*/
+
     const activator = new EffectActivator();
+
+    const midi = new Midi((dt, msg) => {
+        const note = MidiDrumNote.fromRawNote(msg, new Date());
+        activator.handleNote(note);
+    });
+    midi.openPort();
+
     const websocketsDriver = new WebsocketsDriver();
     websocketsDriver.connect(
         "ws://drumlite-hub.jdl.local:3000",
@@ -80,6 +66,7 @@ export default async function main() {
         periodMillis: 10
     });
     activator.addAmbientEffects([racerEffect]);//, racerEffect2, racerEffect3]);
+    activator.addTriggeredEffects([racerEffect2]);
     await effectRunner.run();
 
     /*
