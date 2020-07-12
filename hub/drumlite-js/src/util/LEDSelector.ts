@@ -5,10 +5,10 @@ export default class LEDSelector {
     public getAllTargetPositions(target: EffectTarget) {
         // TODO define this elsewhere (will not be constant per target either)
         if (target == EffectTarget.SNARE) {
-            return Util.range(0, 52);
+            return Util.range(0, 53);
         }
         else if (target == EffectTarget.TOM1) {
-            return Util.range(52, 88);
+            return Util.range(53, 88);
         }
         else if (target == EffectTarget.TOM2) {
             return Util.range(88, 120);
@@ -18,6 +18,10 @@ export default class LEDSelector {
         }
 
         return []
+    }
+
+    public getAllTargetPositionsArray(targets: EffectTarget[]) {
+        return targets.map(t => this.getAllTargetPositions(t)).flat();
     }
 
     public unalias(target: EffectTarget, pos: number): number {

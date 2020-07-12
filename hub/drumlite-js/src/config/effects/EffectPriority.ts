@@ -7,7 +7,8 @@ export enum EffectPriority {
     HIGH = 70,
     VERY_HIGH = 85,
     HIGHEST = 100,
-    ANY = 1000
+    ANY = 1000,
+    TOM2
 };
 
 export const EffectPriorityString: {[key: number]: string} = {

@@ -1,4 +1,4 @@
-import { EffectParameter, EffectParameterOptions } from "../effects/EffectParameter";
+import { EffectParameter, EffectParameterOptions, defaultAmplitudeRange, defaultMillisecondRange, defaultLedRange } from "../effects/EffectParameter";
 import { EffectPriority } from "../effects/EffectPriority";
 
 export default class CommonParams {
@@ -9,8 +9,8 @@ export default class CommonParams {
         });
     }
 
-    public static color(values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
-        return new EffectParameter("Color", this.findValue("color", [255, 255, 255], values), {
+    public static color(name: string, values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
+        return new EffectParameter(name, this.findValue(name, [255, 255, 255], values), {
             ...options,
             type: "rgb"
         });
@@ -33,7 +33,7 @@ export default class CommonParams {
     }
 
     public static startTime(values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
-        return new EffectParameter("Start Time", this.findValue("starttime", [], values), {
+        return new EffectParameter("Start Time", this.findValue("starttime", 0, values), {
             ...options,
             type: "number",
             isArray: false
@@ -49,6 +49,41 @@ export default class CommonParams {
     }
 
     private static findValue(key: string, defaultVal: any, values?: {[key: string]: any}) {
-        return values ? values[key.toLowerCase()]: defaultVal;
+        return (values && values[key.toLowerCase()]) ? values[key.toLowerCase()] : defaultVal;
+    }
+
+    public static period(values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
+        return new EffectParameter("Period", this.findValue("period", 1000, values), {
+            ...options,
+            type: "number",
+            range: defaultMillisecondRange
+        });
+    }
+
+    public static speed(values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
+        return this.number("Speed", values, options, 1);
+    }
+
+    public static number(name: string, values: {[key: string]: any} = {}, options?: EffectParameterOptions, defaultVal?: number) {
+        return new EffectParameter(name, this.findValue(name, defaultVal ?? 0, values), {
+            ...options,
+            type: "number",
+            range: defaultLedRange
+        });
+    }
+
+    public static transition(name: string, values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
+        return new EffectParameter(name, this.findValue(name, "linear", values), {
+            ...options,
+            type: "transition"
+        });
+    }
+
+    public static triggers(name?: string, values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
+        return new EffectParameter(name ?? "triggers", this.findValue(name ?? "triggers", [], values), {
+            ...options,
+            isArray: true,
+            type: "hittype"
+        });
     }
 }

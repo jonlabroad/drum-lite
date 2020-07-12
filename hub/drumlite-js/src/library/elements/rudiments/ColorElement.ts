@@ -6,7 +6,7 @@ import LedInstruction from "../../../effect/LedInstruction";
 export class ColorElementConfig extends EffectConfig {
     constructor() {
         super();
-        this.params["Color"] = CommonParams.color();
+        this.params["Color"] = CommonParams.color("Color");
     }
 }
 

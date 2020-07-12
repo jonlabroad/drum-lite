@@ -10,11 +10,11 @@ import Util from "../../../util/Util";
 export class ConstantSpinConfig extends EffectConfig {
     constructor(values: {[key: string]: any}) {
         super(values);
-        this.params["StartTime"] = CommonParams.startTime();
-        this.params["Targets"] = CommonParams.targets();
+        this.params["StartTime"] = CommonParams.startTime(values);
+        this.params["Targets"] = CommonParams.targets(values);
         this.params["Period"] = new EffectParameter<number>("Period", 1000, {range: defaultMillisecondRange});
-        this.params["Num"] = new EffectParameter<number>("Number", values.number ?? 0);
-        this.params["Speed"] = new EffectParameter<number>("Speed", values.speed ?? 0);
+        this.params["Num"] = new EffectParameter<number>("Number", values.number ?? 1);
+        this.params["Speed"] = new EffectParameter<number>("Speed", values.speed ?? 1);
         this.params["Offset"] = new EffectParameter<number>("Offset", values.offset ?? 0);
     }
 }

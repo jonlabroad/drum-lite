@@ -3,7 +3,13 @@ import EffectConfig from "../config/EffectConfig";
 import RGB from "../light/RGB";
 import MidiDrumNote from "../midi/MidiDrumNote";
 
+export type RunnableEffectType = 
+"colorhit" |
+"racer" |
+"constantamplitude"
+
 export default abstract class RunnableEffect {
+    public abstract type: RunnableEffectType;
     public config: EffectConfig = new EffectConfig();
 
     constructor(config: EffectConfig) {

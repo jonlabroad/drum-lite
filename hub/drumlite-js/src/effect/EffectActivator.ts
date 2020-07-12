@@ -18,18 +18,22 @@ export default class EffectActivator {
     }
 
     public handleNote(note: MidiDrumNote) {
-        if (note.isNoteOn()) {
-            const effectsToTrigger = this.triggeredEffects.filter(effect => {
-                const triggers = effect.config.params['Triggers']?.val as HitType[] | undefined;
-                return triggers?.includes(note.note) ?? false;
-            });
-            this.activeEffects.push(...effectsToTrigger.map(e => {
-                const copy = EffectFactory.create('racer', {
-                    ...e.config.values,
-                    starttime: new Date().getTime()
+        try {
+            if (note.isNoteOn()) {
+                const effectsToTrigger = this.triggeredEffects.filter(effect => {
+                    const triggers = effect.config.params['Triggers']?.val as HitType[] | undefined;
+                    return triggers?.includes(note.note) ?? false;
                 });
-                return copy;
-            }).filter(e => !!e) as RunnableEffect[]);
+                this.activeEffects.push(...effectsToTrigger.map(e => {
+                    const copy = EffectFactory.create(e.type, {
+                        ...e.config.values,
+                        starttime: new Date().getTime()
+                    });
+                    return copy;
+                }).filter(e => !!e) as RunnableEffect[]);
+            }
+        } catch (err) {
+            console.error("An error occurred", err);
         }
     }
 
