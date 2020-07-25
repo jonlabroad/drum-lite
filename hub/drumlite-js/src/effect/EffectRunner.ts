@@ -1,9 +1,8 @@
-import EffectActivator from "./EffectActivator"
 import EffectPriorityHandler from "./EffectPriorityHandler";
-import BasicCombiner from "./combiners/BasicCombiner";
-import LEDDriver from "../light/drivers/LEDDriver";
 import Util from "../util/Util";
-import IRemoteDriver from "../light/drivers/IRemoteDriver";
+import InstructionExecutor from "../driver/InstructionExecutor";
+import IRemoteDriver from "../driver/IRemoteDriver";
+import EffectActivator from "./EffectActivator";
 
 export interface RunnerOptions {
     periodMillis?: number
@@ -12,18 +11,16 @@ export interface RunnerOptions {
 export default class EffectRunner {
     activator: EffectActivator;
     priorityHandler: EffectPriorityHandler;
-    combiner: BasicCombiner;
     ledDriver: IRemoteDriver;
-    driver: LEDDriver;
+    executor: InstructionExecutor;
     runLeds: boolean;
     options: RunnerOptions;
 
     constructor(activator: EffectActivator, driver: IRemoteDriver, options: RunnerOptions) {
         this.activator = activator;
         this.priorityHandler = new EffectPriorityHandler();
-        this.combiner = new BasicCombiner();
         this.ledDriver = driver;
-        this.driver = new LEDDriver(this.ledDriver);
+        this.executor = new InstructionExecutor(this.ledDriver);
         this.runLeds = false;
         this.options = options;
     }
@@ -31,23 +28,30 @@ export default class EffectRunner {
     public async run() {
         this.runLeds = true;
         while(this.runLeds) {
+            const t = new Date().getTime();
             const activeEffects = this.activator.getCurrentActiveEffects();
             this.priorityHandler.clear();
             for (let activeEffect of activeEffects) {
-                this.priorityHandler.addLedEffect(activeEffect);
+                const instructions = activeEffect.getInstructions(t);
+                instructions.forEach(instruction => this.priorityHandler.addLedEffect(instruction));
             }
-            
-            const mappedEffectsToRun = this.priorityHandler.getLeds()
 
-            this.combiner.combine(mappedEffectsToRun);
-            this.driver.runEffects(mappedEffectsToRun)
+            const mappedEffectsToRun = this.priorityHandler.getLeds();
 
-            await Util.sleep(this.options.periodMillis || 100);
+            const modifiers = this.activator.getCurrentActiveModifiers();
+            modifiers.forEach(modifier => {
+                modifier.modInstructions(Object.values(mappedEffectsToRun).flat(), t);
+            });
+
+            // TODO combiner or no combiner?
+            this.executor.runEffects(mappedEffectsToRun)
+
+            await Util.sleep(this.options.periodMillis || 10);
         }
     }
 
     public clear() {
-        this.driver.clear();
+        this.executor.clear();
     }
 
     public stop() {

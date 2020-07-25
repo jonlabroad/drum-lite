@@ -1,4 +1,5 @@
-import { EffectTarget } from "../light/effect/EffectTarget";
+import { EffectTarget } from "../config/EffectTarget";
+import RGB from "../light/RGB";
 
 export default class Util {
     public static range(start: number, stop: number, inc: number = 1): number[] {
@@ -26,5 +27,9 @@ export default class Util {
 
     public static modulo(n: number, m: number) {
         return ((n % m) + m) % m;
+    }
+
+    public static arrayToRgb(arr: number[]) {
+        return new RGB(arr[0], arr[1], arr[2]);
     }
 }
