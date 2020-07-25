@@ -4,6 +4,8 @@ import EffectActivator from "./effect/EffectActivator";
 import Midi from "./midi/Midi";
 import MidiDrumNote from "./midi/MidiDrumNote";
 import Tron from "./library/config/Tron";
+import CommandHandler, { CommandMessage } from "./util/CommandHandler";
+import WebsocketServer from "./util/WebsocketServer";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -35,31 +37,10 @@ export default async function main() {
     activator.addAmbientEffects(configEffects.ambient);
     activator.addTriggeredEffects(configEffects.triggered);
     activator.addModifiers(configEffects.modifiers);
-    await effectRunner.run();
 
-/*
-    websocketsDriver.connect(
-        "ws://10.0.0.27:3000",
-        (data: any) => {},
-        async () => {
-            while(true) {
-                const t = new Date().getTime();
-                // TODO EffectRunner does this (after resolving priorities)
-                const instrs = racerEffect.getInstructions(t);
-                const mappedInstr: {[key: number]: LedInstruction[]} = {};
-                instrs.forEach(instr => {
-                    instr.ledPositions?.forEach(pos => {
-                        const mappedElement: LedInstruction[] = mappedInstr[pos] ?? [];
-                        mappedElement.push(instr);
-                        mappedInstr[pos] = mappedElement;
-                    })
-                });
-
-                driver.runEffects(mappedInstr);
-                await Util.sleep(10);
-            }
-            
-        }
-    );
-*/
+    const commandHandler = new CommandHandler(effectRunner);
+    const commandReceiver = new WebsocketServer(3003);
+    commandReceiver.connect(async (msg: string) => {
+        await commandHandler.handle(JSON.parse(msg) as CommandMessage);
+    });
 }
