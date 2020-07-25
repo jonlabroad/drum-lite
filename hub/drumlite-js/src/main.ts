@@ -32,8 +32,9 @@ export default async function main() {
     const effectRunner = new EffectRunner(activator, websocketsDriver, {
         periodMillis: timestepMillis
     });
-    activator.addAmbientEffects(configEffects.ambient);//, racerEffect2, racerEffect3]);
+    activator.addAmbientEffects(configEffects.ambient);
     activator.addTriggeredEffects(configEffects.triggered);
+    activator.addModifiers(configEffects.modifiers);
     await effectRunner.run();
 
 /*

@@ -11,11 +11,13 @@ export class ColorHitConfig extends EffectConfig {
     constructor(values: {[key: string]: any}) {
         super(values);
         this.params["StartTime"] = CommonParams.startTime(values);
-        this.params["Targets"] = CommonParams.targets(values);
+        this.params["Targets"] = CommonParams.targets("Targets", values);
         this.params["Colors"] = CommonParams.color("Colors", values, { isArray: true });
         this.params["Period"] = CommonParams.period(values);
         this.params["Transition"] = CommonParams.transition("Transition", values);
         this.params["Triggers"] = CommonParams.triggers("Triggers", values);
+        this.params["Singleton"] = CommonParams.singleton("Singleton", values);
+        this.params["Priority"] = CommonParams.priority(values);
     }
 }
 
@@ -33,7 +35,7 @@ export default class ColorHitEffect extends RunnableEffect {
         const amplitude = new NoteAmplitudeEffect(new NoteAmplitudeConfig({
             transition: this.config.params?.Transition?.val ?? "linear"
         })).getInstructions(t, note);
-        instrs.push(new LedInstruction(color.rgb, amplitude.amplitude, ledPositions));
+        instrs.push(new LedInstruction(color.rgb, amplitude.amplitude, ledPositions, this.config.params.Priority?.val));
         return instrs;
     }
 

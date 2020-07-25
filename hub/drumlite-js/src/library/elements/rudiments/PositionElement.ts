@@ -16,6 +16,6 @@ export default class PositionElementEffect extends PartialRunnableEffect {
     }
 
     getInstructions(t: number): LedInstruction {
-        return new LedInstruction(undefined, undefined, this.config.params.Positions.val);
+        return new LedInstruction(undefined, undefined, this.config.params.Positions.val, this.config.params.Priority?.val);
     }
 }

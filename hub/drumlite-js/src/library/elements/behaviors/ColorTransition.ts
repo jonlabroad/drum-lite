@@ -31,7 +31,7 @@ export default class ColorTransitionEffect extends PartialRunnableEffect {
         const tNorm = Transitions.get(transition).getTNorm(t, startTime, period);
         const color = this.findColor(tNorm);
 
-        return new LedInstruction(color, undefined, undefined);
+        return new LedInstruction(color, undefined, undefined, this.config.params.Priority?.val);
     }
 
     public isComplete(t: number) {

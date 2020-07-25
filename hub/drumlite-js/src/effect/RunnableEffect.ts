@@ -6,7 +6,12 @@ import MidiDrumNote from "../midi/MidiDrumNote";
 export type RunnableEffectType = 
 "colorhit" |
 "racer" |
-"constantamplitude"
+"constantamplitude" |
+"sparkler" |
+"kickpulse"
+
+export type ModifierEffectType = 
+"amplitude"
 
 export default abstract class RunnableEffect {
     public abstract type: RunnableEffectType;

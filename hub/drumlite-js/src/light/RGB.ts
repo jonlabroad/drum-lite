@@ -3,10 +3,10 @@ export default class RGB {
     g: number;
     b: number;
 
-    constructor(r: number = 0, g: number = 0, b: number = 0) {
-        this.r = r;
-        this.b = b;
-        this.g = g;
+    constructor(r: number = 0, g: number = 0, b: number = 0, scale = 1.0) {
+        this.r = Math.round(r * scale);
+        this.b = Math.round(b * scale);
+        this.g = Math.round(g * scale);
     }
 
     public add(other: RGB) {

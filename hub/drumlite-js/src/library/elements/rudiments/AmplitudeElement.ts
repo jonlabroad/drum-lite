@@ -16,6 +16,6 @@ export default class AmplitudeElementEffect extends PartialRunnableEffect {
     }
 
     getInstructions(t: number): LedInstruction {
-        return new LedInstruction(undefined, this.config.params.Amplitude.val, undefined);
+        return new LedInstruction(undefined, this.config.params.Amplitude.val, undefined, this.config.params.Priority?.val);
     }
 }

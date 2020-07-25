@@ -13,10 +13,9 @@ export class SpinConfig extends EffectConfig {
     constructor(values: {[key: string]: any}) {
         super(values);
         this.params["StartTime"] = CommonParams.startTime(values);
-        this.params["Targets"] = CommonParams.targets(values);
+        this.params["Targets"] = CommonParams.targets("Targets", values);
         this.params["Period"] = CommonParams.period(values);
         this.params["Num"] = CommonParams.number("num", values, undefined, 1);
-        this.params["Speed"] = CommonParams.speed(values);
         this.params["Offset"] = CommonParams.number("offset", values, undefined, 0);
         this.params["Transition"] = CommonParams.transition("transition", values);
     }
@@ -51,7 +50,7 @@ export default class SpinEffect extends PartialRunnableEffect {
             }
         }
 
-        return new LedInstruction(undefined, undefined, ledPositions);
+        return new LedInstruction(undefined, undefined, ledPositions, this.config.params.Priority?.val);
     }
 
 }

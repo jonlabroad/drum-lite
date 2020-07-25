@@ -19,7 +19,7 @@ export default class NoteAmplitudeEffect extends PartialRunnableEffect {
 
     public getInstructions(t: number, note?: MidiDrumNote): LedInstruction {
         const scaled = NoteScaler.scale(note?.velocity ?? 0, this.config.params.Transition?.val);
-        return new LedInstruction(undefined, scaled, undefined);
+        return new LedInstruction(undefined, scaled, undefined, this.config.params.Priority?.val);
     }
 
     public isComplete(t: number) {

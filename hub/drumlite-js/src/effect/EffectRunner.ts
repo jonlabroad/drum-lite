@@ -33,10 +33,15 @@ export default class EffectRunner {
             this.priorityHandler.clear();
             for (let activeEffect of activeEffects) {
                 const instructions = activeEffect.getInstructions(t);
-                instructions.map(instruction => this.priorityHandler.addLedEffect(instruction));
+                instructions.forEach(instruction => this.priorityHandler.addLedEffect(instruction));
             }
-            
+
             const mappedEffectsToRun = this.priorityHandler.getLeds();
+
+            const modifiers = this.activator.getCurrentActiveModifiers();
+            modifiers.forEach(modifier => {
+                modifier.modInstructions(Object.values(mappedEffectsToRun).flat(), t);
+            });
 
             // TODO combiner or no combiner?
             this.executor.runEffects(mappedEffectsToRun)

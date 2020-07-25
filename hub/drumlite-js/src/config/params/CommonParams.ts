@@ -24,8 +24,8 @@ export default class CommonParams {
         });
     }
 
-    public static targets(values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
-        return new EffectParameter("Targets", this.findValue("targets", [], values), {
+    public static targets(name?: string, values?: {[key: string]: any}, options?: EffectParameterOptions) {
+        return new EffectParameter(name ?? "Targets", this.findValue(name ?? "targets", [], values ?? {}), {
             ...options,
             type: "target",
             isArray: true
@@ -84,6 +84,14 @@ export default class CommonParams {
             ...options,
             isArray: true,
             type: "hittype"
+        });
+    }
+
+    public static singleton(name?: string, values: {[key: string]: any} = {}, options?: EffectParameterOptions) {
+        return new EffectParameter(name ?? "singleton", this.findValue(name ?? "singleton", true, values), {
+            ...options,
+            isArray: false,
+            type: "boolean"
         });
     }
 }

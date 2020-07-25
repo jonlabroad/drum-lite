@@ -6,13 +6,14 @@ import ColorElementEffect from "./elements/rudiments/ColorElement";
 import AmplitudeElementEffect from "./elements/rudiments/AmplitudeElement";
 import MidiDrumNote from "../midi/MidiDrumNote";
 import SpinEffect, { SpinConfig } from "./elements/behaviors/Spin";
+import ColorTransitionEffect from "./elements/behaviors/ColorTransition";
 
-export class RacerConfig extends EffectConfig {
+export class KickPulseConfig extends EffectConfig {
     constructor(values: {[key: string]: any}) {
         super(values);
         this.params["StartTime"] = CommonParams.startTime(values);
         this.params["Targets"] = CommonParams.targets("Targets", values);
-        this.params["Color"] = CommonParams.color("Color", values);
+        this.params["Colors"] = CommonParams.color("Colors", values);
         this.params["Amplitude"] = CommonParams.amplitude(values);
         this.params["Period"] = CommonParams.period(values);
         this.params["Num"] = CommonParams.number("Num", values, undefined, 1);
@@ -21,31 +22,24 @@ export class RacerConfig extends EffectConfig {
         this.params["Transition"] = CommonParams.transition("Transition", values);
         this.params["Triggers"] = CommonParams.triggers("Triggers", values);
         this.params["Length"] = CommonParams.number("Length", values, undefined, 1);
+        this.params["Duration"] = CommonParams.number("Duration", values);
         this.params["Priority"] = CommonParams.priority(values);
     }
 }
 
-export default class RacerEffect extends RunnableEffect {
-    public type: RunnableEffectType = "racer";
+export default class KickPulseEffect extends RunnableEffect {
+    public type: RunnableEffectType = "kickpulse";
 
     public getInstructions(t: number, note?: MidiDrumNote): LedInstruction[] {
         const instrs = [];
         for (let n = -this.config.params.Length?.val ?? 1; n < 0; n++) {
             const ledPositions = new SpinEffect(new SpinConfig({
                 ...this.config.values,
+                period: 10000000,
                 offset: n + (this.config.params.Offset?.val ?? 0)
             })).getInstructions(t);
-            /*
-            const color = new ColorTransitionEffect(new ColorTransitionConfig({
-                colors: [
-                    new RGB(100, 200, 50),
-                    new RGB(200, 50, 50),
-                    new RGB(10, 50, 200),
-                ],
-                period: this.config.params.Period.val,
-            })).getInstructions(t, note);
-            */
-            const color = new ColorElementEffect(this.config).getInstructions(t);
+
+            const color = new ColorTransitionEffect(this.config).getInstructions(t);
             const amplitude = new AmplitudeElementEffect(this.config).getInstructions(t);
             instrs.push(new LedInstruction(color.rgb, amplitude.amplitude, ledPositions.ledPositions, this.config.params.Priority?.val));
         }
@@ -54,7 +48,7 @@ export default class RacerEffect extends RunnableEffect {
 
     public isComplete(t: number) {
         const startTime = this.config.params.StartTime.val;
-        const period = this.config.params.Period.val;
+        const period = this.config.params.Duration.val;
         const dt = t - startTime;
         return dt > period;
     }

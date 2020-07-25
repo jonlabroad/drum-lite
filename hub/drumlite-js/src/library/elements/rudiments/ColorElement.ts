@@ -16,6 +16,6 @@ export default class ColorElementEffect extends PartialRunnableEffect {
     }
 
     getInstructions(t: number): LedInstruction {
-        return new LedInstruction(this.config.params.Color.val, undefined, undefined);
+        return new LedInstruction(this.config.params.Color.val, undefined, undefined, this.config.params.Priority?.val);
     }
 }
