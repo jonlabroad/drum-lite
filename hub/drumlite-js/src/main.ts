@@ -20,12 +20,17 @@ export default async function main() {
 
     const activator = new EffectActivator();
 
+    const websocket = new WebsocketServer(4000);
+    websocket.connect(() => {});
+
     const midi = new Midi((dt, msg) => {
+        console.log(msg);
         const note = MidiDrumNote.fromRawNote(msg, new Date());
         activator.handleNote(note);
+        websocket.send("TEST$1190800$135240");
     });
     midi.openPort();
-
+/*
     const websocketsDriver = new WebsocketsDriver();
     websocketsDriver.connect(
         "ws://drumlite-hub.jdl.local:3000",
@@ -43,4 +48,5 @@ export default async function main() {
     commandReceiver.connect(async (msg: string) => {
         await commandHandler.handle(JSON.parse(msg) as CommandMessage);
     });
+    */
 }
