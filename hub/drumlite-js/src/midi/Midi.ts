@@ -22,6 +22,7 @@ export default class Midi {
                 console.log(`Trying port ${i}`);
                 this.midiInput.openPort(i);
                 this.connected = true;
+                console.log("MIDI CONNECTED");
                 return true;
             }
         }
