@@ -21,6 +21,7 @@ export default async function main() {
     const activator = new EffectActivator();
 
     const midi = new Midi((dt, msg) => {
+        console.log(msg);
         const note = MidiDrumNote.fromRawNote(msg, new Date());
         activator.handleNote(note);
     });
