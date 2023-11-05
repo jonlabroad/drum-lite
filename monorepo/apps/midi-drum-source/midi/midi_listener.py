@@ -10,6 +10,8 @@ class MidiListener:
         self.filter = MidiFilter()
         self.connected = False
         self.port = None
+        self.portNum = None
+        self.midi_in = rtmidi.MidiIn()
 
     def run(self):
         self.open()
@@ -24,24 +26,34 @@ class MidiListener:
 
     def open(self):
         if not self.isPortOpen():
-          self.midi_in = rtmidi.MidiIn()
-          ports = self.midi_in.get_ports()
-          if ports:
-              portNum = 0
-              print(ports)
-              for port in ports:
-                  if "USB MIDI Interface" in port or "TD-17" in port:
-                      print("Opening midi port: " + port)
-                      self.midi_in.open_port(portNum)
-                      self.port = port
-                      self.midi_in.set_callback(self.noteHandler)
-                  portNum = portNum + 1
+            portInfo = self.findPortToOpen()
+            if portInfo is not None:
+                self.midi_in.open_port(portInfo["portNum"])
+                self.port = portInfo["port"]
+                self.portNum = portInfo["portNum"]
+                self.midi_in.set_callback(self.noteHandler)
 
     def isPortOpen(self):
-      if (self.port is not None):
-        isOpen = rtmidi.MidiIn.is_port_open(self.port)
-        print(f"isOpen: {isOpen}")
-        return isOpen
-      print("isOpen: False")
-      return False
+        portInfo = self.findPortToOpen()
+        if portInfo is None:
+            self.midi_in.close_port()
+            self.port = None
+            self.portNum = None
+            return False
 
+        if (self.port is not None):
+            isOpen = rtmidi.MidiIn.is_port_open(self.port)
+            print(f"isOpen: {isOpen}")
+            return isOpen
+        print("isOpen: False")
+        return False
+
+    def findPortToOpen(self):
+        ports = self.midi_in.get_ports()
+        if ports:
+            portNum = 0
+            print(ports)
+            for port in ports:
+                if "USB MIDI Interface" in port:
+                    return { "portNum": portNum, "port": port }
+                portNum = portNum + 1
