@@ -39,6 +39,7 @@ def handleMidiNote(note):
 
 
 
+
 if __name__ == '__main__':
     server_url = 'http://localhost:5000'  # Change this URL to the address of your Socket.IO server
     connectToServer()
@@ -52,16 +53,9 @@ if __name__ == '__main__':
     t = 0
     while True:
         midiListener.open()
-        sio.sleep(1)
-        note = MidiDrumNote(1, HitType.KICK, 255, 0, time=t)
-        if sio.sid is not None:
-          try:
-            sio.emit(noteCommand, json.dumps({ "note": note.to_dict() }))
-          except:
-            print("Error sending note")
-        else:
+        if sio.sid is None:
           connectToServer()
-
+        sio.sleep(1)
         t = t + 1
 
     sio.disconnect()
