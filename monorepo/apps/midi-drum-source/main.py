@@ -36,7 +36,7 @@ def on_response(data):
 
 def handleMidiNote(note):
   print(f"Note received from midi: {note}")
-  
+
 
 
 if __name__ == '__main__':
@@ -45,14 +45,14 @@ if __name__ == '__main__':
 
     midiListener = MidiListener(handleMidiNote)
 
-    while midiListener.port is None:
-      midiListener.open()
-      time.sleep(3)
+    #while midiListener.port is None:
+    #  midiListener.open()
+    #  time.sleep(3)
 
     t = 0
     while True:
-        sio.sleep(1)
         midiListener.open()
+        sio.sleep(1)
         note = MidiDrumNote(1, HitType.KICK, 255, 0, time=t)
         if sio.sid is not None:
           try:
