@@ -16,12 +16,11 @@ class MidiListener:
 
     def noteHandler(self, midiNote, junk):
         t = time.time()
+        print(midiNote)
         note = MidiDrumNote.fromRawNote(midiNote, t)
         note = self.filter.filterNote(note)
         if note:
-            self.handler.handleNote(note.note)
-        else:
-            print("*** Filtered ***")
+            self.handler(note.note)
 
     def open(self):
         if not self.isPortOpen():
@@ -31,7 +30,8 @@ class MidiListener:
               portNum = 0
               print(ports)
               for port in ports:
-                  if "USB MIDI Interface" in port:
+                  if "USB MIDI Interface" in port or "TD-17" in port:
+                      #self.midi_in.close_port()
                       print("Opening midi port: " + port)
                       self.midi_in.open_port(portNum)
                       self.port = port
@@ -40,6 +40,6 @@ class MidiListener:
 
     def isPortOpen(self):
       if (self.port is not None):
-        return rtmidi.MidiIn.is_port_open()
+        return rtmidi.MidiIn.is_port_open(self.port)
       return False
 
