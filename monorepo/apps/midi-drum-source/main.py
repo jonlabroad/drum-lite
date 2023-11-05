@@ -36,6 +36,7 @@ def on_response(data):
 
 def handleMidiNote(note):
   print(f"Note received from midi: {note}")
+  
 
 
 if __name__ == '__main__':
