@@ -24,7 +24,7 @@ def on_response(data):
     print(f"Initialization confirmation received: {data}")
 
 if __name__ == '__main__':
-    server_url = 'http://localhost:5000'  # Change this URL to the address of your Socket.IO server
+    server_url = 'http://192.168.0.138:5000'  # Change this URL to the address of your Socket.IO server
     sio.connect(server_url, transports='websocket')
 
     while True:
