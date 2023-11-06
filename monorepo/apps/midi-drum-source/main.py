@@ -34,11 +34,9 @@ def disconnect():
 def on_response(data):
     print(f"Initialization confirmation received: {data}")
 
-def handleMidiNote(note):
-  print(f"Note received from midi: {note}")
-
-
-
+def handleMidiNote(midiDrumNote):
+  print(f"Note received from midi: {midiDrumNote}")
+  sio.emit("drumnote", json.dumps(midiDrumNote.to_dict()))
 
 if __name__ == '__main__':
     server_url = 'http://localhost:5000'  # Change this URL to the address of your Socket.IO server

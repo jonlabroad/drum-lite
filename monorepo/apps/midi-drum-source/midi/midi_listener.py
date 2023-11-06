@@ -22,7 +22,7 @@ class MidiListener:
         note = MidiDrumNote.fromRawNote(midiNote, t)
         note = self.filter.filterNote(note)
         if note:
-            self.handler(note.note)
+            self.handler(note)
 
     def open(self):
         if not self.isPortOpen():
