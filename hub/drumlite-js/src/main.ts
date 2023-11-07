@@ -1,11 +1,11 @@
 import WebsocketsDriver from "./driver/WebsocketsDriver";
 import EffectRunner from "./effect/EffectRunner";
 import EffectActivator from "./effect/EffectActivator";
-import Midi from "./midi/Midi";
-import MidiDrumNote from "./midi/MidiDrumNote";
 import Tron from "./library/config/Tron";
 import CommandHandler, { CommandMessage } from "./util/CommandHandler";
 import WebsocketServer from "./util/WebsocketServer";
+import LocalBlinkStickDriver from "./driver/LocalBlinkstickDriver";
+import { WebsocketNoteSource } from "./notesource/WebsocketNoteSource";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -20,19 +20,13 @@ export default async function main() {
 
     const activator = new EffectActivator();
 
-    const midi = new Midi((dt, msg) => {
-        console.log(msg);
-        const note = MidiDrumNote.fromRawNote(msg, new Date());
-        activator.handleNote(note);
-    });
-    midi.openPort();
+    const serverUrl = 'ws://192.168.0.138:5000';
+    const noteSource = new WebsocketNoteSource(serverUrl, (note) => activator.handleNote(note));
+    noteSource.connect();
 
-    const websocketsDriver = new WebsocketsDriver();
-    websocketsDriver.connect(
-        "ws://drumlite-hub.jdl.local:3000",
-        (data: any) => {}
-    );
-    const effectRunner = new EffectRunner(activator, websocketsDriver, {
+    const blinkstickDriver = new LocalBlinkStickDriver();
+    blinkstickDriver.connect();
+    const effectRunner = new EffectRunner(activator, blinkstickDriver, {
         periodMillis: timestepMillis
     });
     activator.addAmbientEffects(configEffects.ambient);
@@ -44,4 +38,6 @@ export default async function main() {
     commandReceiver.connect(async (msg: string) => {
         await commandHandler.handle(JSON.parse(msg) as CommandMessage);
     });
+
+    await effectRunner.run();
 }

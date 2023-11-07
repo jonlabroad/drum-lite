@@ -27,11 +27,13 @@ export default class EffectActivator {
 
     public handleNote(note: MidiDrumNote) {
         try {
+            console.log({ isNoteOn: note.isNoteOn(), note: note.note, drumnote: note })
             if (note.isNoteOn()) {
                 const effectsToTrigger = this.triggeredEffects.filter(effect => {
                     const triggers = effect.config.params['Triggers']?.val as HitType[] | undefined;
                     return triggers?.includes(note.note) ?? false;
                 });
+                console.log({ effectsToTrigger });
 
                 const newEffects = effectsToTrigger.map(e => {
                     const copy = EffectFactory.create(e.type, {

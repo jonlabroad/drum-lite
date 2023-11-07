@@ -3,7 +3,8 @@ from midi.midi_mapper import MidiMapper
 class MidiDrumNote:
     def __init__(self, status, midiNote, velocity, dt, time=0):
         self.status = status
-        self.note = MidiMapper().map(midiNote)
+        self.noteType = MidiMapper().map(midiNote)
+        self.note = midiNote
         self.velocity = velocity
         self.dt = dt
         self.time = time
@@ -26,7 +27,8 @@ class MidiDrumNote:
     def to_dict(self):
         return {
             "status": self.status,
-            "note": str(self.note),
+            "note": self.note,
+            "noteType": self.noteType,
             "velocity": self.velocity,
             "dt": self.dt,
             "time": self.time
