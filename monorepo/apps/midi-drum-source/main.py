@@ -38,10 +38,12 @@ def handleMidiNote(midiDrumNote):
   print(f"Note received from midi: {midiDrumNote}")
   message = json.dumps(midiDrumNote.to_dict())
   print(message)
+  print("Sending")
   sio.emit("drumnote", message)
+  print("Sent")
 
 if __name__ == '__main__':
-    server_url = 'http://localhost:5000'  # Change this URL to the address of your Socket.IO server
+    server_url = 'http://drumlite-socket-server.local.jdl:5000'  # Change this URL to the address of your Socket.IO server
     connectToServer()
 
     midiListener = MidiListener(handleMidiNote)
