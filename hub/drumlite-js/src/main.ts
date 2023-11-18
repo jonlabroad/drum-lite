@@ -6,6 +6,7 @@ import CommandHandler, { CommandMessage } from "./util/CommandHandler";
 import WebsocketServer from "./util/WebsocketServer";
 import LocalBlinkStickDriver from "./driver/LocalBlinkstickDriver";
 import { WebsocketNoteSource } from "./notesource/WebsocketNoteSource";
+import { ServiceConfig } from "./config/serviceConfig";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -20,8 +21,11 @@ export default async function main() {
 
     const activator = new EffectActivator();
 
-    const serverUrl = 'ws://192.168.0.138:5000';
-    const noteSource = new WebsocketNoteSource(serverUrl, (note) => activator.handleNote(note));
+    const serverUrl = ServiceConfig.drumSocketServer;
+    const noteSource = new WebsocketNoteSource(serverUrl, (note) => {
+        console.log({note});
+        activator.handleNote(note)
+    });
     noteSource.connect();
 
     const blinkstickDriver = new LocalBlinkStickDriver();

@@ -36,7 +36,9 @@ def on_response(data):
 
 def handleMidiNote(midiDrumNote):
   print(f"Note received from midi: {midiDrumNote}")
-  sio.emit("drumnote", json.dumps(midiDrumNote.to_dict()))
+  message = json.dumps(midiDrumNote.to_dict())
+  print(message)
+  sio.emit("drumnote", message)
 
 if __name__ == '__main__':
     server_url = 'http://localhost:5000'  # Change this URL to the address of your Socket.IO server
