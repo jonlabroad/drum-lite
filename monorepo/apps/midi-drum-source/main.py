@@ -43,7 +43,7 @@ def handleMidiNote(midiDrumNote):
   print("Sent")
 
 if __name__ == '__main__':
-    server_url = 'http://drumlite-socket-server.local.jdl:5000'  # Change this URL to the address of your Socket.IO server
+    server_url = 'http://drumlite-socket-server.jdl.local:5000'  # Change this URL to the address of your Socket.IO server
     connectToServer()
 
     midiListener = MidiListener(handleMidiNote)
