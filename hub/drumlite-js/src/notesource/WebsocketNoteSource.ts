@@ -34,8 +34,8 @@ export class WebsocketNoteSource {
     this.socket.emit("initialize", { "roles":  roles })
 
     // You can add more event listeners for other events if needed
-    this.socket.on('drumnote', (note: any) => {
-      console.log({ note });
+    this.socket.on('drumnote', (messageString: string) => {
+      const note = JSON.parse(messageString);
       const midiNote = new MidiDrumNote(note.status, note.note, note.velocity, new Date());
       this.noteHandler(midiNote);
     });
