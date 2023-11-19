@@ -6,9 +6,10 @@ import CommandHandler, { CommandMessage } from "./util/CommandHandler";
 import WebsocketServer from "./util/WebsocketServer";
 //import LocalBlinkStickDriver from "./driver/LocalBlinkstickDriver";
 import { WebsocketNoteSource } from "./notesource/WebsocketNoteSource";
-import { ServiceConfig } from "./config/serviceConfig";
+import { ServiceConfig } from "./config/ServiceConfig";
 import DebugDriver from "./driver/DebugDriver";
 import { NullDriver } from "./driver/NullDriver";
+import { SocketIoDriver } from "./driver/SocketIoDriver";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -33,7 +34,8 @@ export default async function main() {
     const blinkstickDriver = new LocalBlinkStickDriver();
     blinkstickDriver.connect();
 */
-    const ledDriver = new NullDriver();
+    const ledDriver = new SocketIoDriver(ServiceConfig.ledDriverServer);
+    ledDriver.connect();
 
     const effectRunner = new EffectRunner(activator, ledDriver, {
         periodMillis: timestepMillis
