@@ -24,12 +24,12 @@ export class WebsocketNoteSource {
   }
 
   public connect() {
-    console.log("Connecting...");
+    console.log("Connecting to the note source server...");
     this.socket.connect();
   }
 
   private onConnect() {
-    console.log('Connected to the server');
+    console.log('Connected to the note source server');
     
     this.socket.emit("initialize", { "roles":  roles })
 
@@ -42,11 +42,11 @@ export class WebsocketNoteSource {
   }
 
   private onReconnect(attemptNumber: number) {
-    console.log(`Reconnected to the server (attempt ${attemptNumber})`);
+    console.log(`Reconnected to the note source server (attempt ${attemptNumber})`);
   }
 
   private onDisconnect(reason: string) {
-    console.log(`Disconnected from the server: ${reason}`);
+    console.log(`Disconnected from the note source server: ${reason}`);
   }
 
   private onError(error: Error) {

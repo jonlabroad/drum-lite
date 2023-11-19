@@ -4,9 +4,11 @@ import EffectActivator from "./effect/EffectActivator";
 import Tron from "./library/config/Tron";
 import CommandHandler, { CommandMessage } from "./util/CommandHandler";
 import WebsocketServer from "./util/WebsocketServer";
-import LocalBlinkStickDriver from "./driver/LocalBlinkstickDriver";
+//import LocalBlinkStickDriver from "./driver/LocalBlinkstickDriver";
 import { WebsocketNoteSource } from "./notesource/WebsocketNoteSource";
 import { ServiceConfig } from "./config/serviceConfig";
+import DebugDriver from "./driver/DebugDriver";
+import { NullDriver } from "./driver/NullDriver";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -27,10 +29,13 @@ export default async function main() {
         activator.handleNote(note)
     });
     noteSource.connect();
-
+/*
     const blinkstickDriver = new LocalBlinkStickDriver();
     blinkstickDriver.connect();
-    const effectRunner = new EffectRunner(activator, blinkstickDriver, {
+*/
+    const ledDriver = new NullDriver();
+
+    const effectRunner = new EffectRunner(activator, ledDriver, {
         periodMillis: timestepMillis
     });
     activator.addAmbientEffects(configEffects.ambient);
