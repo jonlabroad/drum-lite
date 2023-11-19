@@ -28,8 +28,9 @@ export class SocketIoDriver implements IRemoteDriver {
         });
     }
 
-    send(topic: string, message: Record<number, number[]>) {
-        this.socket?.emit(topic, message);
+    public send(topic: string, message: Record<number, number[]>) {
+        const messageString = JSON.stringify(message);
+        this.socket?.emit(topic, messageString);
     }
 
 }

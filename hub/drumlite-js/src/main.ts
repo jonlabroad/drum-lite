@@ -18,7 +18,7 @@ async function sleep(ms: number) {
 }
 
 export default async function main() {
-    const timestepMillis = 20;
+    const timestepMillis = 50;
     const config = new Tron();
     const configEffects = config.getEffects();
 
@@ -30,10 +30,7 @@ export default async function main() {
         activator.handleNote(note)
     });
     noteSource.connect();
-/*
-    const blinkstickDriver = new LocalBlinkStickDriver();
-    blinkstickDriver.connect();
-*/
+
     const ledDriver = new SocketIoDriver(ServiceConfig.ledDriverServer);
     ledDriver.connect();
 
