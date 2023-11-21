@@ -1,13 +1,14 @@
 from midi.midi_mapper import MidiMapper
 
 class MidiDrumNote:
-    def __init__(self, status, midiNote, velocity, dt, time=0):
+    def __init__(self, status, midiNote, velocity, dt, rawNote, time=0):
         self.status = status
         self.noteType = MidiMapper().map(midiNote)
         self.note = midiNote
         self.velocity = velocity
         self.dt = dt
         self.time = time
+        self.rawNote = rawNote
 
     @staticmethod
     def fromRawNote(rawNote, time):
@@ -15,7 +16,7 @@ class MidiDrumNote:
         status = val[0]
         midiNoteNum = val[1]
         velocity = val[2]
-        note = MidiDrumNote(status, midiNoteNum, velocity, 0, time)
+        note = MidiDrumNote(status, midiNoteNum, velocity, 0, rawNote, time)
         return note
 
     def isNoteOn(self):
@@ -28,8 +29,9 @@ class MidiDrumNote:
         return {
             "status": self.status,
             "note": self.note,
-            "noteType": self.noteType,
+            "noteType": str(self.noteType),
             "velocity": self.velocity,
             "dt": self.dt,
-            "time": self.time
+            "time": self.time,
+            "rawNote": self.rawNote
         }

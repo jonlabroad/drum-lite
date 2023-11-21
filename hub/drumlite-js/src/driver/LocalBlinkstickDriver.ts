@@ -1,3 +1,4 @@
+/*
 import IRemoteDriver from "./IRemoteDriver";
 const blinkstick = require("blinkstick");
 
@@ -32,3 +33,4 @@ export default class LocalBlinkStickDriver implements IRemoteDriver {
     return true;
   }
 }
+*/

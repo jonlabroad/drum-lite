@@ -37,7 +37,7 @@ export default class WebsocketsDriver implements IRemoteDriver {
         this.connected = false;
     }
 
-    send(topic: string, message: any): boolean {
+    send(topic: string, message: Record<number, number>): boolean {
         if (this.connected) {
             this.ws.send(JSON.stringify(message));
             return true;

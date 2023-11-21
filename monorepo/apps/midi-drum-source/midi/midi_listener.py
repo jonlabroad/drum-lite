@@ -28,6 +28,7 @@ class MidiListener:
         if not self.isPortOpen():
             portInfo = self.findPortToOpen()
             if portInfo is not None:
+                print("Connecting MIDI to " + portInfo["port"])
                 self.midi_in.open_port(portInfo["portNum"])
                 self.port = portInfo["port"]
                 self.portNum = portInfo["portNum"]
@@ -43,16 +44,13 @@ class MidiListener:
 
         if (self.port is not None):
             isOpen = rtmidi.MidiIn.is_port_open(self.port)
-            print(f"isOpen: {isOpen}")
             return isOpen
-        print("isOpen: False")
         return False
 
     def findPortToOpen(self):
         ports = self.midi_in.get_ports()
         if ports:
             portNum = 0
-            print(ports)
             for port in ports:
                 if "USB MIDI Interface" in port:
                     return { "portNum": portNum, "port": port }

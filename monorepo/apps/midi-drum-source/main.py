@@ -36,7 +36,11 @@ def on_response(data):
 
 def handleMidiNote(midiDrumNote):
   print(f"Note received from midi: {midiDrumNote}")
-  message = json.dumps(midiDrumNote.to_dict())
+  try:
+    message = json.dumps(midiDrumNote.to_dict())
+  except Exception as e:
+    print(e)
+
   print(message)
   print("Sending")
   sio.emit("drumnote", message)
