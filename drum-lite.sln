@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "monorepo", "monorepo", "{E5DBD147-3DE0-4F6D-997F-5F1C738212FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{C0B8B123-8B1A-4733-9FE1-8B6BB91BC858}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlinkstickRemoteDriver", "monorepo\apps\BlinkstickRemoteDriver\BlinkstickRemoteDriver.csproj", "{50680BCC-0E58-4761-991C-F4EAD38E3FCB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50680BCC-0E58-4761-991C-F4EAD38E3FCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50680BCC-0E58-4761-991C-F4EAD38E3FCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50680BCC-0E58-4761-991C-F4EAD38E3FCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50680BCC-0E58-4761-991C-F4EAD38E3FCB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C0B8B123-8B1A-4733-9FE1-8B6BB91BC858} = {E5DBD147-3DE0-4F6D-997F-5F1C738212FB}
+		{50680BCC-0E58-4761-991C-F4EAD38E3FCB} = {C0B8B123-8B1A-4733-9FE1-8B6BB91BC858}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFC387C6-79B7-48A6-9537-A4BC7C518E3E}
+	EndGlobalSection
+EndGlobal

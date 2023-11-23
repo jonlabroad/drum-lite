@@ -5,3 +5,8 @@ build
 /secrets.txt
 /hub/drumlite-ui-react/.npmrc
 /hub/drumlite-js/.npmrc
+monorepo/apps/BlinkstickRemoteDriver/bin
+monorepo/apps/BlinkstickRemoteDriver/obj
+monorepo/apps/BlinkstickRemoteDriver/packages
+monorepo/apps/BlinkstickRemoteDriver/.vs
+*.zip
