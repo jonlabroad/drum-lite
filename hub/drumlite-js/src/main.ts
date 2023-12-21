@@ -31,8 +31,11 @@ export default async function main() {
     });
     noteSource.connect();
 
-    const ledDriver = new SocketIoDriver(ServiceConfig.ledDriverServer);
-    ledDriver.connect();
+    //const ledDriver = new SocketIoDriver(ServiceConfig.ledDriverServer);
+    //const ledDriver = new SocketIoDriver("http://localhost:5001");
+    const ledDriver = new WebsocketsDriver("ws://drumlite-led-driver.jdl.local:5001");
+    //const ledDriver = new WebsocketsDriver("ws://localhost:5001");
+    ledDriver.connect((data) => { console.log(data); });
 
     const effectRunner = new EffectRunner(activator, ledDriver, {
         periodMillis: timestepMillis

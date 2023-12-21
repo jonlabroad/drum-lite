@@ -1,91 +1,74 @@
+using System;
+using System.Collections.Generic;
 using BlinkStickDotNet;
-using Quobject.SocketIoClientDotNet.Client;
+using Newtonsoft.Json;
+using Fleck;
 
 namespace BlinkStickDotNetTest
 {
   class Program
   {
+    private static int numLeds = 32;
+    private static BlinkStick blinkStick;
+
     static void Main(string[] args)
     {
-      var socket = IO.Socket("0.0.0.0:5001");
+      blinkStick = BlinkStick.FindFirst();
 
-      socket.On(Socket.EVENT_CONNECT, () =>
+      if (blinkStick == null)
       {
-        Console.WriteLine("Connected to Socket.IO server");
+        Console.WriteLine("Could not find a blinkstick");
+        return;
+      }
 
-        // Emitting the command_leds message when connected
-        socket.Emit("command_leds", "Your_LED_Command");
-      });
+      var isOpen = blinkStick.OpenDevice();
+      Console.WriteLine($"isOpen: {isOpen}");
 
-      socket.On(Socket.EVENT_DISCONNECT, () =>
+      var allSockets = new List<IWebSocketConnection>();
+      var server = new WebSocketServer("ws://0.0.0.0:5001");
+      server.Start(socket =>
       {
-        Console.WriteLine("Disconnected from Socket.IO server");
+        socket.OnOpen = () =>
+        {
+          Console.WriteLine($"Client connected: {socket.ConnectionInfo.ClientIpAddress}:{socket.ConnectionInfo.ClientPort}");
+          allSockets.Add(socket);
+        };
 
-        // Reconnect automatically
-        socket.Connect();
-      });
+        socket.OnClose = () =>
+        {
+          Console.WriteLine($"Client disconnected: {socket.ConnectionInfo.ClientIpAddress}:{socket.ConnectionInfo.ClientPort}");
+          allSockets.Remove(socket);
+        };
 
-      socket.On("command_leds", (data) =>
-      {
-        Console.WriteLine($"Received command_leds: {data}");
-
-        // Write an entire frame
-        Console.WriteLine(data);
-
-      });
-
-      // To handle errors
-      socket.On(Socket.EVENT_ERROR, (error) =>
-      {
-        Console.WriteLine($"Socket.IO Error: {error}");
+        socket.OnMessage = message =>
+        {
+          HandleMessage(message);
+        };
       });
 
       Console.ReadLine(); // Keep the console application running
+      server.Dispose(); // Dispose the server when done
+    }
 
-      try
+    static void HandleMessage(string message)
+    {
+      dynamic parsedData = JsonConvert.DeserializeObject<dynamic>(message);
+
+      byte[] rgbArray = new byte[numLeds * 3];
+      foreach (var kvp in parsedData)
       {
-        var blinkStick = BlinkStick.FindFirst();
-
-        if (blinkStick == null )
+        var ledNum = int.Parse(kvp.Name);
+        if (ledNum > 31)
         {
-          Console.WriteLine("Could not find a blinkstick");
+          break;
         }
-
-        var isOpen = blinkStick.OpenDevice();
-        Console.WriteLine($"isOpen: {isOpen}");
-
-        var numLeds = 32;
-        byte colorVal = 5;
-        var ledNum = 0;
-        var numIter = 0;
-        while (true)
-        {
-          byte[] rgbArray = new byte[numLeds * 3];
-          for (int i = 0; i < numLeds; i++)
-          {
-            var startIndex = i * 3;
-            rgbArray[startIndex] = i == ledNum ? colorVal : (byte)0;
-            rgbArray[startIndex + 1] = i == ledNum ? colorVal : (byte)20;
-            rgbArray[startIndex + 2] = i == ledNum ? colorVal : (byte)0;
-          }
-
-          if (blinkStick != null)
-          {
-            blinkStick.SetColors(0, rgbArray);
-            Thread.Sleep(20);
-            colorVal += 1 % 128;
-            if (numIter % 25 == 0)
-            {
-              ledNum = (ledNum + 1) % numLeds;
-            }
-          }
-        }
+        var ledRgb = kvp.Value;
+        var baseIndex = ledNum * 3;
+        rgbArray[baseIndex] = ledRgb[1];
+        rgbArray[baseIndex + 1] = ledRgb[0];
+        rgbArray[baseIndex + 2] = ledRgb[2];
       }
-      catch (Exception ex)
-      {
-        Console.WriteLine(ex);
-      }
-      Console.WriteLine("OK");
+      blinkStick.SetColors(0, rgbArray);
     }
   }
 }
