@@ -35,6 +35,12 @@ export default async function main() {
     //const ledDriver = new SocketIoDriver(ServiceConfig.ledDriverServer);
     //const ledDriver = new SocketIoDriver("http://localhost:5001");
     const ledDriver = new WebsocketsDriver("ws://drumlite-led-driver.jdl.local:5001");
+    ledDriver.connect(
+        () => {},
+        () => {
+            console.log("Connected to LED driver");
+        }
+    );
     //const ledDriver = new WebsocketsDriver("ws://localhost:5001");
 
     const effectRunner = new EffectRunner(activator, ledDriver, {
