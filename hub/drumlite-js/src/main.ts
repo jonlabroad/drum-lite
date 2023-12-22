@@ -10,6 +10,7 @@ import { ServiceConfig } from "./config/ServiceConfig";
 import DebugDriver from "./driver/DebugDriver";
 import { NullDriver } from "./driver/NullDriver";
 import { SocketIoDriver } from "./driver/SocketIoDriver";
+import MidiDrumNote from "./midi/MidiDrumNote";
 
 async function sleep(ms: number) {
     return new Promise(resolve => {
@@ -25,7 +26,7 @@ export default async function main() {
     const activator = new EffectActivator();
 
     const serverUrl = ServiceConfig.drumSocketServer;
-    const noteSource = new WebsocketNoteSource(serverUrl, (note) => {
+    const noteSource = new WebsocketNoteSource(serverUrl, (note: MidiDrumNote) => {
         console.log({note});
         activator.handleNote(note)
     });
@@ -35,7 +36,6 @@ export default async function main() {
     //const ledDriver = new SocketIoDriver("http://localhost:5001");
     const ledDriver = new WebsocketsDriver("ws://drumlite-led-driver.jdl.local:5001");
     //const ledDriver = new WebsocketsDriver("ws://localhost:5001");
-    ledDriver.connect((data) => { console.log(data); });
 
     const effectRunner = new EffectRunner(activator, ledDriver, {
         periodMillis: timestepMillis
